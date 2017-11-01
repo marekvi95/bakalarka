@@ -4,9 +4,10 @@ import datetime
 import time
 import logging
 import dropbox
-from PIL import Image
-from PIL import ImageFont
-from PIL import ImageDraw
+import contextlib
+from Pillow import Image
+from Pillow import ImageFont
+from Pillow import ImageDraw
 from fractions import Fraction
 
 #Setup logging
@@ -188,10 +189,14 @@ def motionDetection():
 
 def saveToCloud(filename):
     with open(filename, 'rb') as f:
-        dbx.files_upload(f.read(), filename, mute=False)
-        logging.debug('Uploading photo %s to Dropbox' % filename)
+        date = f.read()
+    with stopwatch('upload %d bytes' % len(data)):
+        try:
+            dbx.files_upload(data, filename, mute=False)
+            logging.debug('Uploading photo %s to Dropbox' % filename)
+        except dropbox.exceptions.ApiError as err:
+            logging.error('*** API error %s' % err)
     f.close()
-
 
 def initPIRsensor(PIR_PIN):
     GPIO.setmode(GPIO.BCM)
@@ -204,6 +209,27 @@ def scanPIRMotion(PIR_PIN):
         motionFound = True
         return motionFound
 
+def downloadConfFile(confFileName):
+    # Download JSON Configuration file from Dropbpox
+    with stopwatch('download'):
+        try:
+            md, res = dbx.files_download(confFileName)
+        except dropbox.exceptions.HttpError as err:
+            logging.error('*** HTTP error %s' % err)
+            return None
+    data = res.content
+    logging.debug(len(data), 'bytes; md:', md)
+    return data
+
+@contextlib.contextmanager
+def stopwatch(message):
+    # Measure how long the block of code took to process
+    t0 = time.time()
+    try:
+        yield
+    finally:
+        t1 = time.time()
+        logging.debug('Total elapsed time for %s: %.3f' % (message, t1 - t0))
 
 if __name__ == '__main__':
     try:

@@ -193,7 +193,7 @@ def motionDetection():
 
 def saveToCloud(filename):
     with open(filename, 'rb') as f:
-        date = f.read()
+        data = f.read()
     with stopwatch('upload %d bytes' % len(data)):
         try:
             dbx.files_upload(data, filename, mute=False)

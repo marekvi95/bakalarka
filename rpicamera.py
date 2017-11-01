@@ -52,8 +52,8 @@ def checkImagePath(imagedir):
     imagePath = baseDir + imagedir  # Where to save the images
     # if imagePath does not exist create the folder
     if not os.path.isdir(imagePath):
-            logging.warning('%s - Image Storage folder not found' % (progName))
-            logging.debug('%s - Creating image storage folder %s ' % (progName, imagePath))
+        logging.warning('%s - Image Storage folder not found' % (progName))
+        logging.debug('%s - Creating image storage folder %s ' % (progName, imagePath))
         os.makedirs(imagePath)
     return imagePath
 

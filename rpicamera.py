@@ -5,9 +5,9 @@ import time
 import logging
 import dropbox
 import contextlib
-from Pillow import Image
-from Pillow import ImageFont
-from Pillow import ImageDraw
+from PIL import Image
+from PIL import ImageFont
+from PIL import ImageDraw
 from fractions import Fraction
 
 #Setup logging
@@ -16,7 +16,11 @@ logging.debug('Libraries loaded')
 
 #Setup Dropbox session
 dbx = dropbox.Dropbox('MZ2iiIImvUAAAAAAAAAAzo2V-UCXSK7MUojx9f7qDKo73tiFjRwJo0J2N2zwkYgz')
-logging.debug('Dropbox session set up')
+#Check if it works
+try:
+    dbx.users_get_current_account()
+except AuthError as err:
+    logging.error('ERROR: Invalid access token; try re-generating token')
 
 #Constants
 SECONDS2MICRO = 1000000  # Constant for converting Shutter Speed in Seconds to Microseconds

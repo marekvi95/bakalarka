@@ -1,9 +1,3 @@
-verbose = True
-if verbose:
-    print "Loading python libraries ....."
-else:
-    print "verbose output has been disabled verbose=False"
-
 import picamera
 import picamera.array
 import datetime
@@ -15,8 +9,13 @@ from PIL import ImageFont
 from PIL import ImageDraw
 from fractions import Fraction
 
+#Setup logging
+logging.basicConfig(filename='logfile.log',level=logging.DEBUG)
+logging.debug('Libraries loaded')
+
 #Setup Dropbox session
 dbx = dropbox.Dropbox('MZ2iiIImvUAAAAAAAAAAzo2V-UCXSK7MUojx9f7qDKo73tiFjRwJo0J2N2zwkYgz')
+logging.debug('Dropbox session set up')
 
 #Constants
 SECONDS2MICRO = 1000000  # Constant for converting Shutter Speed in Seconds to Microseconds
@@ -53,15 +52,13 @@ def checkImagePath(imagedir):
     imagePath = baseDir + imagedir  # Where to save the images
     # if imagePath does not exist create the folder
     if not os.path.isdir(imagePath):
-        if verbose:
-            print "%s - Image Storage folder not found." % (progName)
-            print "%s - Creating image storage folder %s " % (progName, imagePath)
+            logging.warning('%s - Image Storage folder not found' % (progName))
+            logging.debug('%s - Creating image storage folder %s ' % (progName, imagePath))
         os.makedirs(imagePath)
     return imagePath
 
 def takeDayImage(imageWidth, imageHeight, filename):
-    if verbose:
-        print "takeDayImage - Working ....."
+    logging.debug('takeDayImage - Working .....')
     with picamera.PiCamera() as camera:
         camera.resolution = (imageWidth, imageHeight)
         # camera.rotation = cameraRotate #Note use imageVFlip and imageHFlip variables
@@ -73,13 +70,11 @@ def takeDayImage(imageWidth, imageHeight, filename):
         camera.exposure_mode = 'auto'
         camera.awb_mode = 'auto'
         camera.capture(filename)
-    if verbose:
-        print "takeDayImage - Captured %s" % (filename)
+    logging.debug('takeDayImage - Captured %s' % (filename))
     return filename
 
 def takeNightImage(imageWidth, imageHeight, filename):
-    if verbose:
-        print "takeNightImage - Working ....."
+    logging.debug('takeNightImage - Working .....')
     with picamera.PiCamera() as camera:
         camera.resolution = (imageWidth, imageHeight)
         if imagePreview:
@@ -98,8 +93,7 @@ def takeNightImage(imageWidth, imageHeight, filename):
         # (you may wish to use fixed AWB instead)
         time.sleep(10)
         camera.capture(filename)
-    if verbose:
-        print "checkNightMode - Captured %s" % (filename)
+    logging.debug('checkNightMode - Captured %s' % (filename))
     return filename
 
 def takeMotionImage(width, height, daymode):
@@ -176,7 +170,7 @@ def getFileName(imagePath, imageNamePrefix, currentCount):
     return filename
 
 def motionDetection():
-    print "Scanning for Motion threshold=%i sensitivity=%i ......"  % (threshold, sensitivity)
+    logging.debug('Scanning for Motion threshold=%i sensitivity=%i ......'  % (threshold, sensitivity))
     isDay = True
     currentCount= 1000
     while True:
@@ -193,8 +187,10 @@ def motionDetection():
 
 
 def saveToCloud(filename):
-    with open(filename, 'rb') a f:
+    with open(filename, 'rb') as f:
         dbx.files_upload(f.read(), filename, mute=False)
+        logging.debug('Uploading photo %s to Dropbox' % filename)
+    f.close()
 
 
 def initPIRsensor(PIR_PIN):
@@ -213,8 +209,4 @@ if __name__ == '__main__':
     try:
         motionDetection()
     finally:
-        print ""
-        print "+++++++++++++++"
-        print "Exiting Program"
-        print "+++++++++++++++"
-        print ""
+        logging.debug('Exiting program')

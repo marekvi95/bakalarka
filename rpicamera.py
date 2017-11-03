@@ -143,7 +143,7 @@ def takeMotionImage(width, height, daymode):
             camera.capture(stream, format='rgb')
             return stream.array
 
-def scanIfDay(width, height, daymode):
+def scanIfDay():
     with picamera.PiCamera() as camera:
         time.sleep(1)
         camera.resolution = (testWidth, testHeight)

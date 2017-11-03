@@ -44,8 +44,8 @@ useDropbox = True
 imageDir = "images"
 imagePath = "/home/pi/pimotion/" + imageDir
 imageNamePrefix = 'capture-'  # Prefix for all image file names. Eg front-
-imageWidth = 1920
-imageHeight = 1080
+imageWidth = 640
+imageHeight = 360
 imageVFlip = False   # Flip image Vertically
 imageHFlip = False   # Flip image Horizontally
 imagePreview = False
@@ -93,7 +93,7 @@ def takeDayImage(imageWidth, imageHeight, filename):
         # Day Automatic Mode
         camera.exposure_mode = 'auto'
         camera.awb_mode = 'auto'
-        camera.capture(filename)
+        camera.capture(filename, format='jpeg', quality=quality)
     logging.debug('takeDayImage - Captured %s' % (filename))
     return filename
 
@@ -139,7 +139,7 @@ def takeMotionImage(width, height, daymode):
                 # Give the camera a good long time to measure AWB
                 # (you may wish to use fixed AWB instead)
                 time.sleep( 10 )
-            camera.capture(stream, format='jpeg', quality=quality)
+            camera.capture(stream, format='rgb')
             return stream.array
 
 def scanIfDay(width, height, daymode):

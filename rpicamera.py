@@ -214,7 +214,7 @@ def saveToCloud(filename):
     with stopwatch('upload %d bytes' % len(data)):
         try:
             dbx.files_upload(data, filename, mute=False)
-            logging.INFO('Uploading photo %s to Dropbox' % filename)
+            logging.info('Uploading photo %s to Dropbox' % filename)
         except dropbox.exceptions.ApiError as err:
             logging.error('*** API error %s' % err)
     f.close()

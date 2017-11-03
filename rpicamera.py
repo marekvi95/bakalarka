@@ -6,6 +6,7 @@ import logging
 import dropbox
 import contextlib
 import numpy as np
+import json
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw

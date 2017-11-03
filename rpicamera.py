@@ -58,7 +58,7 @@ threshold = 10  # How Much pixel changes
 sensitivity = 100  # How many pixels change
 
 nightISO = 800
-nightShutSpeed = 6 * SECONDS2MICRO  # seconds times conversion to microseconds constant
+nightShutSpeed = 2 * SECONDS2MICRO  # seconds times conversion to microseconds constant
 
 # Advanced Settings not normally changed
 testWidth = 128
@@ -116,7 +116,7 @@ def takeNightImage(imageWidth, imageHeight, filename):
         camera.iso = nightISO
         # Give the camera a good long time to measure AWB
         # (you may wish to use fixed AWB instead)
-        time.sleep(10)
+        time.sleep(1)
         camera.capture(filename, format='jpeg', quality=quality)
     logging.debug('checkNightMode - Captured %s' % (filename))
     return filename
@@ -189,7 +189,7 @@ def getFileName(imagePath, imageNamePrefix, currentCount):
 
 def motionDetection():
     logging.debug('Scanning for Motion threshold=%i sensitivity=%i ......'  % (threshold, sensitivity))
-    isDay = scanIfDay()
+    isDay = False
     currentCount= 1000
     while True:
         if scanMotion(testWidth, testHeight, isDay):

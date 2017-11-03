@@ -11,7 +11,19 @@ from PIL import ImageDraw
 from fractions import Fraction
 
 #Setup logging
-logging.basicConfig(filename='logfile.log',level=logging.DEBUG)
+logging.basicConfig(filename='logfile.log',level=logging.DEBUG,
+                    format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+                    datefmt='%m-%d %H:%M',)
+# define a Handler which writes INFO messages or higher to the sys.stderr
+console = logging.StreamHandler()
+console.setLevel(logging.DEBUG)
+# set a format which is simpler for console use
+formatter = logging.Formatter('%(name)-12s: %(levelname)-8s %(message)s')
+# tell the handler to use this format
+console.setFormatter(formatter)
+# add the handler to the root logger
+logging.getLogger('').addHandler(console)
+
 logging.debug('Libraries loaded')
 
 #Setup Dropbox session
@@ -25,7 +37,10 @@ except AuthError as err:
 #Constants
 SECONDS2MICRO = 1000000  # Constant for converting Shutter Speed in Seconds to Microseconds
 
-# User Customizable Settings
+# Default Settings
+usePIR = False
+useDropbox = True
+
 imageDir = "images"
 imagePath = "/home/pi/pimotion/" + imageDir
 imageNamePrefix = 'capture-'  # Prefix for all image file names. Eg front-
@@ -46,6 +61,9 @@ nightShutSpeed = 6 * SECONDS2MICRO  # seconds times conversion to microseconds c
 # Advanced Settings not normally changed
 testWidth = 100
 testHeight = 75
+
+def loadConfig(confData):
+    conf = json.load(confData)
 
 def checkImagePath(imagedir):
     # Find the path of this python script and set some global variables
@@ -190,14 +208,13 @@ def motionDetection():
                 takeNightImage( imageWidth, imageHeight, filename )
                 saveToCloud(filename)
 
-
 def saveToCloud(filename):
     with open(filename, 'rb') as f:
         data = f.read()
     with stopwatch('upload %d bytes' % len(data)):
         try:
             dbx.files_upload(data, filename, mute=False)
-            logging.debug('Uploading photo %s to Dropbox' % filename)
+            logging.INFO('Uploading photo %s to Dropbox' % filename)
         except dropbox.exceptions.ApiError as err:
             logging.error('*** API error %s' % err)
     f.close()
@@ -206,12 +223,28 @@ def initPIRsensor(PIR_PIN):
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(PIR_PIN, GPIO.IN)
 
-def scanPIRMotion(PIR_PIN):
+def PIRscanMotion(PIR_PIN):
     motionFound = False;
     GPIO.add_event_detect(PIR_PIN, GPIO.RISING)
     if GPIO.event_detected(PIR_PIN):
         motionFound = True
         return motionFound
+
+def PIRMotionDetection():
+    initPIRsensor(PIR_PIN)
+    logging.INFO('Scanning for Motion using PIR ......')
+    currentCount= 1000
+    while True:
+        if PIRscanMotion(PIR_PIN):
+            filename = getFileName(imagePath, imageNamePrefix, currentCount)
+            if numberSequence:
+                currentCount += 1
+            if isDay:
+                takeDayImage( imageWidth, imageHeight, filename )
+                saveToCloud(filename)
+            else:
+                takeNightImage( imageWidth, imageHeight, filename )
+                saveToCloud(filename)
 
 def downloadConfFile(confFileName):
     # Download JSON Configuration file from Dropbpox
@@ -237,6 +270,9 @@ def stopwatch(message):
 
 if __name__ == '__main__':
     try:
-        motionDetection()
+        if usePIR:
+            PIRMotionDetection()
+        else
+            motionDetection()
     finally:
         logging.debug('Exiting program')

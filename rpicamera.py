@@ -189,7 +189,7 @@ def getFileName(imagePath, imageNamePrefix, currentCount):
 
 def motionDetection():
     logging.debug('Scanning for Motion threshold=%i sensitivity=%i ......'  % (threshold, sensitivity))
-    isDay = scanIfDay
+    isDay = scanIfDay()
     currentCount= 1000
     while True:
         if scanMotion(testWidth, testHeight, isDay):

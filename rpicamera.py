@@ -272,7 +272,7 @@ if __name__ == '__main__':
     try:
         if usePIR:
             PIRMotionDetection()
-        else
+        else:
             motionDetection()
     finally:
         logging.debug('Exiting program')

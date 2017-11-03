@@ -39,7 +39,7 @@ except AuthError as err:
 SECONDS2MICRO = 1000000  # Constant for converting Shutter Speed in Seconds to Microseconds
 
 # Default Settings
-confFileName = "conf.json"
+confFileName = "/conf.json"
 usePIR = False
 realtime = True
 dropbox_token = 'MZ2iiIImvUAAAAAAAAAAzo2V-UCXSK7MUojx9f7qDKo73tiFjRwJo0J2N2zwkYgz'

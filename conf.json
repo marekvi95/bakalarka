@@ -1,0 +1,10 @@
+{
+	"use_PIR": true,
+	"realtime": true,
+	"use_dropbox": true,
+	"dropbox_token": "YOUR_DROPBOX_KEY",
+	"SMS_notification": true,
+	"SMS_control": true,
+	"authorized_number": 733122122,
+	"resolution": [640, 360],
+}

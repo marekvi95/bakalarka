@@ -39,7 +39,13 @@ except AuthError as err:
 SECONDS2MICRO = 1000000  # Constant for converting Shutter Speed in Seconds to Microseconds
 
 # Default Settings
+confFileName = "conf.json"
 usePIR = False
+realtime = True
+dropbox_token = 'MZ2iiIImvUAAAAAAAAAAzo2V-UCXSK7MUojx9f7qDKo73tiFjRwJo0J2N2zwkYgz'
+SMSNotification = True
+SMSControl = True
+authorizedNumber = 733733733
 useDropbox = True
 
 imageDir = "images"
@@ -66,6 +72,12 @@ testHeight = 80
 
 def loadConfig(confData):
     conf = json.load(confData)
+    usePIR = conf['use_PIR']
+    useDropbox = conf['use_dropbox']
+    SMSNotification = conf['SMS_notification']
+    SMSControl = conf['SMS_control']
+    authorizedNumber = conf['authorized_number']
+
 
 def checkImagePath(imagedir):
     # Find the path of this python script and set some global variables
@@ -117,7 +129,7 @@ def takeNightImage(imageWidth, imageHeight, filename):
         # Give the camera a good long time to measure AWB
         # (you may wish to use fixed AWB instead)
         time.sleep(10)
-        camera.capture(filename, format='jpeg', quality=quality)
+        camera.capture(filename, format='jpeg', quality=quality, thumbnail=None)
     logging.debug('checkNightMode - Captured %s' % (filename))
     return filename
 
@@ -243,11 +255,22 @@ def PIRMotionDetection():
                 takeNightImage( imageWidth, imageHeight, filename )
                 saveToCloud(filename)
 
-def downloadConfFile(confFileName):
+class vectorMotionAnalysis(picamera.array.PiMotionAnalysis):
+    def analyse(self, a):
+        a = np.sqrt(
+            np.square(a['x'].astype(np.float)) +
+            np.square(a['y'].astype(np.float))
+            ).clip(0, 255).astype(np.uint8)
+        # If there're more than 10 vectors with a magnitude greater
+        # than 60, then say we've detected motion
+        if (a > 60).sum() > 10:
+            print('Motion detected!')
+
+def downloadConfFile(confFile):
     # Download JSON Configuration file from Dropbpox
     with stopwatch('download'):
         try:
-            md, res = dbx.files_download(confFileName)
+            md, res = dbx.files_download(confFile)
         except dropbox.exceptions.HttpError as err:
             logging.error('*** HTTP error %s' % err)
             return None
@@ -267,6 +290,8 @@ def stopwatch(message):
 
 if __name__ == '__main__':
     try:
+        if configData = downloadConfFile(confFileName):
+            loadConfig(configData)
         if usePIR:
             PIRMotionDetection()
         else:

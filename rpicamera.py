@@ -72,7 +72,7 @@ testWidth = 128
 testHeight = 80
 
 def loadConfig(confData):
-    conf = json.load(confData)
+    conf = json.loads(confData.read())
     usePIR = conf['use_PIR']
     useDropbox = conf['use_dropbox']
     SMSNotification = conf['SMS_notification']

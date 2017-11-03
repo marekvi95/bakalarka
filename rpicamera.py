@@ -49,7 +49,7 @@ imageHeight = 360
 imageVFlip = False   # Flip image Vertically
 imageHFlip = False   # Flip image Horizontally
 imagePreview = False
-quality = 80
+quality = 50
 
 numberSequence = False
 
@@ -60,8 +60,8 @@ nightISO = 800
 nightShutSpeed = 6 * SECONDS2MICRO  # seconds times conversion to microseconds constant
 
 # Advanced Settings not normally changed
-testWidth = 100
-testHeight = 75
+testWidth = 128
+testHeight = 80
 
 def loadConfig(confData):
     conf = json.load(confData)

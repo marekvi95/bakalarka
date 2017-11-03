@@ -110,7 +110,7 @@ def takeNightImage(imageWidth, imageHeight, filename):
         # Settings for Low Light Conditions
         # Set a frame rate of 1/6 fps, then set shutter
         # speed to 6s and ISO to approx 800 per nightISO variable
-        camera.framerate = Fraction(1, 6)
+        #camera.framerate = Fraction(1, 6)
         camera.shutter_speed = nightShutSpeed
         camera.exposure_mode = 'off'
         camera.iso = nightISO
@@ -189,7 +189,7 @@ def getFileName(imagePath, imageNamePrefix, currentCount):
 
 def motionDetection():
     logging.debug('Scanning for Motion threshold=%i sensitivity=%i ......'  % (threshold, sensitivity))
-    isDay = False
+    isDay = True
     currentCount= 1000
     while True:
         if scanMotion(testWidth, testHeight, isDay):
@@ -198,8 +198,10 @@ def motionDetection():
                 currentCount += 1
             if isDay:
                 takeDayImage( imageWidth, imageHeight, filename )
+                logging.debug('Take day image')
             else:
                 takeNightImage( imageWidth, imageHeight, filename )
+                logging.debug('Take night image')
 # Save photo to cloud
             saveToCloud(filename)
 

@@ -5,6 +5,7 @@ import time
 import logging
 import dropbox
 import contextlib
+import numpy as np
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
@@ -49,7 +50,7 @@ imageHeight = 360
 imageVFlip = False   # Flip image Vertically
 imageHFlip = False   # Flip image Horizontally
 imagePreview = False
-quality = 50
+quality = 72
 
 numberSequence = False
 
@@ -116,7 +117,7 @@ def takeNightImage(imageWidth, imageHeight, filename):
         # Give the camera a good long time to measure AWB
         # (you may wish to use fixed AWB instead)
         time.sleep(10)
-        camera.capture(filename)
+        camera.capture(filename, format='jpeg', quality=quality)
     logging.debug('checkNightMode - Captured %s' % (filename))
     return filename
 
@@ -143,26 +144,19 @@ def takeMotionImage(width, height, daymode):
             return stream.array
 
 def scanIfDay(width, height, daymode):
-    data1 = takeMotionImage(width, height, daymode)
-    while not motionFound:
-        data2 = takeMotionImage(width, height, daymode)
-        pCnt = 0L;
-        diffCount = 0L;
-        for w in range(0, width):
-            for h in range(0, height):
-                # get the diff of the pixel. Conversion to int
-                # is required to avoid unsigned short overflow.
-                diff = abs(int(data1[h][w][1]) - int(data2[h][w][1]))
-                if  diff > threshold:
-                    diffCount += 1
-            if diffCount > sensitivity:
-                break; #break outer loop.
-        if diffCount > sensitivity:
-            motionFound = True
-        else:
-            # print "Sum of all pixels=", pxCnt
-            data2 = data1
-    return motionFound
+    with picamera.PiCamera() as camera:
+        time.sleep(1)
+        camera.resolution = (testWidth, testHeight)
+            with picamera.array.PiRGBArray(camera) as stream:
+                camera.exposure_mode = 'auto'
+                camera.awb_mode = 'auto'
+                camera.capture(stream, format='rgb')
+                pixAverage = int(np.average(stream.array[...,1]))
+    logging.info("Light Meter pixAverage=%i" % pixAverage)
+    if (pixAverage > 100):
+        return True
+    else:
+        return False
 
 def scanMotion(width, height, daymode):
     motionFound = False
@@ -195,7 +189,7 @@ def getFileName(imagePath, imageNamePrefix, currentCount):
 
 def motionDetection():
     logging.debug('Scanning for Motion threshold=%i sensitivity=%i ......'  % (threshold, sensitivity))
-    isDay = True
+    isDay = scanIfDay
     currentCount= 1000
     while True:
         if scanMotion(testWidth, testHeight, isDay):

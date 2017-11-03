@@ -139,7 +139,7 @@ def takeMotionImage(width, height, daymode):
                 camera.iso = nightISO
                 # Give the camera a good long time to measure AWB
                 # (you may wish to use fixed AWB instead)
-                time.sleep( 10 )
+                time.sleep( 5 )
             camera.capture(stream, format='rgb')
             return stream.array
 
@@ -189,7 +189,7 @@ def getFileName(imagePath, imageNamePrefix, currentCount):
 
 def motionDetection():
     logging.debug('Scanning for Motion threshold=%i sensitivity=%i ......'  % (threshold, sensitivity))
-    isDay = True
+    isDay = False
     currentCount= 1000
     while True:
         if scanMotion(testWidth, testHeight, isDay):

@@ -147,11 +147,11 @@ def scanIfDay(width, height, daymode):
     with picamera.PiCamera() as camera:
         time.sleep(1)
         camera.resolution = (testWidth, testHeight)
-            with picamera.array.PiRGBArray(camera) as stream:
-                camera.exposure_mode = 'auto'
-                camera.awb_mode = 'auto'
-                camera.capture(stream, format='rgb')
-                pixAverage = int(np.average(stream.array[...,1]))
+        with picamera.array.PiRGBArray(camera) as stream:
+            camera.exposure_mode = 'auto'
+            camera.awb_mode = 'auto'
+            camera.capture(stream, format='rgb')
+            pixAverage = int(np.average(stream.array[...,1]))
     logging.info("Light Meter pixAverage=%i" % pixAverage)
     if (pixAverage > 100):
         return True

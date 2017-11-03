@@ -110,13 +110,13 @@ def takeNightImage(imageWidth, imageHeight, filename):
         # Settings for Low Light Conditions
         # Set a frame rate of 1/6 fps, then set shutter
         # speed to 6s and ISO to approx 800 per nightISO variable
-        #camera.framerate = Fraction(1, 6)
+        camera.framerate = Fraction(1, 6)
         camera.shutter_speed = nightShutSpeed
         camera.exposure_mode = 'off'
         camera.iso = nightISO
         # Give the camera a good long time to measure AWB
         # (you may wish to use fixed AWB instead)
-        time.sleep(1)
+        time.sleep(10)
         camera.capture(filename, format='jpeg', quality=quality)
     logging.debug('checkNightMode - Captured %s' % (filename))
     return filename
@@ -139,7 +139,7 @@ def takeMotionImage(width, height, daymode):
                 camera.iso = nightISO
                 # Give the camera a good long time to measure AWB
                 # (you may wish to use fixed AWB instead)
-                time.sleep( 5 )
+                time.sleep( 10 )
             camera.capture(stream, format='rgb')
             return stream.array
 

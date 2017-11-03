@@ -44,11 +44,12 @@ useDropbox = True
 imageDir = "images"
 imagePath = "/home/pi/pimotion/" + imageDir
 imageNamePrefix = 'capture-'  # Prefix for all image file names. Eg front-
-imageWidth = 1980
-imageHeight = 1080
+imageWidth = 640
+imageHeight = 480
 imageVFlip = False   # Flip image Vertically
 imageHFlip = False   # Flip image Horizontally
 imagePreview = False
+quality = 80
 
 numberSequence = False
 
@@ -138,7 +139,7 @@ def takeMotionImage(width, height, daymode):
                 # Give the camera a good long time to measure AWB
                 # (you may wish to use fixed AWB instead)
                 time.sleep( 10 )
-            camera.capture(stream, format='rgb')
+            camera.capture(stream, format='jpeg', quality=quality)
             return stream.array
 
 def scanIfDay(width, height, daymode):
@@ -203,10 +204,10 @@ def motionDetection():
                 currentCount += 1
             if isDay:
                 takeDayImage( imageWidth, imageHeight, filename )
-                saveToCloud(filename)
             else:
                 takeNightImage( imageWidth, imageHeight, filename )
-                saveToCloud(filename)
+# Save photo to cloud
+            saveToCloud(filename)
 
 def saveToCloud(filename):
     with open(filename, 'rb') as f:
@@ -232,7 +233,7 @@ def PIRscanMotion(PIR_PIN):
 
 def PIRMotionDetection():
     initPIRsensor(PIR_PIN)
-    logging.INFO('Scanning for Motion using PIR ......')
+    logging.info('Scanning for Motion using PIR ......')
     currentCount= 1000
     while True:
         if PIRscanMotion(PIR_PIN):
@@ -266,7 +267,7 @@ def stopwatch(message):
         yield
     finally:
         t1 = time.time()
-        logging.debug('Total elapsed time for %s: %.3f' % (message, t1 - t0))
+        logging.info('Total elapsed time for %s: %.3f' % (message, t1 - t0))
 
 if __name__ == '__main__':
     try:

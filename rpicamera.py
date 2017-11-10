@@ -7,6 +7,7 @@ import dropbox
 import contextlib
 import numpy as np
 import json
+import pprint
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw

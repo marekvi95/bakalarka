@@ -272,13 +272,13 @@ def downloadFile(fileName):
     # Download JSON Configuration file from Dropbpox
     with stopwatch('download'):
         try:
-            md, res = dbx.files_download(confFile)
+            md, res = dbx.files_download(fileName)
         except dropbox.exceptions.HttpError as err:
             logging.error('*** HTTP error %s' % err)
             return None
     data = res.content
     logging.debug(len(data), 'bytes; md:', md)
-    myFile = open(confFile,'w')
+    myFile = open(fileName,'w')
     myFile.write(data)
 
 @contextlib.contextmanager

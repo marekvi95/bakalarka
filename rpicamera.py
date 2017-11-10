@@ -268,7 +268,7 @@ class vectorMotionAnalysis(picamera.array.PiMotionAnalysis):
         if (a > 60).sum() > 10:
             print('Motion detected!')
 
-def downloadConfFile(confFile):
+def downloadFile(fileName):
     # Download JSON Configuration file from Dropbpox
     with stopwatch('download'):
         try:
@@ -278,7 +278,8 @@ def downloadConfFile(confFile):
             return None
     data = res.content
     logging.debug(len(data), 'bytes; md:', md)
-    return data
+    myFile = open(confFile,'w')
+    myFile.write(data)
 
 @contextlib.contextmanager
 def stopwatch(message):
@@ -292,7 +293,7 @@ def stopwatch(message):
 
 if __name__ == '__main__':
     try:
-        data = downloadConfFile(confFileName)
+        downloadFile(confFileName)
         pprint(data)
         #loadConfig(data)
         if usePIR:

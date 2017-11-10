@@ -272,7 +272,7 @@ def downloadFile(fileName):
     # Download JSON Configuration file from Dropbpox
     with stopwatch('download'):
         try:
-            md, res = dbx.files_download(fileName)
+            md, res = dbx.files_download('\'+fileName)
         except dropbox.exceptions.HttpError as err:
             logging.error('*** HTTP error %s' % err)
             return None

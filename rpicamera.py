@@ -294,7 +294,7 @@ def stopwatch(message):
 if __name__ == '__main__':
     try:
         downloadFile(confFileName)
-        #loadConfig(data)
+        loadConfig(confFileName)
         if usePIR:
             PIRMotionDetection()
         else:

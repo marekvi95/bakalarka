@@ -1,5 +1,5 @@
 {
-	"use_PIR": true,
+	"use_PIR": false,
 	"realtime": true,
 	"use_dropbox": true,
 	"dropbox_token": "YOUR_DROPBOX_KEY",

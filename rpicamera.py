@@ -278,7 +278,7 @@ def downloadFile(fileName):
             logging.error('*** HTTP error %s' % err)
             return None
     data = res.content
-    logging.debug(len(data), 'bytes; md:', md)
+    # logging.debug(len(data), 'bytes; md:', md)
     myFile = open(fileName,'w')
     myFile.write(data)
     myFile.close()

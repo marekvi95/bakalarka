@@ -204,7 +204,7 @@ def getFileName(imagePath, imageNamePrefix, currentCount):
 
 def motionDetection():
     logging.debug('Scanning for Motion threshold=%i sensitivity=%i ......'  % (threshold, sensitivity))
-    isDay = False
+    isDay = True
     currentCount= 1000
     while True:
         if scanMotion(testWidth, testHeight, isDay):
@@ -278,7 +278,7 @@ def downloadFile(fileName):
             logging.error('*** HTTP error %s' % err)
             return None
     data = res.content
-    # logging.debug(len(data), 'bytes; md:', md)
+    #logging.debug(len(data), 'bytes; md:', md)
     myFile = open(fileName,'w')
     myFile.write(data)
     myFile.close()

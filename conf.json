@@ -6,5 +6,5 @@
 	"SMS_notification": true,
 	"SMS_control": true,
 	"authorized_number": 733122122,
-	"resolution": [640, 360],
+	"resolution": [640, 360]
 }

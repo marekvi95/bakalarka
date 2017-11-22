@@ -73,13 +73,14 @@ testWidth = 128
 testHeight = 80
 
 def loadConfig(confFile):
-    conf = json.load(open(confFile))
+    myFile = open(confFile)
+    conf = json.load(myFile)
     usePIR = conf['use_PIR']
     useDropbox = conf['use_dropbox']
     SMSNotification = conf['SMS_notification']
     SMSControl = conf['SMS_control']
     authorizedNumber = conf['authorized_number']
-
+    myFile.close()
 
 def checkImagePath(imagedir):
     # Find the path of this python script and set some global variables
@@ -280,6 +281,7 @@ def downloadFile(fileName):
     logging.debug(len(data), 'bytes; md:', md)
     myFile = open(fileName,'w')
     myFile.write(data)
+    myFile.close()
 
 @contextlib.contextmanager
 def stopwatch(message):

@@ -286,7 +286,7 @@ def downloadFile(fileName):
     myFile.close()
 
 def checkConf(confFileName):
-    threading.Timer(10.0, checkConf).start() # called every minute
+    threading.Timer(10.0, checkConf(confFileName)).start() # called every minute
     downloadFile(confFileName)
     loadConfig(confFileName)
 

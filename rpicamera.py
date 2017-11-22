@@ -8,6 +8,7 @@ import contextlib
 import numpy as np
 import json
 import pprint
+import threading
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
@@ -75,6 +76,7 @@ testHeight = 80
 def loadConfig(confFile):
     myFile = open(confFile)
     conf = json.load(myFile)
+    logging.info('Loading configuration file')
     usePIR = conf['use_PIR']
     useDropbox = conf['use_dropbox']
     SMSNotification = conf['SMS_notification']
@@ -283,6 +285,13 @@ def downloadFile(fileName):
     myFile.write(data)
     myFile.close()
 
+def checkConf(confFileName):
+    threading.Timer(10.0, checkConf).start() # called every minute
+    downloadFile(confFileName)
+    loadConfig(confFileName)
+
+
+
 @contextlib.contextmanager
 def stopwatch(message):
     # Measure how long the block of code took to process
@@ -297,6 +306,7 @@ if __name__ == '__main__':
     try:
         downloadFile(confFileName)
         loadConfig(confFileName)
+        checkConf(confFileName)
         if usePIR:
             PIRMotionDetection()
         else:

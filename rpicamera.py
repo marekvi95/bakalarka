@@ -285,8 +285,8 @@ def downloadFile(fileName):
     myFile.write(data)
     myFile.close()
 
-def checkConf(confFileName):
-    threading.Timer(10.0, checkConf(confFileName)).start() # called every minute
+def checkConf():
+    threading.Timer(10.0, checkConf).start() # called every minute
     downloadFile(confFileName)
     loadConfig(confFileName)
 
@@ -306,7 +306,7 @@ if __name__ == '__main__':
     try:
         downloadFile(confFileName)
         loadConfig(confFileName)
-        checkConf(confFileName)
+        checkConf()
         if usePIR:
             PIRMotionDetection()
         else:

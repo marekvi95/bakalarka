@@ -397,7 +397,10 @@ def saveToGDrive():
     file = service.files().create(body=file_metadata,
                                     media_body=media,
                                     fields='id').execute()
-
+def confFileThread():
+    downloadFile(confFileName) # Download configuration file
+    loadConfig(confFileName) # Load configuration
+    checkConf() # Check configuration
 
 @contextlib.contextmanager
 def stopwatch(message):
@@ -411,9 +414,10 @@ def stopwatch(message):
 
 if __name__ == '__main__':
     try:
-        downloadFile(confFileName) # Download configuration file
-        loadConfig(confFileName) # Load configuration
-        checkConf() # Check configuration
+        confFileThread()
+        d = Timer(500.0, confFileThread())
+        d.start()
+
         if ( mode == "interval"):
             t = Timer(interval*60.0, intervalCapture()) # Execute thread for interval capture
             t.start()
@@ -424,4 +428,5 @@ if __name__ == '__main__':
             motionDetection()
     finally:
         t.cancel()
+        d.cancel()
         logging.debug('Exiting program')

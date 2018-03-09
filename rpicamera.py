@@ -14,6 +14,14 @@ from PIL import ImageFont
 from PIL import ImageDraw
 from fractions import Fraction
 
+import httplib2
+from apiclient import discovery
+from apiclient.http import MediaFileUpload
+from oauth2client import client
+from oauth2client import tools
+from oauth2client.file import Storage
+from datetime import datetime
+
 #Setup logging
 logging.basicConfig(filename='logfile.log',level=logging.DEBUG,
                     format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
@@ -43,11 +51,15 @@ SECONDS2MICRO = 1000000  # Constant for converting Shutter Speed in Seconds to M
 
 # Default Settings
 confFileName = "conf.json"
+mode = "realtime"
+echo = False
+interval = 1
+storage = "dropbox"
+google_json = ""
 usePIR = False
-realtime = True
 dropbox_token = 'MZ2iiIImvUAAAAAAAAAAzo2V-UCXSK7MUojx9f7qDKo73tiFjRwJo0J2N2zwkYgz'
-SMSNotification = True
-SMSControl = True
+SMSNotification = False
+SMSControl = False
 authorizedNumber = 733733733
 useDropbox = True
 
@@ -78,7 +90,7 @@ def loadConfig(confFile):
     conf = json.load(myFile)
     logging.info('Loading configuration file')
     usePIR = conf['use_PIR']
-    useDropbox = conf['use_dropbox']
+    storage = conf['storage']
     SMSNotification = conf['SMS_notification']
     SMSControl = conf['SMS_control']
     authorizedNumber = conf['authorized_number']
@@ -220,9 +232,19 @@ def motionDetection():
                 takeNightImage( imageWidth, imageHeight, filename )
                 logging.debug('Take night image')
 # Save photo to cloud
-            saveToCloud(filename)
+            saveToCloud(filename, storage)
 
-def saveToCloud(filename):
+def intervalCapture():
+    if isDay:
+        takeDayImage( imageWidth, imageHeight, filename )
+        logging.debug('Take day image')
+    else:
+        takeNightImage( imageWidth, imageHeight, filename )
+        logging.debug('Take night image')
+
+    saveToCloud(filename, storage)
+
+def saveToDropbox(filename):
     with open(filename, 'rb') as f:
         data = f.read()
     with stopwatch('upload %d bytes' % len(data)):
@@ -231,6 +253,30 @@ def saveToCloud(filename):
             logging.info('Uploading photo %s to Dropbox' % filename)
         except dropbox.exceptions.ApiError as err:
             logging.error('*** API error %s' % err)
+    f.close()
+
+def saveToCloud(filename, storage): # save to cloud storage
+    with open(filename, 'rb') as f:
+        data = f.read()
+    if ( storage=="dropbox" ):
+        with stopwatch('upload %d bytes' % len(data)):
+            try:
+                dbx.files_upload(data, filename, mute=False)
+                logging.info('Uploading photo %s to Dropbox' % filename)
+            except dropbox.exceptions.ApiError as err:
+                logging.error('*** API error %s' % err)
+
+    if ( storage == "google"):
+        credentials = get_credentials()
+        http = credentials.authorize(httplib2.Http())
+        service = discovery.build('drive', 'v3', http=http)
+
+        file_metadata = {'name': filename}
+        media = MediaFileUpload(data,
+                            mimetype='image/jpeg')
+        file = service.files().create(body=file_metadata,
+                                        media_body=media,
+                                        fields='id').execute()
     f.close()
 
 def initPIRsensor(PIR_PIN):
@@ -255,10 +301,9 @@ def PIRMotionDetection():
                 currentCount += 1
             if isDay:
                 takeDayImage( imageWidth, imageHeight, filename )
-                saveToCloud(filename)
             else:
                 takeNightImage( imageWidth, imageHeight, filename )
-                saveToCloud(filename)
+            saveToDropbox(filename)
 
 class vectorMotionAnalysis(picamera.array.PiMotionAnalysis):
     def analyse(self, a):
@@ -286,10 +331,72 @@ def downloadFile(fileName):
     myFile.close()
 
 def checkConf():
-    threading.Timer(10.0, checkConf).start() # called every minute
+    threading.Timer(60.0, checkConf).start() # called every minute
     downloadFile(confFileName)
     loadConfig(confFileName)
 
+def get_credentials():
+    """Gets valid user credentials from storage.
+
+    If nothing has been stored, or if the stored credentials are invalid,
+    the OAuth2 flow is completed to obtain the new credentials.
+
+    Returns:
+        Credentials, the obtained credential.
+    """
+    home_dir = os.path.expanduser('~')
+    credential_dir = os.path.join(home_dir, '.credentials')
+    if not os.path.exists(credential_dir):
+        os.makedirs(credential_dir)
+    credential_path = os.path.join(credential_dir,
+                                   'sheets.googleapis.com-python-quickstart.json')
+
+    store = Storage(credential_path)
+    credentials = store.get()
+    if not credentials or credentials.invalid:
+        flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
+        flow.user_agent = APPLICATION_NAME
+        if flags:
+            credentials = tools.run_flow(flow, store, flags)
+        else: # Needed only for compatibility with Python 2.6
+            credentials = tools.run(flow, store)
+        print('Storing credentials to ' + credential_path)
+    return credentials
+
+def uploadTelemetry():
+    credentials = get_credentials()
+    http = credentials.authorize(httplib2.Http())
+    discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
+                    'version=v4')
+    service = discovery.build('sheets', 'v4', http=http,
+                              discoveryServiceUrl=discoveryUrl)
+
+    spreadsheetId = '1XNmtg0NoCiU03NDZohlBwmOpFC-heHWbdRzY_tTYjhg'
+    rangeName = 'Log!A2:E2'
+    values = [
+        [
+        str(datetime.now()),"OK",random.randint(10,15),random.randint(0,40)
+        ]
+    ]
+    body = {
+    'values': values
+    }
+    result = service.spreadsheets().values().append(
+    spreadsheetId=spreadsheetId, range=rangeName,
+    valueInputOption="USER_ENTERED", body=body).execute()
+    print('{0} cells updated.'.format(result.get('updates')));
+
+def saveToGDrive():
+    credentials = get_credentials()
+    http = credentials.authorize(httplib2.Http())
+    service = discovery.build('drive', 'v3', http=http)
+
+    file_metadata = {'name': 'rpizero.jpg'}
+    media = MediaFileUpload('rpizero.jpg',
+                        mimetype='image/jpeg')
+    file = service.files().create(body=file_metadata,
+                                    media_body=media,
+                                    fields='id').execute()
 
 
 @contextlib.contextmanager
@@ -304,12 +411,17 @@ def stopwatch(message):
 
 if __name__ == '__main__':
     try:
-        downloadFile(confFileName)
-        loadConfig(confFileName)
-        checkConf()
+        downloadFile(confFileName) # Download configuration file
+        loadConfig(confFileName) # Load configuration
+        checkConf() # Check configuration
+        if ( mode == "interval"):
+            t = Timer(interval*60.0, intervalCapture()) # Execute thread for interval capture
+            t.start()
+
         if usePIR:
             PIRMotionDetection()
         else:
             motionDetection()
     finally:
+        t.cancel()
         logging.debug('Exiting program')

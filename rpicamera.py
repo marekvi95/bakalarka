@@ -422,11 +422,8 @@ if __name__ == '__main__':
             t = Timer(interval*60.0, intervalCapture()) # Execute thread for interval capture
             t.start()
 
-        if usePIR:
-            PIRMotionDetection()
-        else:
-            motionDetection()
+        motionDetection()
     finally:
-        t.cancel()
+        # t.cancel()
         d.cancel()
         logging.debug('Exiting program')

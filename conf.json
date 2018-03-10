@@ -1,7 +1,7 @@
 {
 	"use_PIR": false,
 	"realtime": true,
-	"use_dropbox": true,
+	"storage": "dropbox",
 	"dropbox_token": "YOUR_DROPBOX_KEY",
 	"SMS_notification": true,
 	"SMS_control": true,

@@ -21,6 +21,8 @@ from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
 from datetime import datetime
+from timeit import Timer
+
 
 #Setup logging
 logging.basicConfig(filename='logfile.log',level=logging.DEBUG,

@@ -425,5 +425,5 @@ if __name__ == '__main__':
         motionDetection()
     finally:
         # t.cancel()
-        d.cancel()
+        # d.cancel()
         logging.debug('Exiting program')

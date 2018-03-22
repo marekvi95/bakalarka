@@ -3,7 +3,7 @@ import numpy as np
 import logging
 import time
 import datetime
-import os 
+import os
 
 import picamera
 import picamera.array
@@ -13,20 +13,20 @@ from config import BaseConfig
 from config import UserConfig
 
 #Setup logging
-logging.basicConfig(filename='logfile.log',level=logging.DEBUG,
-                    format='%(asctime)s %(threadName)-12s %(levelname)-8s %(message)s',
-                    datefmt='%m-%d %H:%M',)
+#logging.basicConfig(filename='logfile.log',level=logging.DEBUG,
+#                    format='%(asctime)s %(threadName)-12s %(levelname)-8s %(message)s',
+#                    datefmt='%m-%d %H:%M',)
 # define a Handler which writes INFO messages or higher to the sys.stderr
-console = logging.StreamHandler()
-console.setLevel(logging.DEBUG)
+#console = logging.StreamHandler()
+#console.setLevel(logging.DEBUG)
 # set a format which is simpler for console use
-formatter = logging.Formatter('%(name)-12s: %(levelname)-8s %(message)s')
+#formatter = logging.Formatter('%(name)-12s: %(levelname)-8s %(message)s')
 # tell the handler to use this format
-console.setFormatter(formatter)
+#console.setFormatter(formatter)
 # add the handler to the root logger
-logging.getLogger('').addHandler(console)
+#logging.getLogger('').addHandler(console)
 
-logging.debug('Libraries loaded')
+#logging.debug('Libraries loaded')
 
 class MotionAnalysis(picamera.array.PiMotionAnalysis):
     def __init__(self, camera, handler):
@@ -95,7 +95,9 @@ class CaptureHandler():
 
             filename = '%s.jpg' % datetime.datetime.now().isoformat()
             path = BaseConfig.imagePath + "/" + BaseConfig.imageDir + "/"
-            os.makedirs(path)
+            if not os.path.exists(path):
+                os.makedirs(path)
+                logging.debug('Path was created')
 
             if BaseConfig.imagePreview:
                 self.camera.start_preview()

@@ -4,6 +4,7 @@ import time
 from io import StringIO
 import json
 import queue
+import contextlib
 
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive

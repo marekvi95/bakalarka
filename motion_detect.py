@@ -28,7 +28,7 @@ logging.debug('Libraries loaded')
 
 class MotionAnalysis(picamera.array.PiMotionAnalysis):
     def __init__(self, camera, handler):
-        super(MyMotionDetector, self).__init__(camera)
+        super(MotionAnalysis, self).__init__(camera)
         self.handler = handler
 
     def analyse(self, a):

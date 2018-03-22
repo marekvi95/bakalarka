@@ -3,6 +3,7 @@ import numpy as np
 import logging
 import time
 import datetime
+import os 
 
 import picamera
 import picamera.array

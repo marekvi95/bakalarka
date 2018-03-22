@@ -100,16 +100,16 @@ class FileUploader(threading.Thread):
             time.sleep(5)
         return
 
-    def gdrive_init(gauth):
+    def gdrive_init(self, gauth):
         return GoogleDrive(gauth)
 
-    def gdrive_upload(filename):
+    def gdrive_upload(self, filename):
         file_upload = drive.CreateFile({'title': filename})
         file_upload.Upload() # Upload the file.
         logging.debug('title: %s, id: %s' % (file_upload['title'],
                         file_upload['id']))
 
-    def dropbox_init():
+    def dropbox_init(self):
         #Setup Dropbox session
         dbx = dropbox.Dropbox(UserConfig.dropbox_token)
         #Check if it works
@@ -120,7 +120,7 @@ class FileUploader(threading.Thread):
 
         return dbx
 
-    def dropbox_upload(filename):
+    def dropbox_upload(self, filename):
         with open(filename, 'rb') as f:
             data = f.read()
         with stopwatch('upload %d bytes' % len(data)):

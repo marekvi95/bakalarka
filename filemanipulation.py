@@ -3,9 +3,11 @@ import threading
 import time
 from io import StringIO
 import json
+import queue
 
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
+import dropbox
 
 import config
 
@@ -13,16 +15,17 @@ import config
 class ConfFileDownloader(threading.Thread):
 
     def __init__(self, group=None, target=None, name=None,
-                 filename=None, *, daemon=None):
+                 filename=None, *, daemon=None, q=None):
         super().__init__(group=group, target=target, name=name,
                          daemon=daemon)
 
         self.filename = filename
+        self.q = q
 
         return
 
     def run(self):
-        logging.debug('Initialization... Params:', self.kwargs)
+        logging.debug('Initialization of Conf file checker thread ')
         drive = self.auth() # Authorization
         content = self.download_file(drive)
         oldconf = self.parse_json(content)
@@ -76,6 +79,27 @@ class ConfFileDownloader(threading.Thread):
         pass
 
 class FileUploader(threading.Thread):
+    def __init__(self, group=None, target=None, name=None,
+                 storage=None, *, daemon=None):
+        super().__init__(group=group, target=target, name=name,
+                         daemon=daemon)
+
+        self.storage = storage
+        self.storage_init = False
+
+    def run(self):
+        logging.debug('Initialization of file uploader thread')
+        while True:
+            if (storage == 'dropbox'):
+                if storage_init:
+                    if not q.empty():
+                        dropbox_upload(q.get())
+                else:
+                    dropbox_init()
+                    self.storage_init = True
+            time.sleep(5)
+        return
+
     def gdrive_init(gauth):
         return GoogleDrive(gauth)
 
@@ -112,6 +136,6 @@ class FileUploader(threading.Thread):
 
 
 
-w = ConfFileDownloader(filename='1TBLQfJHsZYPXDvcpS_ysg6asxf-5_Oku')
+#w = ConfFileDownloader(filename='1TBLQfJHsZYPXDvcpS_ysg6asxf-5_Oku')
 
-w.start()
+#w.start()

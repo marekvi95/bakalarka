@@ -9,8 +9,10 @@ import picamera
 import picamera.array
 
 import config
+import filemanipulation
 from config import BaseConfig
 from config import UserConfig
+from filemanipulation import FileUploader
 
 #Setup logging
 #logging.basicConfig(filename='logfile.log',level=logging.DEBUG,
@@ -107,7 +109,7 @@ class CaptureHandler():
 
             self.camera.stop_preview()
             #put the taken picture into queue
-            q.put(filename)
+            q.put(path + filename)
 
             logging.debug('Finished capturing')
 
@@ -144,5 +146,7 @@ class PiMotion:
                 logging.debug('Recording finished')
 
 q = queue.Queue(maxsize=200)
+w = FileUploader(storage='dropbox', q=q)
+w.start()
 motion = PiMotion(verbose=False, post_capture_callback=None)
 motion.start()

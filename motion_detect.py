@@ -86,7 +86,7 @@ class CaptureHandler():
             #put the taken picture into queue
             q.put(filename)
 
-            logging.debug('Finished capturing")
+            logging.debug('Finished capturing')
 
             self.working = False
 
@@ -121,3 +121,5 @@ class PiMotion:
                 logging.debug('Recording finished')
 
 q = queue.Queue(maxsize=200)
+motion = PiMotion(verbose=False, post_capture_callback=callback)
+motion.start()

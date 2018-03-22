@@ -96,9 +96,10 @@ class FileUploader(threading.Thread):
             if (self.storage == 'dropbox'):
                 if self.storage_init:
                     if not self.q.empty():
-                        self.dropbox_upload(self.q.get())
+                        self.dropbox_upload(filename = self.q.get(),
+                                            dbx = self.dbx)
                 else:
-                    self.dropbox_init()
+                    self.dbx = self.dropbox_init()
                     self.storage_init = True
             time.sleep(5)
         return
@@ -123,7 +124,7 @@ class FileUploader(threading.Thread):
 
         return dbx
 
-    def dropbox_upload(self, filename):
+    def dropbox_upload(self, filename, dbx):
         with open(filename, 'rb') as f:
             data = f.read()
         with stopwatch('upload %d bytes' % len(data)):

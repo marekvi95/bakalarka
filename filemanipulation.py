@@ -15,12 +15,11 @@ import config
 class ConfFileDownloader(threading.Thread):
 
     def __init__(self, group=None, target=None, name=None,
-                 filename=None, *, daemon=None, q=None):
+                 filename=None, *, daemon=None):
         super().__init__(group=group, target=target, name=name,
                          daemon=daemon)
 
         self.filename = filename
-        self.q = q
 
         return
 
@@ -80,12 +79,13 @@ class ConfFileDownloader(threading.Thread):
 
 class FileUploader(threading.Thread):
     def __init__(self, group=None, target=None, name=None,
-                 storage=None, *, daemon=None):
+                 storage=None, *, daemon=None, q=None):
         super().__init__(group=group, target=target, name=name,
                          daemon=daemon)
 
         self.storage = storage
         self.storage_init = False
+        self.q = q
 
     def run(self):
         logging.debug('Initialization of file uploader thread')

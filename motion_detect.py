@@ -1,4 +1,11 @@
+import queue
+import numpy as np
+
+import picamera
+import picamera.array
+
 import config
+
 
 class MotionAnalysis(picamera.array.PiMotionAnalysis):
     def __init__(self, camera, handler):
@@ -14,7 +21,7 @@ class MotionAnalysis(picamera.array.PiMotionAnalysis):
         # than 60, then say we've detected motion
         if (a > BaseConfig.vecMagnitude).sum() > BaseConfig.vecCount:
             # Motion detected!
-            print('Motion detected!')
+            logging.debug('Motion detected!')
             self.handler.motion_detected()
 
 
@@ -60,33 +67,26 @@ class CaptureHandler():
 
     def tick(self):
         if self.detected:
-            print "Started working on capturing"
+            logging.debug('Capturing!')
             self.working = True
             self.detected = False
             self.i += 1
 
-            path = "captures/%s/" % datetime.datetime.now().isoformat()
-
+            filename = '%s.jpg' % datetime.datetime.now().isoformat()
+            path = BaseConfig.imagePath + "/" + BaseConfig.imageDir + "/"
             os.makedirs(path)
 
             if BaseConfig.imagePreview:
                 self.camera.start_preview()
 
-            for x in range(1, 16):
-                filename = "detected-%02d.jpg" % x
-                self.camera.capture(path + filename, use_video_port=True)
-                print "Captured " + filename
+            self.camera.capture(path + filename)
+            logging.debug('Captured ' + filename)
 
             self.camera.stop_preview()
+            #put the taken picture into queue
+            q.put(filename)
 
-            print "Generating the montage"
-            montage_file = path + 'montage.jpg'
-            subprocess.call("montage -border 0 -background none -geometry 240x180 " + path + "* " + montage_file, shell=True)
-
-            print "Finished capturing"
-
-            if self.callback:
-                self.callback(montage_file)
+            logging.debug('Finished capturing")
 
             self.working = False
 
@@ -96,10 +96,6 @@ class PiMotion:
         self.verbose = verbose
         self.post_capture_callback = post_capture_callback
 
-    def __print(self, str):
-        if self.verbose:
-            print str
-
     def start(self):
         with picamera.PiCamera() as camera:
             camera.resolution = (BaseConfig.imageWidth, BaseConfig.imageHeight)
@@ -107,11 +103,11 @@ class PiMotion:
 
             handler = CaptureHandler(camera, self.post_capture_callback)
 
-            self.__print('Waiting 2 seconds for the camera to warm up')
+            logging.debug('Starting camera')
             time.sleep(2)
 
             try:
-                self.__print('Started recording')
+                logging.debug('Capture of video started')
                 camera.start_recording(
                     '/dev/null', format='h264',
                     motion_output=MotionAnalysis(camera, handler)
@@ -122,4 +118,6 @@ class PiMotion:
                     time.sleep(1)
             finally:
                 camera.stop_recording()
-                self.__print('Stopped recording')
+                logging.debug('Recording finished')
+
+q = queue.Queue(maxsize=200)

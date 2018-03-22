@@ -2,25 +2,22 @@ import logging
 import threading
 import time
 from io import StringIO
-import simplejson as json
+import json
+
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 
 import config
 
-logging.basicConfig(level=logging.DEBUG,
-                     format='(%(threadName)-10s) %(message)s',
-                     )
-
 
 class ConfFileDownloader(threading.Thread):
 
     def __init__(self, group=None, target=None, name=None,
-                 args=(), kwargs=None, *, daemon=None):
+                 filename=None, *, daemon=None):
         super().__init__(group=group, target=target, name=name,
                          daemon=daemon)
-        self.args = args
-        self.kwargs = kwargs
+
+        self.filename = filename
 
         return
 
@@ -35,8 +32,10 @@ class ConfFileDownloader(threading.Thread):
 
             if (newconf != oldconf):
                 oldconf = newconf
-                print("Configuration changed!!")
-            time.sleep(5)
+                logging.debug("Configuration changed!!")
+
+            # sleep thread for some amount of time
+            time.sleep(BaseConfig.confCheckTime)
 
         return
 
@@ -62,10 +61,11 @@ class ConfFileDownloader(threading.Thread):
 
     def download_file(self, drive):
 
-        conffile = drive.CreateFile({'id': '1TBLQfJHsZYPXDvcpS_ysg6asxf-5_Oku'})
+        conffile = drive.CreateFile({'id': self.filename})
         conffile.FetchMetadata()
 
-        print('title: %s, mimeType: %s' % (conffile['title'], conffile['mimeType']))
+        logging.debug('title: %s, mimeType: %s' % (conffile['title'],
+                        conffile['mimeType']))
 
         return conffile.GetContentString()
 
@@ -75,12 +75,43 @@ class ConfFileDownloader(threading.Thread):
     def load_config(self, configdata):
         pass
 
-class FileUploader():
-    def GDriveUpload():
-        pass
+class FileUploader(threading.Thread):
+    def gdrive_init(gauth):
+        return GoogleDrive(gauth)
+
+    def gdrive_upload(filename):
+        file_upload = drive.CreateFile({'title': filename})
+        file_upload.Upload() # Upload the file.
+        logging.debug('title: %s, id: %s' % (file_upload['title'],
+                        file_upload['id']))
+
+    def dropbox_init():
+        #Setup Dropbox session
+        dbx = dropbox.Dropbox(UserConfig.dropbox_token)
+        #Check if it works
+        try:
+            dbx.users_get_current_account()
+        except AuthError as err:
+            logging.error('ERROR: Invalid access token; re-generate token')
+
+        return dbx
+
+    def dropbox_upload(filename):
+        with open(filename, 'rb') as f:
+            data = f.read()
+        with stopwatch('upload %d bytes' % len(data)):
+            try:
+                dbx.files_upload(data, filename, mute=False)
+                logging.info('Uploading photo %s to Dropbox' % filename)
+            except dropbox.exceptions.ApiError as err:
+                logging.error('*** API error %s' % err)
+        f.close()
 
 
 
-w = ConfFileDownloader(args=0, kwargs={'a': 'A', 'b': 'B'})
+
+
+
+w = ConfFileDownloader(filename='1TBLQfJHsZYPXDvcpS_ysg6asxf-5_Oku')
 
 w.start()

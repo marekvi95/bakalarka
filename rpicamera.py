@@ -1,3 +1,6 @@
+# Standard library imports
+# Third-party imports
+# Local applications
 import picamera
 import picamera.array
 import datetime

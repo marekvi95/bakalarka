@@ -134,6 +134,15 @@ class FileUploader(threading.Thread):
         f.close()
 
 
+@contextlib.contextmanager
+def stopwatch(message):
+    # Measure how long the block of code took to process
+    t0 = time.time()
+    try:
+        yield
+    finally:
+        t1 = time.time()
+        logging.info('Total elapsed time for %s: %.3f' % (message, t1 - t0))
 
 
 

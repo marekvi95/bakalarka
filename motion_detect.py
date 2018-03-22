@@ -121,5 +121,5 @@ class PiMotion:
                 logging.debug('Recording finished')
 
 q = queue.Queue(maxsize=200)
-motion = PiMotion(verbose=False, post_capture_callback=callback)
+motion = PiMotion(verbose=False, post_capture_callback=None)
 motion.start()

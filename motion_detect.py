@@ -5,6 +5,8 @@ import picamera
 import picamera.array
 
 import config
+from config import BaseConfig
+from config import UserConfig
 
 
 class MotionAnalysis(picamera.array.PiMotionAnalysis):

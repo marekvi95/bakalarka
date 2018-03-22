@@ -10,6 +10,8 @@ from pydrive.drive import GoogleDrive
 import dropbox
 
 import config
+from config import BaseConfig
+from config import UserConfig
 
 
 class ConfFileDownloader(threading.Thread):

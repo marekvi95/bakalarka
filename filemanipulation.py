@@ -93,9 +93,9 @@ class FileUploader(threading.Thread):
             if (self.storage == 'dropbox'):
                 if self.storage_init:
                     if not q.empty():
-                        dropbox_upload(q.get())
+                        self.dropbox_upload(q.get())
                 else:
-                    dropbox_init()
+                    self.dropbox_init()
                     self.storage_init = True
             time.sleep(5)
         return

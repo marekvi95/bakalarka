@@ -14,6 +14,7 @@ formatter = logging.Formatter('%(threadName)-12s: %(levelname)-8s %(message)s')
 # tell the handler to use this format
 console.setFormatter(formatter)
 # add the handler to the root logger
+logging.getLogger('googleapiclient.discovery').setLevel(logging.CRITICAL)
 logging.getLogger('').addHandler(console)
 
 logging.debug('Libraries loaded')

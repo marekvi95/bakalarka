@@ -23,6 +23,7 @@ class ConfFileDownloader(threading.Thread):
                          daemon=daemon)
 
         self.filename = filename
+        self.setName('ConfFileDownloader')
 
         return
 
@@ -37,7 +38,7 @@ class ConfFileDownloader(threading.Thread):
 
             if (newconf != oldconf):
                 oldconf = newconf
-                logging.debug("Configuration changed!!")
+                logging.info("Configuration has been changed!!")
 
             # sleep thread for some amount of time
             time.sleep(BaseConfig.confCheckTime)
@@ -87,27 +88,54 @@ class FileUploader(threading.Thread):
                          daemon=daemon)
 
         self.storage = storage
-        self.storage_init = False
+        self.dropbox_is_init = False
+        self.gdrive_is_init = False
         self.q = q
+
+        self.setName('FileUploader')
 
     def run(self):
         logging.debug('Initialization of file uploader thread')
         while True:
             if (self.storage == 'dropbox'):
-                if self.storage_init:
+                if self.dropbox_is_init:
                     if not self.q.empty():
                         self.dropbox_upload(filename = self.q.get(),
                                             dbx = self.dbx)
                 else:
                     self.dbx = self.dropbox_init()
-                    self.storage_init = True
+                    self.dropbox_is_init = True
+
+            if (self.storage == 'gdrive'):
+                if self.gdrive_is_init:
+                    if not self.q.empty():
+                        self.gdrive_upload(filename = self.q.get(),
+                                            drive = self.drive)
+                else:
+                    self.drive = self.gdrive_init()
+                    self.gdrive_is_init = True
             time.sleep(5)
         return
 
-    def gdrive_init(self, gauth):
+    def gdrive_init(self):
+        gauth = GoogleAuth()
+        # Try to load saved client credentials
+        gauth.LoadCredentialsFile("mycreds.txt")
+        if gauth.credentials is None:
+            # Authenticate if they're not there
+            gauth.LocalWebserverAuth()
+        elif gauth.access_token_expired:
+            # Refresh them if expired
+            gauth.Refresh()
+        else:
+            # Initialize the saved creds
+            gauth.Authorize()
+        # Save the current credentials to a file
+        gauth.SaveCredentialsFile("mycreds.txt")
+
         return GoogleDrive(gauth)
 
-    def gdrive_upload(self, filename):
+    def gdrive_upload(self, filename, drive):
         file_upload = drive.CreateFile({'title': filename})
         file_upload.Upload() # Upload the file.
         logging.debug('title: %s, id: %s' % (file_upload['title'],

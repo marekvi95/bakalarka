@@ -1,6 +1,10 @@
 import httplib2
 import os
 import random
+import io
+import logging
+import logging.handlers
+import queue
 
 import psutil
 from apiclient import discovery
@@ -26,7 +30,7 @@ class GoogleHandler():
 
         Returns:
             Credentials, the obtained credential.
-            """
+        """
 
         home_dir = os.path.expanduser('~')
         credential_dir = os.path.join(home_dir, '.credentials')
@@ -83,13 +87,30 @@ class GoogleHandler():
 
     def upload_file(self, service, filename):
 
-        file_metadata = {'name': 'rpizero.jpg'}
-        media = MediaFileUpload('rpizero.jpg',
+        file_metadata = {'name': filename}
+        media = MediaFileUpload(filename,
                             mimetype='image/jpeg')
         file = service.files().create(body=file_metadata,
                                         media_body=media,
                                         fields='id').execute()
         print(file.get('id'))
+
+class SheetsLogHandler(logging.handlers.QueueHandler):
+    def __init__(self,queue):
+        print("initialized")
+        self.queue = queue
+        super().__init__(queue)
+
+    def enqueue(self, record):
+        self.queue.put(record)
+        print(record)
+
+    def close(self):
+        pass
+        #self.queue.close()
+
+
+
 
 def gdrive():
     """Shows basic usage of the Google Drive API.
@@ -118,11 +139,28 @@ def gdrive():
                                     media_body=media,
                                     fields='id').execute()
     print(file.get('id'))
+q1 = queue.Queue(-1)
+#q1.put('heejo')
+handler = SheetsLogHandler(q1)
 
+# define a Handler which writes INFO messages or higher to the sys.stderr
+handler.setLevel(logging.INFO)
+# set a format which is simpler for console use
+formatter = logging.Formatter('%(threadName)-12s: %(levelname)-8s %(message)s')
+# tell the handler to use this format
+handler.setFormatter(formatter)
+logging.getLogger('').addHandler(handler)
+logging.info('TESSST!!')
+logging.debug('TESST2!')
+logging.error('heej')
 
-gh = GoogleHandler()
-crd = gh.get_credentials()
-print(crd)
-srvc = gh.get_sheets_service(credentials=crd)
-gh.add_sheet_line(service=srvc, line = [str(datetime.now()),"OK",random.randint(10,15),random.randint(0,40),
-psutil.cpu_percent(),psutil.virtual_memory().percent])
+print(q1.get())
+print(q1.get())
+print(q1.get())
+
+#gh = GoogleHandler()
+#crd = gh.get_credentials()
+#print(crd)
+#srvc = gh.get_sheets_service(credentials=crd)
+#gh.add_sheet_line(service=srvc, line = [str(datetime.now()),"OK",random.randint(10,15),random.randint(0,40),
+#psutil.cpu_percent(),psutil.virtual_memory().percent])

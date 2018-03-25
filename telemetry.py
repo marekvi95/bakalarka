@@ -14,6 +14,7 @@ from oauth2client import tools
 from oauth2client.file import Storage
 from datetime import datetime
 
+from config import BaseConfig
 
 # If modifying these scopes, delete your previously saved credentials
 # at ~/.credentials/sheets.googleapis.com-python-quickstart.json
@@ -67,23 +68,18 @@ class GoogleHandler():
 
         return service
 
-    def add_sheet_line(self, service, line=None):
-        self.service = service
-        self.line = line
+    def add_sheet_line(self, service=None, line=None, spreadsheetId=None,
+                        rangeName=None):
 
-        spreadsheetId = '1XNmtg0NoCiU03NDZohlBwmOpFC-heHWbdRzY_tTYjhg'
-        rangeName = 'Log!A:A'
-        values = [
-                self.line
-        ]
         body = {
-        'values': values
-        }
+            'values': [line]
+            }
+            
         result = service.spreadsheets().values().append(
         spreadsheetId=spreadsheetId, range=rangeName,
         valueInputOption="USER_ENTERED", body=body).execute()
 
-        print('{0} cells updated.'.format(result.get('updates')));
+        logging.debug('{0} cells updated.'.format(result.get('updates')));
 
     def upload_file(self, service, filename):
 
@@ -155,12 +151,17 @@ logging.debug('TESST2!')
 logging.error('heej')
 
 print(q1.get())
-print(q1.get())
-print(q1.get())
+#print(q1.get())
+#print(q1.get())
 
-#gh = GoogleHandler()
-#crd = gh.get_credentials()
+gh = GoogleHandler()
+crd = gh.get_credentials()
 #print(crd)
-#srvc = gh.get_sheets_service(credentials=crd)
-#gh.add_sheet_line(service=srvc, line = [str(datetime.now()),"OK",random.randint(10,15),random.randint(0,40),
-#psutil.cpu_percent(),psutil.virtual_memory().percent])
+srvc = gh.get_sheets_service(credentials=crd)
+gh.add_sheet_line(service=srvc, spreadsheetId=BaseConfig.dashboardFileID,
+                    rangeName=BaseConfig.logRange,
+                                        line = [str(datetime.now()),
+                                        "OK",random.randint(10,15),
+                                        random.randint(0,40),
+                                        psutil.cpu_percent(),
+                                        psutil.virtual_memory().percent])

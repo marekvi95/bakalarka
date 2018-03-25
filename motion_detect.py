@@ -83,6 +83,7 @@ class CaptureHandler():
         self.detected = False
         self.working = False
         self.i = 0
+        self.echoCounter = -1
 
     def motion_detected(self):
         if not self.working:
@@ -108,6 +109,19 @@ class CaptureHandler():
             logging.debug('Captured ' + filename)
 
             self.camera.stop_preview()
+
+            if self.echoCounter == -1 and UserConfig.echo:
+                logging.debug('Echo mode enabled, capturing will continue')
+                self.echoCounter = 0
+                self.detected = True
+
+            if self.echoCounter >= 0:
+                if self.echoCounter >= 10:
+                    self.echoCounter = -1
+                else:
+                    self.echoCounter += 1
+                    logging.debug(echoCounter % '. echo captured')
+                    self.detected = True
             #put the taken picture into queue
             q.put(path + filename)
 

@@ -67,7 +67,9 @@ class BaseConfig:
 
     PIRpin = 21
 
-    dashboardFilename='1TBLQfJHsZYPXDvcpS_ysg6asxf-5_Oku'
+    confFileID='1TBLQfJHsZYPXDvcpS_ysg6asxf-5_Oku'
+    dashboardFileID = '1XNmtg0NoCiU03NDZohlBwmOpFC-heHWbdRzY_tTYjhg'
+    logRange = 'Log!A:A'
 
 class UserConfig(BaseConfig):
     """ Extends BaseConfig class with user defined configuration

@@ -74,7 +74,7 @@ class GoogleHandler():
         body = {
             'values': [line]
             }
-            
+
         result = service.spreadsheets().values().append(
         spreadsheetId=spreadsheetId, range=rangeName,
         valueInputOption="USER_ENTERED", body=body).execute()
@@ -89,7 +89,7 @@ class GoogleHandler():
         file = service.files().create(body=file_metadata,
                                         media_body=media,
                                         fields='id').execute()
-        print(file.get('id'))
+        logging.debug(file.get('id'))
 
 class SheetsLogHandler(logging.handlers.QueueHandler):
     def __init__(self,queue):
@@ -104,9 +104,6 @@ class SheetsLogHandler(logging.handlers.QueueHandler):
     def close(self):
         pass
         #self.queue.close()
-
-
-
 
 def gdrive():
     """Shows basic usage of the Google Drive API.
@@ -135,6 +132,7 @@ def gdrive():
                                     media_body=media,
                                     fields='id').execute()
     print(file.get('id'))
+
 q1 = queue.Queue(-1)
 #q1.put('heejo')
 handler = SheetsLogHandler(q1)
@@ -165,3 +163,5 @@ gh.add_sheet_line(service=srvc, spreadsheetId=BaseConfig.dashboardFileID,
                                         random.randint(0,40),
                                         psutil.cpu_percent(),
                                         psutil.virtual_memory().percent])
+srvc2 = gh.get_file_service(crd)
+gh.upload_file(service=srvc2, filename='../../../Pictures/IMG_9210.jpg')

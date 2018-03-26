@@ -159,8 +159,8 @@ class PiMotion:
                 camera.stop_recording()
                 logging.debug('Recording finished')
 
-q = queue.Queue(maxsize=200)
-w = FileUploader(storage='gdrive', q=q)
-w.start()
-motion = PiMotion(verbose=False, post_capture_callback=None)
-motion.start()
+#q = queue.Queue(maxsize=200)
+#w = FileUploader(storage='gdrive', q=q)
+#w.start()
+#motion = PiMotion(verbose=False, post_capture_callback=None)
+#motion.start()

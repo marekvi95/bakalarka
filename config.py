@@ -81,7 +81,7 @@ class UserConfig(BaseConfig):
 
     """
     mode = "realtime"
-    echo = False
+    echo = True
     interval = 1
     storage = "gdrive"
     usePIR = False

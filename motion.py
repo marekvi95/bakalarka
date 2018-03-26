@@ -132,16 +132,17 @@ class CaptureHandler:
 
 
 class PiMotion:
-    def __init__(self, verbose=False, post_capture_callback=None):
+    def __init__(self, verbose=False, post_capture_callback=None, q=None):
         self.verbose = verbose
         self.post_capture_callback = post_capture_callback
+        self.q = q
 
     def start(self):
         with picamera.PiCamera() as camera:
             camera.resolution = (BaseConfig.imageWidth, BaseConfig.imageHeight)
             camera.framerate = BaseConfig.cameraFPS
 
-            handler = CaptureHandler(camera, self.post_capture_callback)
+            handler = CaptureHandler(camera, self.post_capture_callback, self.q)
 
             logging.debug('Starting camera')
             time.sleep(2)

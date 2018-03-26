@@ -3,6 +3,7 @@ import config
 import filemanipulation
 import motion
 import telemetry
+import queue
 
 from config import BaseConfig
 from config import UserConfig

@@ -25,6 +25,7 @@ if __name__ == '__main__':
         #initialization of file uploader
         w = FileUploader(storage=UserConfig.storage, q=q)
         w.start()
+
         logging.debug('File uploader started')
         #initialization daylight detection threadName
 
@@ -33,6 +34,6 @@ if __name__ == '__main__':
         motion.start()
 
     finally:
-        w.cancel()
-        cfg.cancel()
+        #w.cancel()
+        #cfg.cancel()
         logging.debug('Exiting program')

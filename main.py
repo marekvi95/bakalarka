@@ -7,6 +7,11 @@ import telemetry
 from config import BaseConfig
 from config import UserConfig
 
+from filemanipulation import FileUploader
+from filemanipulation import ConfFileDownloader
+from motion import PiMotion
+
+
 if __name__ == '__main__':
     try:
         logging.debug('Starting program')

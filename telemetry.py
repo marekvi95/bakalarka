@@ -107,22 +107,22 @@ class SheetsLogHandler(logging.handlers.QueueHandler):
         pass
         #self.queue.close()
 
-q1 = queue.Queue(-1)
+#q1 = queue.Queue(-1)
 #q1.put('heejo')
-handler = SheetsLogHandler(q1)
+#handler = SheetsLogHandler(q1)
 
 # define a Handler which writes INFO messages or higher to the sys.stderr
-handler.setLevel(logging.INFO)
+#handler.setLevel(logging.INFO)
 # set a format which is simpler for console use
-formatter = logging.Formatter('%(threadName)-12s: %(levelname)-8s %(message)s')
+#formatter = logging.Formatter('%(threadName)-12s: %(levelname)-8s %(message)s')
 # tell the handler to use this format
-handler.setFormatter(formatter)
-logging.getLogger('').addHandler(handler)
-logging.info('TESSST!!')
-logging.debug('TESST2!')
-logging.error('heej')
+#handler.setFormatter(formatter)
+#logging.getLogger('').addHandler(handler)
+#logging.info('TESSST!!')
+#logging.debug('TESST2!')
+#logging.error('heej')
 
-print(q1.get())
+#print(q1.get())
 #print(q1.get())
 #print(q1.get())
 

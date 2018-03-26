@@ -112,6 +112,3 @@ def stopwatch(message):
     finally:
         t1 = time.time()
         logging.info('Total elapsed time for %s: %.3f' % (message, t1 - t0))
-
-UserConfig.loadcfg({'mode':'pepa'})
-print(UserConfig.mode)

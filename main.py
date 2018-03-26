@@ -25,7 +25,7 @@ if __name__ == '__main__':
         #initialization of file uploader
         w = FileUploader(storage=UserConfig.storage, q=q)
         w.start()
-
+        logging.debug('File uploader started')
         #initialization daylight detection threadName
 
         #initialization of motion detection analysis

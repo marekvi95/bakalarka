@@ -5,6 +5,7 @@ import io
 import logging
 import logging.handlers
 import queue
+import time
 
 import psutil
 from apiclient import discovery
@@ -15,6 +16,7 @@ from oauth2client.file import Storage
 from datetime import datetime
 
 from config import BaseConfig
+from config import UserConfig
 
 # If modifying these scopes, delete your previously saved credentials
 # at ~/.credentials/sheets.googleapis.com-python-quickstart.json
@@ -22,7 +24,7 @@ SCOPES = 'https://www.googleapis.com/auth/drive'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Google Sheets API Python Quickstart'
 
-class GoogleHandler():
+class GoogleHandler:
     def get_credentials(self):
         """Gets valid user credentials from storage.
 
@@ -105,34 +107,6 @@ class SheetsLogHandler(logging.handlers.QueueHandler):
         pass
         #self.queue.close()
 
-def gdrive():
-    """Shows basic usage of the Google Drive API.
-
-    Creates a Google Drive API service object and outputs the names and IDs
-    for up to 10 files.
-    """
-    credentials = get_credentials()
-    http = credentials.authorize(httplib2.Http())
-    service = discovery.build('drive', 'v3', http=http)
-
-    results = service.files().list(
-        pageSize=10,fields="nextPageToken, files(id, name)").execute()
-    items = results.get('files', [])
-    if not items:
-        print('No files found.')
-    else:
-        print('Files:')
-        for item in items:
-            print('{0} ({1})'.format(item['name'], item['id']))
-
-    file_metadata = {'name': 'rpizero.jpg'}
-    media = MediaFileUpload('rpizero.jpg',
-                        mimetype='image/jpeg')
-    file = service.files().create(body=file_metadata,
-                                    media_body=media,
-                                    fields='id').execute()
-    print(file.get('id'))
-
 q1 = queue.Queue(-1)
 #q1.put('heejo')
 handler = SheetsLogHandler(q1)
@@ -152,16 +126,19 @@ print(q1.get())
 #print(q1.get())
 #print(q1.get())
 
-gh = GoogleHandler()
-crd = gh.get_credentials()
+#gh = GoogleHandler()
+#crd = gh.get_credentials()
 #print(crd)
-srvc = gh.get_sheets_service(credentials=crd)
-gh.add_sheet_line(service=srvc, spreadsheetId=BaseConfig.dashboardFileID,
-                    rangeName=BaseConfig.logRange,
-                                        line = [str(datetime.now()),
-                                        "OK",random.randint(10,15),
-                                        random.randint(0,40),
-                                        psutil.cpu_percent(),
-                                        psutil.virtual_memory().percent])
-srvc2 = gh.get_file_service(crd)
-gh.upload_file(service=srvc2, filename='../../../Pictures/IMG_9210.jpg')
+#srvc = gh.get_sheets_service(credentials=crd)
+#while True:
+#    gh.add_sheet_line(service=srvc, spreadsheetId=BaseConfig.dashboardFileID,
+#                    rangeName=BaseConfig.logRange,
+#                                        line = [str(datetime.now()),
+#                                        "OK",random.randint(10,15),
+#                                        random.randint(0,40),
+#                                        psutil.cpu_percent(),
+#                                        psutil.virtual_memory().percent])
+#    time.sleep(1)
+
+#srvc2 = gh.get_file_service(crd)
+#gh.upload_file(service=srvc2, filename='../../../Pictures/IMG_9210.jpg')

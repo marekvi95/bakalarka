@@ -70,6 +70,7 @@ class BaseConfig:
     confFileID='1TBLQfJHsZYPXDvcpS_ysg6asxf-5_Oku'
     dashboardFileID = '1XNmtg0NoCiU03NDZohlBwmOpFC-heHWbdRzY_tTYjhg'
     logRange = 'Log!A:A'
+    OAuthJSON = 'client_secret.json'
 
 class UserConfig(BaseConfig):
     """ Extends BaseConfig class with user defined configuration
@@ -79,32 +80,27 @@ class UserConfig(BaseConfig):
         mode -- mode of motion detection
 
     """
-    def __init__(self, cfgdict):
-        self.__dict__ = cfgdict
-
     mode = "realtime"
     echo = False
     interval = 1
     storage = "gdrive"
-    google_json = ""
     usePIR = False
-    dropbox_token = 'MZ2iiIImvUAAAAAAAAAAzo2V-UCXSK7MUojx9f7qDKo73tiFjRwJo0J2N2zwkYgz'
+    dropboxToken = 'MZ2iiIImvUAAAAAAAAAAzo2V-UCXSK7MUojx9f7qDKo73tiFjRwJo0J2N2zwkYgz'
     SMSNotification = False
     SMSControl = False
     authorizedNumber = 733733733
 
-    def loadConfig(self, conf):
-        logging.info('Loading new configuration file')
-        self.mode = conf['mode']
-        self.echo = conf['echo']
-        self.interval = conf['interval']
-        self.storage = conf['storage']
-        self.google_json = conf['google_json']
-        self.usePIR = conf['usePIR']
-        self.dropbox_token = conf['dropbox_token']
-        self.SMSNotification = conf['SMSNotification']
-        self.SMSControl = conf['SMSControl']
-        self.authorizedNumber = conf['authorizedNumber']
+    @classmethod
+    def load_config(cls, conf):
+        cls.mode = conf['mode']
+        cls.echo = conf['echo']
+        cls.interval = conf['interval']
+        cls.storage = conf['storage']
+        cls.usePIR = conf['usePIR']
+        cls.dropboxToken = conf['dropboxToken']
+        cls.SMSNotification = conf['SMSNotification']
+        cls.SMSControl = conf['SMSControl']
+        cls.authorizedNumber = conf['authorizedNumber']
 
 
 @contextlib.contextmanager
@@ -116,3 +112,6 @@ def stopwatch(message):
     finally:
         t1 = time.time()
         logging.info('Total elapsed time for %s: %.3f' % (message, t1 - t0))
+
+UserConfig.loadcfg({'mode':'pepa'})
+print(UserConfig.mode)

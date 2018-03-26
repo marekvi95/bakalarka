@@ -48,7 +48,7 @@ class MotionAnalysis(picamera.array.PiMotionAnalysis):
             self.handler.motion_detected()
 
 
-class PIRMotionAnalysis():
+class PIRMotionAnalysis:
     def initPIRsensor(PIR_PIN):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(PIR_PIN, GPIO.IN)
@@ -76,7 +76,7 @@ class PIRMotionAnalysis():
                 saveToDropbox(filename)
 
 
-class CaptureHandler():
+class CaptureHandler:
     def __init__(self, camera, post_capture_callback=None):
         self.camera = camera
         self.callback = post_capture_callback

@@ -39,6 +39,7 @@ class ConfFileDownloader(threading.Thread):
             if (newconf != oldconf):
                 oldconf = newconf
                 logging.info("Configuration has been changed!!")
+                UserConfig.load_config(newconf)
 
             # sleep thread for some amount of time
             time.sleep(BaseConfig.confCheckTime)
@@ -174,10 +175,3 @@ def stopwatch(message):
     finally:
         t1 = time.time()
         logging.info('Total elapsed time for %s: %.3f' % (message, t1 - t0))
-
-
-
-
-#w = ConfFileDownloader(filename='1TBLQfJHsZYPXDvcpS_ysg6asxf-5_Oku')
-
-#w.start()

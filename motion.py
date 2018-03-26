@@ -120,7 +120,7 @@ class CaptureHandler:
                     self.echoCounter = -1
                 else:
                     self.echoCounter += 1
-                    logging.debug(self.echoCounter % '. echo captured')
+                    logging.debug(self.echoCounter, '. echo captured')
                     self.detected = True
             #put the taken picture into queue
             q.put(path + filename)

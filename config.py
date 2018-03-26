@@ -92,15 +92,18 @@ class UserConfig(BaseConfig):
 
     @classmethod
     def load_config(cls, conf):
-        cls.mode = conf['mode']
-        cls.echo = conf['echo']
-        cls.interval = conf['interval']
-        cls.storage = conf['storage']
-        cls.usePIR = conf['usePIR']
-        cls.dropboxToken = conf['dropboxToken']
-        cls.SMSNotification = conf['SMSNotification']
-        cls.SMSControl = conf['SMSControl']
-        cls.authorizedNumber = conf['authorizedNumber']
+        try:
+            cls.mode = conf['mode']
+            cls.echo = conf['echo']
+            cls.interval = conf['interval']
+            cls.storage = conf['storage']
+            cls.usePIR = conf['usePIR']
+            cls.dropboxToken = conf['dropboxToken']
+            cls.SMSNotification = conf['SMSNotification']
+            cls.SMSControl = conf['SMSControl']
+            cls.authorizedNumber = conf['authorizedNumber']
+        except KeyError:
+            logging.error('New configuration cannot be loaded, check syntax!')
 
 
 @contextlib.contextmanager

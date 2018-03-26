@@ -77,9 +77,10 @@ class PIRMotionAnalysis:
 
 
 class CaptureHandler:
-    def __init__(self, camera, post_capture_callback=None):
+    def __init__(self, camera, post_capture_callback=None, q=None):
         self.camera = camera
         self.callback = post_capture_callback
+        self.q = q
         self.detected = False
         self.working = False
         self.i = 0
@@ -123,7 +124,7 @@ class CaptureHandler:
                     logging.debug('Echo image captured')
                     self.detected = True
             #put the taken picture into queue
-            q.put(path + filename)
+            self.q.put(path + filename)
 
             logging.debug('Finished capturing')
 

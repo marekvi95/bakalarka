@@ -6,6 +6,8 @@ import logging
 import logging.handlers
 import queue
 import time
+import threading
+import json
 
 import psutil
 from apiclient import discovery
@@ -17,6 +19,11 @@ from datetime import datetime
 
 from config import BaseConfig
 from config import UserConfig
+
+
+logging.basicConfig(filename='logfile.log',level=logging.DEBUG,
+                   format='%(asctime)s %(threadName)-12s %(levelname)-8s %(message)s',
+                    datefmt='%m-%d %H:%M',)
 
 # If modifying these scopes, delete your previously saved credentials
 # at ~/.credentials/sheets.googleapis.com-python-quickstart.json
@@ -93,6 +100,42 @@ class GoogleHandler:
                                         fields='id').execute()
         logging.debug(file.get('id'))
 
+class LogSender(threading.Thread):
+    def __init__(self, group=None, target=None, name=None,
+             storage=None, *, daemon=None, q, gh, service):
+
+        super().__init__(group=group, target=target, name=name,
+                     daemon=daemon)
+        self.q = q
+        self.gh = gh
+        self.service = service
+
+        self.setName('LogSender')
+
+    def run(self):
+        while True:
+            if not self.q.empty():
+
+                self.logObject = self.q.get()
+
+                self.msg = self.logObject.__dict__['msg']
+                self.levelname = self.logObject.__dict__['levelname']
+                self.threadName = self.logObject.__dict__['threadName']
+                self.asctime = self.logObject.__dict__['asctime']
+
+                self.newLine = [self.asctime, self.levelname,
+                                self. threadName,  self.msg]
+
+                print(self.logObject.__dict__)
+
+                print(self.msg)
+                self.gh.add_sheet_line(service=self.service,
+                                spreadsheetId=BaseConfig.dashboardFileID,
+                                rangeName=BaseConfig.msgRange,
+                                line=self.newLine)
+            time.sleep(1)
+
+
 class SheetsLogHandler(logging.handlers.QueueHandler):
     def __init__(self,queue):
         print("initialized")
@@ -100,12 +143,65 @@ class SheetsLogHandler(logging.handlers.QueueHandler):
         super().__init__(queue)
 
     def enqueue(self, record):
+        #formatted = self.format(record)
         self.queue.put(record)
         print(record)
 
     def close(self):
         pass
         #self.queue.close()
+
+class HandlerSheets(logging.Handler):
+    def __init__(self, gh, srvc):
+        self.gh = gh
+        self.srvc = srvc
+
+        super().__init__()
+
+    def emit(self,record):
+        print('Emituju')
+        print(record)
+        formatted = self.format(record)
+        print(formatted)
+        #self.gh.add_sheet_line(service=srvc, spreadsheetId=BaseConfig.dashboardFileID,
+        #                    rangeName=BaseConfig.logRange, line=[formatted])
+
+class SheetsLogListener(logging.handlers.QueueListener):
+    def _init_(self,queue,sheetHandler):
+        self.queue = queue
+        self.sheetHandler = sheetHandler
+
+
+q1 = queue.Queue(-1)
+gh = GoogleHandler()
+crd = gh.get_credentials()
+print(crd)
+srvc = gh.get_sheets_service(credentials=crd)
+handler = logging.StreamHandler()
+handler2 = SheetsLogHandler(q1)
+handler2.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(threadName)-12s: %(levelname)-8s %(message)s')
+# tell the handler to use this format
+handler2.setFormatter(formatter)
+handler.setFormatter(formatter)
+handler.setLevel(logging.DEBUG)
+logging.getLogger('').addHandler(handler2)
+logging.getLogger('').addHandler(handler)
+
+testThread = LogSender(q=q1, gh=gh, service=srvc)
+testThread.start()
+
+
+while True:
+    logging.debug('testt')
+    logging.debug('testt jeste jednou')
+    logging.info('testt jeste jeste jednou')
+    logging.error('chyba')
+    logging.critical('kriticka chyba')
+    time.sleep(5)
+#logging.info('tes2tt')
+
+
 
 #q1 = queue.Queue(-1)
 #q1.put('heejo')

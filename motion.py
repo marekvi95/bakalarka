@@ -31,6 +31,14 @@ from filemanipulation import FileUploader
 #logging.debug('Libraries loaded')
 
 class MotionAnalysis(picamera.array.PiMotionAnalysis):
+    """ MotionAnalysis class extends PiMotionAnalysis class.
+
+        The array passed to analyse() is organized as (rows, columns)
+        where rows and columns are the number of rows and columns of macro-
+        blocks (16x16 pixel blocks) in the original frames. There is always
+        one extra column of macro-blocks present in motion vector data.
+
+    """
     def __init__(self, camera, handler):
         super(MotionAnalysis, self).__init__(camera)
         self.handler = handler
@@ -44,7 +52,7 @@ class MotionAnalysis(picamera.array.PiMotionAnalysis):
         # than 60, then say we've detected motion
         if (a > BaseConfig.vecMagnitude).sum() > BaseConfig.vecCount:
             # Motion detected!
-            logging.debug('Motion detected!')
+            logging.info('Motion detected!')
             self.handler.motion_detected()
 
 
@@ -77,6 +85,19 @@ class PIRMotionAnalysis:
 
 
 class CaptureHandler:
+    """
+        It provides a handler for capturing the pictures
+
+        Attributes:
+            camera (obj): PiCamera object
+            callback (str): callback
+            q (obj): queue for passing captured photos
+            detected (bool): True if motion is detected
+            working (bool): True if the picture is saving
+            i (int): counter of captured photos
+            echoCounter (int): counter of taken pictures with echo mode
+
+    """
     def __init__(self, camera, post_capture_callback=None, q=None):
         self.camera = camera
         self.callback = post_capture_callback

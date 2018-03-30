@@ -138,7 +138,7 @@ class FileUploader(threading.Thread):
 
     def gdrive_upload(self, filename, drive):
         file_upload = drive.CreateFile({"parents": [{"kind": "drive#fileLink",
-                                            "id": BaseConfig.pictureFolderID}]}
+                                            "id": BaseConfig.pictureFolderID}]})
         #file_upload = drive.CreateFile({'title': filename})
         file_upload.SetContentFile(filename)
         file_upload.Upload() # Upload the file.

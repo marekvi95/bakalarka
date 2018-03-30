@@ -62,7 +62,7 @@ class GoogleHandler:
     def get_sheets_service(self, credentials):
         self.credentials = credentials
 
-        http = self.credentials.authorize(httplib2.Http())
+        http = credentials.authorize(httplib2.Http())
         discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
                         'version=v4')
         service = discovery.build('sheets', 'v4', http=http,

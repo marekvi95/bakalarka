@@ -82,8 +82,8 @@ class UserConfig(BaseConfig):
         mode -- mode of motion detection
 
     """
-    mode = 'realtime'
-    echo = True
+    mode = 'interval'
+    echo = False
     interval = 1
     storage = 'gdrive'
     usePIR = False
@@ -99,7 +99,7 @@ class UserConfig(BaseConfig):
                 logging.error('Mode is invalid!!')
             else:
                 cls.mode = conf['mode']
-            
+
             cls.interval = conf['interval']
             cls.storage = conf['storage']
             cls.usePIR = conf['usePIR']

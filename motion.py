@@ -45,7 +45,7 @@ class MotionAnalysis(picamera.array.PiMotionAnalysis):
 
     def analyse(self, a):
 
-        if UserConfig.mode = 'realtime':
+        if UserConfig.mode == 'realtime':
             a = np.sqrt(
                 np.square(a['x'].astype(np.float)) +
                 np.square(a['y'].astype(np.float))
@@ -57,11 +57,11 @@ class MotionAnalysis(picamera.array.PiMotionAnalysis):
                     logging.info('Motion detected!')
                     self.handler.motion_detected()
 
-        if UserConfig.mode = 'interval':
+        if UserConfig.mode == 'interval':
             # Interval mode
             # capture
             self.handler.motion_detected()
-            # sleep for some time 
+            # sleep for some time
             time.sleep(UserConfig.interval)
 
 

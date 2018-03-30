@@ -62,7 +62,7 @@ class GoogleHandler:
     def get_sheets_service(self, credentials):
         self.credentials = credentials
 
-        http = credentials.authorize(httplib2.Http())
+        http = self.credentials.authorize(httplib2.Http())
         discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
                         'version=v4')
         service = discovery.build('sheets', 'v4', http=http,
@@ -88,7 +88,7 @@ class GoogleHandler:
         spreadsheetId=spreadsheetId, range=rangeName,
         valueInputOption="USER_ENTERED", body=body).execute()
 
-        logging.debug('{0} cells updated.'.format(result.get('updates')));
+        #logging.debug('{0} cells updated.'.format(result.get('updates')));
 
     def upload_file(self, service, filename):
 

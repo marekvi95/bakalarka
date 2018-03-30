@@ -191,13 +191,13 @@ class TelemetrySender(threading.Thread):
 
 
 
-while True:
-    logging.debug('testt')
-    logging.debug('testt jeste jednou')
-    logging.info('testt jeste jeste jednou')
-    logging.error('chyba')
-    logging.critical('kriticka chyba')
-    time.sleep(5)
+#while True:
+#    logging.debug('testt')
+#    logging.debug('testt jeste jednou')
+#    logging.info('testt jeste jeste jednou')
+#    logging.error('chyba')
+#    logging.critical('kriticka chyba')
+#    time.sleep(5)
 #logging.info('tes2tt')
 
 

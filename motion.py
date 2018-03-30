@@ -52,10 +52,11 @@ class MotionAnalysis(picamera.array.PiMotionAnalysis):
                 ).clip(0, 255).astype(np.uint8)
                 # If there're more than 50 vectors with a magnitude greater
                 # than 60, then say we've detected motion
-                if (a > BaseConfig.vecMagnitude).sum() > BaseConfig.vecCount:
-                    # Motion detected!
-                    logging.info('Motion detected!')
-                    self.handler.motion_detected()
+
+            if (a > BaseConfig.vecMagnitude).sum() > BaseConfig.vecCount:
+                # Motion detected!
+                logging.info('Motion detected!')
+                self.handler.motion_detected()
 
         if UserConfig.mode == 'interval':
             # Interval mode

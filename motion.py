@@ -44,16 +44,25 @@ class MotionAnalysis(picamera.array.PiMotionAnalysis):
         self.handler = handler
 
     def analyse(self, a):
-        a = np.sqrt(
-            np.square(a['x'].astype(np.float)) +
-            np.square(a['y'].astype(np.float))
-            ).clip(0, 255).astype(np.uint8)
-        # If there're more than 50 vectors with a magnitude greater
-        # than 60, then say we've detected motion
-        if (a > BaseConfig.vecMagnitude).sum() > BaseConfig.vecCount:
-            # Motion detected!
-            logging.info('Motion detected!')
+
+        if UserConfig.mode = 'realtime':
+            a = np.sqrt(
+                np.square(a['x'].astype(np.float)) +
+                np.square(a['y'].astype(np.float))
+                ).clip(0, 255).astype(np.uint8)
+                # If there're more than 50 vectors with a magnitude greater
+                # than 60, then say we've detected motion
+                if (a > BaseConfig.vecMagnitude).sum() > BaseConfig.vecCount:
+                    # Motion detected!
+                    logging.info('Motion detected!')
+                    self.handler.motion_detected()
+
+        if UserConfig.mode = 'interval':
+            # Interval mode
+            # capture
             self.handler.motion_detected()
+            # sleep for some time 
+            time.sleep(UserConfig.interval)
 
 
 class PIRMotionAnalysis:

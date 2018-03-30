@@ -20,11 +20,6 @@ from datetime import datetime
 from config import BaseConfig
 from config import UserConfig
 
-
-logging.basicConfig(filename='logfile.log',level=logging.DEBUG,
-                   format='%(asctime)s %(threadName)-12s %(levelname)-8s %(message)s',
-                    datefmt='%m-%d %H:%M',)
-
 # If modifying these scopes, delete your previously saved credentials
 # at ~/.credentials/sheets.googleapis.com-python-quickstart.json
 SCOPES = 'https://www.googleapis.com/auth/drive'
@@ -32,6 +27,11 @@ CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Google Sheets API Python Quickstart'
 
 class GoogleHandler:
+
+    def __init__(self):
+        self.credentials = self.get_credentials()
+        self.sheetsService = self.get_sheets_service(self.credentials)
+
     def get_credentials(self):
         """Gets valid user credentials from storage.
 
@@ -81,10 +81,10 @@ class GoogleHandler:
                         rangeName=None):
 
         body = {
-            'values': [line]
+            'values': line
             }
 
-        result = service.spreadsheets().values().append(
+        result = self.sheetsService.spreadsheets().values().append(
         spreadsheetId=spreadsheetId, range=rangeName,
         valueInputOption="USER_ENTERED", body=body).execute()
 
@@ -101,95 +101,94 @@ class GoogleHandler:
         logging.debug(file.get('id'))
 
 class LogSender(threading.Thread):
-    def __init__(self, group=None, target=None, name=None,
-             storage=None, *, daemon=None, q, gh, service):
+    """
+        LogSender class is a subclass of a Thread class.
+        It provides a functionality to send a captured log to
+        Google Sheets. It should be used together with the
+        logging.handlers.QueueHandler class as a handler for logging.
+        LogSender works only in specified time intervals,
+        dequeues everything in logQueue, sends it
+        to the Google Sheets and goes sleep.
 
-        super().__init__(group=group, target=target, name=name,
-                     daemon=daemon)
-        self.q = q
-        self.gh = gh
-        self.service = service
+        Attributes:
+            logQueue (obj): queue.Queue object with logRecord (obj)
+            enqueued
+            googleHandler (obj): GoogleHandler instance object
+
+    """
+    def __init__(self, logQueue, googleHandler):
+
+        super().__init__(group=None, target=None, name=None,
+                     daemon=None)
+
+        self.logQueue = logQueue
+        self.googleHandler = googleHandler
 
         self.setName('LogSender')
 
     def run(self):
+        self.array = []
         while True:
-            if not self.q.empty():
+            if not self.logQueue.empty():
+                while not self.logQueue.empty():
+                    self.record = self.logQueue.get()
 
-                self.logObject = self.q.get()
+                    self.newLine = [self.record.asctime, self.record.levelname,
+                                    self.record.threadName,  self.record.msg]
 
-                self.msg = self.logObject.__dict__['msg']
-                self.levelname = self.logObject.__dict__['levelname']
-                self.threadName = self.logObject.__dict__['threadName']
-                self.asctime = self.logObject.__dict__['asctime']
+                    self.array.append(self.newLine)
 
-                self.newLine = [self.asctime, self.levelname,
-                                self. threadName,  self.msg]
-
-                print(self.logObject.__dict__)
-
-                print(self.msg)
-                self.gh.add_sheet_line(service=self.service,
+                self.googleHandler.add_sheet_line(
                                 spreadsheetId=BaseConfig.dashboardFileID,
                                 rangeName=BaseConfig.msgRange,
-                                line=self.newLine)
+                                line=self.array)
+
+                self.array = [] #empty the array
+
             time.sleep(1)
 
+class TelemetrySender(threading.Thread):
+    """
+        Telemetry class is a subclass of a Thread class.
+        It provides a functionality for sending a telemetric data to
+        Google Sheets.
 
-class SheetsLogHandler(logging.handlers.QueueHandler):
-    def __init__(self,queue):
-        print("initialized")
-        self.queue = queue
-        super().__init__(queue)
+        Attributes:
 
-    def enqueue(self, record):
-        #formatted = self.format(record)
-        self.queue.put(record)
-        print(record)
+    """
+    def __init__(self, googleHandler):
 
-    def close(self):
-        pass
-        #self.queue.close()
+        self.googleHandler = googleHandler
 
-class HandlerSheets(logging.Handler):
-    def __init__(self, gh, srvc):
-        self.gh = gh
-        self.srvc = srvc
+        super().__init__(group=None, target=None, name=None,
+                     daemon=None)
 
-        super().__init__()
-
-    def emit(self,record):
-        print('Emituju')
-        print(record)
-        formatted = self.format(record)
-        print(formatted)
-        #self.gh.add_sheet_line(service=srvc, spreadsheetId=BaseConfig.dashboardFileID,
-        #                    rangeName=BaseConfig.logRange, line=[formatted])
-
-class SheetsLogListener(logging.handlers.QueueListener):
-    def _init_(self,queue,sheetHandler):
-        self.queue = queue
-        self.sheetHandler = sheetHandler
+        self.setName('TelemetrySender')
 
 
-q1 = queue.Queue(-1)
-gh = GoogleHandler()
-crd = gh.get_credentials()
-print(crd)
-srvc = gh.get_sheets_service(credentials=crd)
-handler = logging.StreamHandler()
-handler2 = SheetsLogHandler(q1)
-handler2.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(threadName)-12s: %(levelname)-8s %(message)s')
-# tell the handler to use this format
-handler2.setFormatter(formatter)
-handler.setFormatter(formatter)
-handler.setLevel(logging.DEBUG)
-logging.getLogger('').addHandler(handler2)
-logging.getLogger('').addHandler(handler)
+    def run(self):
+        while True:
+                self.record = self.getTelemetry()
 
-testThread = LogSender(q=q1, gh=gh, service=srvc)
-testThread.start()
+                self.googleHandler.add_sheet_line(spreadsheetId=BaseConfig.dashboardFileID,
+                                rangeName=BaseConfig.logRange,
+                                line=[self.record])
+                time.sleep(5)
+
+    def getTelemetry(self):
+            self.time = str(datetime.now())
+            self.chargingStatus = "OK"
+            self.batteryVoltage = random.randint(10,15)
+            self.batteryTemperature = random.randint(0,40)
+            self.cpuLoad = psutil.cpu_percent()
+            self.ramLoad = psutil.virtual_memory().percent
+
+            self.telemetry = [self.time, self.chargingStatus, self.batteryVoltage,
+                            self.batteryTemperature, self.cpuLoad, self.ramLoad]
+
+            return self.telemetry
+
+
 
 
 while True:

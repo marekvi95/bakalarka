@@ -67,6 +67,7 @@ class BaseConfig:
 
     PIRpin = 21
 
+    pictureFolderID = '1AO_tQMMz2c6_l69s9vo9PW0PTy4nrYqi'
     confFileID='1TBLQfJHsZYPXDvcpS_ysg6asxf-5_Oku'
     dashboardFileID = '1XNmtg0NoCiU03NDZohlBwmOpFC-heHWbdRzY_tTYjhg'
     logRange = 'Log!A:A'
@@ -81,10 +82,10 @@ class UserConfig(BaseConfig):
         mode -- mode of motion detection
 
     """
-    mode = "realtime"
+    mode = 'realtime'
     echo = True
     interval = 1
-    storage = "gdrive"
+    storage = 'gdrive'
     usePIR = False
     dropboxToken = 'MZ2iiIImvUAAAAAAAAAAzo2V-UCXSK7MUojx9f7qDKo73tiFjRwJo0J2N2zwkYgz'
     SMSNotification = False
@@ -94,15 +95,20 @@ class UserConfig(BaseConfig):
     @classmethod
     def load_config(cls, conf):
         try:
-            cls.mode = conf['mode']
-            cls.echo = conf['echo']
+            if cls.mode == 'realtime' or 'interval' or 'batch' or 'ondemand':
+                logging.error('Mode is invalid!!')
+            else:
+                cls.mode = conf['mode']
+            
             cls.interval = conf['interval']
             cls.storage = conf['storage']
             cls.usePIR = conf['usePIR']
             cls.dropboxToken = conf['dropboxToken']
+            cls.authorizedNumber = conf['authorizedNumber']
             cls.SMSNotification = conf['SMSNotification']
             cls.SMSControl = conf['SMSControl']
-            cls.authorizedNumber = conf['authorizedNumber']
+            cls.echo = conf['echo']
+
         except KeyError:
             logging.error('New configuration cannot be loaded, check syntax!')
 

@@ -45,7 +45,7 @@ class MotionAnalysis(picamera.array.PiMotionAnalysis):
 
     def analyse(self, a):
 
-        if UserConfig.mode == 'realtime':
+        if UserConfig.mode == 'realtime' or 'ondemand' or 'batch':
             a = np.sqrt(
                 np.square(a['x'].astype(np.float)) +
                 np.square(a['y'].astype(np.float))
@@ -67,7 +67,9 @@ class MotionAnalysis(picamera.array.PiMotionAnalysis):
 
 
 class PIRMotionAnalysis:
-    def initPIRsensor(PIR_PIN):
+    def __init__(pinNumber):
+
+        self.pinNumber = pinNumber
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(PIR_PIN, GPIO.IN)
 

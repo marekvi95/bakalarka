@@ -16,7 +16,14 @@ from config import UserConfig
 
 
 class ConfFileDownloader(threading.Thread):
+    """
+        ConfFileDownloader is a subclass of a Thread class
+        First it loads the initial JSON configuration from Google drive
+        and then it check if the configuration was changed. If yes, it loads it.
 
+        Attributes:
+            filename (string): file ID of JSON configuration file on Google drive
+    """
     def __init__(self, group=None, target=None, name=None,
                  filename=None, *, daemon=None):
         super().__init__(group=group, target=target, name=name,

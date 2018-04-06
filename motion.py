@@ -141,13 +141,13 @@ class CaptureHandler:
 
             if self.scan_day():
                 logging.debug("Day mode capture acitvated")
-                self.camera.shutter_speed = 10
-                self.camera.iso = 200
+                #self.camera.shutter_speed = 10
+                #self.camera.iso = 200
                 self.camera.capture(path + filename)
             else:
                 logging.debug("Night mode capture activated")
-                self.camera.shutter_speed = 100
-                self.camera.iso = 800
+                #self.camera.shutter_speed = 100
+                #self.camera.iso = 800
                 self.camera.capture(path + filename)
             logging.debug('Captured ' + filename)
 

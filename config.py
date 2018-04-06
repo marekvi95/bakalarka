@@ -46,7 +46,7 @@ class BaseConfig:
     imagePath = "/home/pi/" + imageDir
     imageNamePrefix = 'capture-'  # Prefix for all image file names. Eg front-
     imageWidth = 640
-    imageHeight = 360
+    imageHeight = 368
     imageVFlip = False   # Flip image Vertically
     imageHFlip = False   # Flip image Horizontally
     imagePreview = False

@@ -141,11 +141,15 @@ class CaptureHandler:
 
             if self.scan_day():
                 logging.debug("Day mode capture acitvated")
+                self.camera.exposure_compensation = 0
+                self.camera.exposure_mode = 'auto'
                 #self.camera.shutter_speed = 10
                 #self.camera.iso = 200
                 self.camera.capture(path + filename)
             else:
                 logging.debug("Night mode capture activated")
+                self.camera.exposure_compensation = 25
+                self.camera.exposure_mode = 'nightpreview'
                 #self.camera.shutter_speed = 100
                 #self.camera.iso = 800
                 self.camera.capture(path + filename)
@@ -180,7 +184,7 @@ class CaptureHandler:
             pixAverage = int(np.average(stream.array[...,1]))
 
         logging.info("Light Meter pixAverage=%i" % pixAverage)
-        if (pixAverage > 100):
+        if (pixAverage > 50):
             return True
         else:
             return False

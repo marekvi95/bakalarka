@@ -139,7 +139,16 @@ class CaptureHandler:
             if BaseConfig.imagePreview:
                 self.camera.start_preview()
 
-            self.camera.capture(path + filename)
+            if self.scan_day():
+                logging.debug("Day mode capture acitvated")
+                self.camera.shutter_speed = 10
+                self.camera.iso = 200
+                self.camera.capture(path + filename)
+            else:
+                logging.debug("Night mode capture activated")
+                self.camera.shutter_speed = 100
+                self.camera.iso = 800
+                self.camera.capture(path + filename)
             logging.debug('Captured ' + filename)
 
             self.camera.stop_preview()
@@ -162,6 +171,18 @@ class CaptureHandler:
             logging.debug('Finished capturing')
 
             self.working = False
+
+    def scan_day(self):
+            with picamera.array.PiRGBArray(self.camera) as stream:
+                #camera.exposure_mode = 'auto'
+                #camera.awb_mode = 'auto'
+                self.camera.capture(stream, format='rgb')
+                pixAverage = int(np.average(stream.array[...,1]))
+        logging.info("Light Meter pixAverage=%i" % pixAverage)
+        if (pixAverage > 100):
+            return True
+        else:
+            return False
 
 
 class PiMotion:

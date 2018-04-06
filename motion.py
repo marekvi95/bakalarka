@@ -141,8 +141,8 @@ class CaptureHandler:
 
             if self.scan_day():
                 logging.debug("Day mode capture acitvated")
-                self.camera.exposure_compensation = 0
-                self.camera.exposure_mode = 'auto'
+                #self.camera.exposure_compensation = 0
+                #self.camera.exposure_mode = 'auto'
                 #self.camera.shutter_speed = 10
                 #self.camera.iso = 200
                 self.camera.capture(path + filename)

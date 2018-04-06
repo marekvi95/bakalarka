@@ -173,11 +173,12 @@ class CaptureHandler:
             self.working = False
 
     def scan_day(self):
-            with picamera.array.PiRGBArray(self.camera) as stream:
-                #camera.exposure_mode = 'auto'
-                #camera.awb_mode = 'auto'
-                self.camera.capture(stream, format='rgb')
-                pixAverage = int(np.average(stream.array[...,1]))
+        with picamera.array.PiRGBArray(self.camera) as stream:
+            #camera.exposure_mode = 'auto'
+            #camera.awb_mode = 'auto'
+            self.camera.capture(stream, format='rgb')
+            pixAverage = int(np.average(stream.array[...,1]))
+
         logging.info("Light Meter pixAverage=%i" % pixAverage)
         if (pixAverage > 100):
             return True

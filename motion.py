@@ -142,7 +142,7 @@ class CaptureHandler:
                 self.camera.capture(path + filename)
             else:
                 logging.debug("Night mode capture activated")
-                self.camera.exposure_compensation = 25
+                #self.camera.exposure_compensation = 25
                 self.camera.exposure_mode = 'nightpreview'
                 self.camera.shutter_speed = 1000000
                 #self.camera.iso = 800

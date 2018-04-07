@@ -66,34 +66,27 @@ class MotionAnalysis(picamera.array.PiMotionAnalysis):
             time.sleep(UserConfig.interval)
 
 
-class PIRMotionAnalysis:
-    def __init__(pinNumber):
+class PIRMotionAnalysis(threading.Thread):
+    def __init__(pin, handler):
 
-        self.pinNumber = pinNumber
+        self.pin = pin
+        self.handler = handler
+
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(PIR_PIN, GPIO.IN)
+        GPIO.setup(pin, GPIO.IN)
 
-    def PIRscanMotion(PIR_PIN):
-        motionFound = False;
-        GPIO.add_event_detect(PIR_PIN, GPIO.RISING)
-        if GPIO.event_detected(PIR_PIN):
-            motionFound = True
-            return motionFound
+        super().__init__(group=None, target=None, name="PIRMotionAnalysis",
+                     daemon=None)
 
-    def PIRMotionDetection():
-        initPIRsensor(PIR_PIN)
-        logging.info('Scanning for Motion using PIR ......')
-        currentCount= 1000
+    def run(self):
+        time.sleep(2) # to stabilize sensor
         while True:
-            if PIRscanMotion(PIR_PIN):
-                filename = getFileName(imagePath, imageNamePrefix, currentCount)
-                if numberSequence:
-                    currentCount += 1
-                if isDay:
-                    takeDayImage( imageWidth, imageHeight, filename )
-                else:
-                    takeNightImage( imageWidth, imageHeight, filename )
-                saveToDropbox(filename)
+            if GPIO.input(self.pin):
+                logging.debug("PIR Motion detected")
+                self.handler.motion_detected()
+                time.sleep(5) #to avoid multiple detection
+            time.sleep(0.1)
+
 
 
 class CaptureHandler:
@@ -189,6 +182,9 @@ class CaptureHandler:
         else:
             return False
 
+    def turn_led():
+        pass
+
 
 class PiMotion:
     def __init__(self, verbose=False, post_capture_callback=None, q=None):
@@ -199,7 +195,8 @@ class PiMotion:
     def start(self):
         with picamera.PiCamera() as camera:
             camera.resolution = (BaseConfig.imageWidth, BaseConfig.imageHeight)
-            camera.framerate = BaseConfig.cameraFPS
+            # camera.framerate = BaseConfig.cameraFPS
+            camera.framerate = 1
 
             handler = CaptureHandler(camera, self.post_capture_callback, self.q)
 

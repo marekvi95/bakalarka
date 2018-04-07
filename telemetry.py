@@ -168,25 +168,25 @@ class TelemetrySender(threading.Thread):
 
     def run(self):
         while True:
-                self.record = self.getTelemetry()
+            self.record = self.getTelemetry()
 
-                self.googleHandler.add_sheet_line(spreadsheetId=BaseConfig.dashboardFileID,
+            self.googleHandler.add_sheet_line(spreadsheetId=BaseConfig.dashboardFileID,
                                 rangeName=BaseConfig.logRange,
                                 line=[self.record])
-                time.sleep(5)
+            time.sleep(5)
 
     def getTelemetry(self):
-            self.time = str(datetime.now())
-            self.chargingStatus = "OK"
-            self.batteryVoltage = random.randint(10,15)
-            self.batteryTemperature = random.randint(0,40)
-            self.cpuLoad = psutil.cpu_percent()
-            self.ramLoad = psutil.virtual_memory().percent
+        self.time = str(datetime.now())
+        self.chargingStatus = "OK"
+        self.batteryVoltage = random.randint(10,15)
+        self.batteryTemperature = random.randint(0,40)
+        self.cpuLoad = psutil.cpu_percent()
+        self.ramLoad = psutil.virtual_memory().percent
 
-            self.telemetry = [self.time, self.chargingStatus, self.batteryVoltage,
+        self.telemetry = [self.time, self.chargingStatus, self.batteryVoltage,
                             self.batteryTemperature, self.cpuLoad, self.ramLoad]
 
-            return self.telemetry
+        return self.telemetry
 
 
 

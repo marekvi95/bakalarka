@@ -147,6 +147,10 @@ class CaptureHandler:
                 self.camera.shutter_speed = 1000000
                 #self.camera.iso = 800
                 self.camera.capture(path + filename)
+
+                self.camera.exposure_mode = 'auto'
+                self.camera.shutter_speed = 0
+
             logging.debug('Captured ' + filename)
 
             self.camera.stop_preview()

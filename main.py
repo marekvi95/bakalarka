@@ -39,6 +39,8 @@ handler.setFormatter(formatter)
 handler.setLevel(logging.DEBUG)
 logging.getLogger('').addHandler(handler2)
 logging.getLogger('').addHandler(handler)
+logging.getLogger('googleapiclient').setLevel(logging.CRITICAL)
+
 
 logThread = LogSender(q1, gh)
 telemetryThread = TelemetrySender(gh1)

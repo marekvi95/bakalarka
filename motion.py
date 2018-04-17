@@ -67,7 +67,7 @@ class MotionAnalysis(picamera.array.PiMotionAnalysis):
             time.sleep(UserConfig.interval)
 
 
-class PIRMotionAnalysis(threading.Thread):
+class PIRMotionAnalysis():
     def __init__(pin, handler):
 
         self.pin = pin
@@ -76,17 +76,21 @@ class PIRMotionAnalysis(threading.Thread):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(pin, GPIO.IN)
 
-        super().__init__(group=None, target=None, name="PIRMotionAnalysis",
-                     daemon=None)
+    #    super().__init__(group=None, target=None, name="PIRMotionAnalysis",
+    #                 daemon=None)
 
-    def run(self):
-        time.sleep(2) # to stabilize sensor
-        while True:
-            if GPIO.input(self.pin):
-                logging.debug("PIR Motion detected")
-                self.handler.motion_detected()
-                time.sleep(5) #to avoid multiple detection
-            time.sleep(0.1)
+    #def run(self):
+    #    time.sleep(2) # to stabilize sensor
+    #    while True:
+    #        if GPIO.input(self.pin):
+    #            logging.debug("PIR Motion detected")
+    #            self.handler.motion_detected()
+    #            time.sleep(1) #to avoid multiple detection
+    #        time.sleep(0.1)
+
+    def is_detected():
+        if GPIO.input(self.pin):
+            return True
 
 
 
@@ -118,6 +122,30 @@ class CaptureHandler:
             self.detected = True
 
     def tick(self):
+        """
+            This tick method provides a handler for capturing the pictures.
+            It ticks every second after PiMotion.start() was called.
+            If detected == True and method is not processing any capture
+            (That is indicated by variable 'working'), it begins with processing.
+            First datetime method is called to obtain the actual datetime, then
+            the scene is analyzed with scan_dat method which return true if
+            light conditions appear to be daylight or false if the light level
+            is too low.
+
+            If the echo mode is activated
+            
+
+            For daylight:
+                exposure compensation is set to 0 <-25;25>
+                exposure mode is set to auto
+                camera shutter speed is set to 0 (auto mode)
+
+            For bad light conditions:
+                exposure compensation is set to 25 for maximum brightness
+                exposure mode is set to night preview
+                shutter speed is set to 200000 microseconds which is equal
+                to 0,2s
+        """
         if self.detected:
             logging.debug('Capturing!')
             self.working = True

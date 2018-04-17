@@ -6,9 +6,10 @@ from datetime import datetime
 
 """
     This module was taken from https://github.com/lamondlab/IteadSIM800
+    and modified for the purpose of camera monitoring system project
 """
-PORT="/dev/ttyAMA0"
-BAUD=9600
+PORT="/dev/ttygsm3"
+BAUD=115200
 GSM_ON=11
 GSM_RESET=12
 DATE_FMT='"%y/%m/%d,%H:%M:%S%z"'
@@ -17,13 +18,10 @@ APN="giffgaff.com"
 APN_USERNAME="giffgaff"
 APN_PASSWORD="" # Leave blank
 
-BALANCE_USSD="*100#"
+BALANCE_USSD="*101#"
 
-# Balance: *100*7#
-# Remaining Credit: *100#
-# Voicemail: 443 (costs 8p!)
-# Text Delivery Receipt (start with): *0#
-# Hide calling number: #31#
+# T-Mobile credit *101#
+
 
 class ATResp(IntEnum):
     ErrorNoResponse=-1

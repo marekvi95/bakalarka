@@ -68,7 +68,7 @@ class MotionAnalysis(picamera.array.PiMotionAnalysis):
 
 
 class PIRMotionAnalysis():
-    def __init__(pin, handler):
+    def __init__(self, pin, handler):
 
         self.pin = pin
         self.handler = handler

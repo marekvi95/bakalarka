@@ -14,6 +14,8 @@ import filemanipulation
 from config import BaseConfig
 from config import UserConfig
 from filemanipulation import FileUploader
+import RPi.GPIO as GPIO
+
 
 #Setup logging
 #logging.basicConfig(filename='logfile.log',level=logging.DEBUG,

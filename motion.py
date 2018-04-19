@@ -88,8 +88,11 @@ class PIRMotionAnalysis():
     #            time.sleep(1) #to avoid multiple detection
     #        time.sleep(0.1)
 
-    def is_detected():
+    @classmethod
+    def is_detected(cls):
         if GPIO.input(self.pin):
+            self.handler.is_detected()
+            logging.info('Motion detected from PIR')
             return True
 
 
@@ -133,7 +136,7 @@ class CaptureHandler:
             is too low.
 
             If the echo mode is activated
-            
+
 
             For daylight:
                 exposure compensation is set to 0 <-25;25>
@@ -243,6 +246,7 @@ class PiMotion:
 
                 while True:
                     handler.tick()
+                    PIRMotionAnalysis(BaseConfig.PIRpin, handler).is_detected()
                     time.sleep(1)
             finally:
                 camera.stop_recording()

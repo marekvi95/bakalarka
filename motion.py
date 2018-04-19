@@ -72,8 +72,8 @@ class MotionAnalysis(picamera.array.PiMotionAnalysis):
 class PIRMotionAnalysis():
     def __init__(self, pin, handler):
 
-        cls.pin = pin
-        cls.handler = handler
+        self.pin = pin
+        self.handler = handler
 
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(pin, GPIO.IN)

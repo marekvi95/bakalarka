@@ -72,8 +72,8 @@ class MotionAnalysis(picamera.array.PiMotionAnalysis):
 class PIRMotionAnalysis():
     def __init__(self, pin, handler):
 
-        self.pin = pin
-        self.handler = handler
+        cls.pin = pin
+        cls.handler = handler
 
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(pin, GPIO.IN)
@@ -90,8 +90,8 @@ class PIRMotionAnalysis():
     #            time.sleep(1) #to avoid multiple detection
     #        time.sleep(0.1)
 
-    @classmethod
-    def is_detected(cls):
+    @staticmethod
+    def is_detected():
         if GPIO.input(self.pin):
             self.handler.is_detected()
             logging.info('Motion detected from PIR')

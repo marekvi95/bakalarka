@@ -76,7 +76,7 @@ class PIRMotionAnalysis():
         self.handler = handler
 
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(pin, GPIO.IN)
+        GPIO.setup(18, GPIO.IN)
 
     #    super().__init__(group=None, target=None, name="PIRMotionAnalysis",
     #                 daemon=None)

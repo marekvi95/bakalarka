@@ -66,6 +66,7 @@ class BaseConfig:
     confCheckTime = 10
 
     PIRpin = 18
+    LEDpin = 23
 
     pictureFolderID = '1AO_tQMMz2c6_l69s9vo9PW0PTy4nrYqi'
     confFileID='1TBLQfJHsZYPXDvcpS_ysg6asxf-5_Oku'

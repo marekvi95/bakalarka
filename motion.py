@@ -78,23 +78,25 @@ class PIRMotionAnalysis():
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.pin, GPIO.IN)
 
-    #    super().__init__(group=None, target=None, name="PIRMotionAnalysis",
-    #                 daemon=None)
-
-    #def run(self):
-    #    time.sleep(2) # to stabilize sensor
-    #    while True:
-    #        if GPIO.input(self.pin):
-    #            logging.debug("PIR Motion detected")
-    #            self.handler.motion_detected()
-    #            time.sleep(1) #to avoid multiple detection
-    #        time.sleep(0.1)
     def is_detected(self):
         if GPIO.input(18):
             self.handler.motion_detected()
             logging.info('Motion detected from PIR')
             #return True
 
+class LEDSwitch():
+    def _init_(self, pin):
+
+        self.pin = pin
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.pin, GPIO.OUT)
+        GPIO.output(self.pin, 0)
+
+    def switch(self):
+        if GPIO.input(self.pin):
+            GPIO.output(self.pin, 0)
+        else:
+            GPIO.output(self.pin, 1)
 
 
 class CaptureHandler:
@@ -111,8 +113,9 @@ class CaptureHandler:
             echoCounter (int): counter of taken pictures with echo mode
 
     """
-    def __init__(self, camera, post_capture_callback=None, q=None):
+    def __init__(self, camera, led, post_capture_callback=None, q=None):
         self.camera = camera
+        self.led = led
         self.callback = post_capture_callback
         self.q = q
         self.detected = False
@@ -177,8 +180,11 @@ class CaptureHandler:
                 self.camera.exposure_mode = 'nightpreview'
                 self.camera.shutter_speed = 200000
                 #self.camera.iso = 800
+                # Turn LED on
+                self.led.switch()
                 self.camera.capture(path + filename, format='jpeg', quality=50)
-
+                # Turn LED off
+                self.led.switch()
 
             logging.debug('Captured ' + filename)
 
@@ -232,7 +238,10 @@ class PiMotion:
             # camera.framerate = BaseConfig.cameraFPS
             camera.framerate = 5
 
-            handler = CaptureHandler(camera, self.post_capture_callback, self.q)
+            # LED Switch
+            led = LEDSwitch(BaseConfig.LEDpin)
+
+            handler = CaptureHandler(camera, led, self.post_capture_callback, self.q)
 
             # PIR Motion analyser
             pir = PIRMotionAnalysis(BaseConfig.PIRpin, handler)

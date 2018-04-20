@@ -8,7 +8,7 @@ from datetime import datetime
     This module was taken from https://github.com/lamondlab/IteadSIM800
     and modified for the purpose of camera monitoring system project
 """
-PORT="/dev/ttygsm3"
+PORT="/dev/ttyGSM3"
 BAUD=115200
 GSM_ON=11
 GSM_RESET=12

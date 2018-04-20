@@ -76,7 +76,7 @@ class PIRMotionAnalysis():
         self.handler = handler
 
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(18, GPIO.IN)
+        GPIO.setup(self.pin, GPIO.IN)
 
     #    super().__init__(group=None, target=None, name="PIRMotionAnalysis",
     #                 daemon=None)
@@ -89,8 +89,6 @@ class PIRMotionAnalysis():
     #            self.handler.motion_detected()
     #            time.sleep(1) #to avoid multiple detection
     #        time.sleep(0.1)
-
-    @staticmethod
     def is_detected():
         if GPIO.input(18):
             self.handler.motion_detected()
@@ -236,6 +234,9 @@ class PiMotion:
 
             handler = CaptureHandler(camera, self.post_capture_callback, self.q)
 
+            # PIR Motion analyser
+            pir = PIRMotionAnalysis(BaseConfig.PIRpin, handler)
+
             logging.debug('Starting camera')
             time.sleep(2)
 
@@ -248,7 +249,7 @@ class PiMotion:
 
                 while True:
                     handler.tick()
-                    PIRMotionAnalysis(BaseConfig.PIRpin, handler).is_detected()
+                    pir.is_detected()
                     time.sleep(1)
             finally:
                 camera.stop_recording()

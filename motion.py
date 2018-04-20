@@ -89,7 +89,7 @@ class PIRMotionAnalysis():
     #            self.handler.motion_detected()
     #            time.sleep(1) #to avoid multiple detection
     #        time.sleep(0.1)
-    def is_detected():
+    def is_detected(self):
         if GPIO.input(18):
             self.handler.motion_detected()
             logging.info('Motion detected from PIR')

@@ -93,7 +93,7 @@ class PIRMotionAnalysis():
     @staticmethod
     def is_detected():
         if GPIO.input(18):
-            #handler.is_detected()
+            handler.motion_detected()
             logging.info('Motion detected from PIR')
             return True
 

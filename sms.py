@@ -1,4 +1,4 @@
-import serial
+from serial import Serial
 import RPi.GPIO as IO, atexit, logging, sys
 from time import sleep
 from enum import IntEnum
@@ -121,7 +121,7 @@ class SMS(object):
         IO.setmode(IO.BOARD)
         IO.setup(GSM_ON, IO.OUT, initial=IO.LOW)
         IO.setup(GSM_RESET, IO.OUT, initial=IO.LOW)
-        self._serial=serial.Serial(self._port, self._baud)
+        self._serial=Serial(self._port, self._baud)
 
     def reset(self):
         """

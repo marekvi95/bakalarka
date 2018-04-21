@@ -451,9 +451,9 @@ if __name__=="__main__":
     if not s.turnOn(): exit(1)
     if not s.setEchoOff(): exit(1)
     print("Good to go!")
-    print(s.getIMEI())
-    print(s.getVersion())
-    print(s.getSIMCCID())
+    #print(s.getIMEI())
+    #print(s.getVersion())
+    #print(s.getSIMCCID())
     #print(s.getLastError())
     ns=s.getNetworkStatus()
     print(ns)
@@ -464,10 +464,16 @@ if __name__=="__main__":
     # print(s.getTime())
     # print(s.setTime(datetime.now()))
     # print(s.getTime())
-    print(s.sendSMS("+420733149295", "Hello World!"))
+    #print(s.sendSMS("+420733149295", "Hello World!"))
     #print(s.sendUSSD(BALANCE_USSD))
     #print(s.getLastError())
-    print(s.getNumSMS())
+    #print(s.getNumSMS())
     #print(s.readSMS(1))
     #print(s.deleteSMS(1))
     #print(s.readAllSMS())
+
+    sms_num = s.getNumSMS
+    for x in range(1, sms_num):
+        s.deleteSMS(x)
+
+    

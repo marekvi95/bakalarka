@@ -49,6 +49,7 @@ class BaseConfig:
     imageHeight = 368
     imageVFlip = False   # Flip image Vertically
     imageHFlip = False   # Flip image Horizontally
+    rotation = 90 # Rotation of the image
     imagePreview = False
     imageQuality = 72
 

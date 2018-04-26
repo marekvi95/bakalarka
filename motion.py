@@ -236,6 +236,7 @@ class PiMotion:
         with picamera.PiCamera() as camera:
             camera.resolution = (BaseConfig.imageWidth, BaseConfig.imageHeight)
             # camera.framerate = BaseConfig.cameraFPS
+            camera.rotation = BaseConfig.rotation
             camera.framerate = 5
 
             # LED Switch

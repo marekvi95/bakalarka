@@ -85,7 +85,7 @@ class PIRMotionAnalysis():
             #return True
 
 class LEDSwitch():
-    def _init_(self, pin):
+    def _init_(self, pin=18):
         pass
         #self.pin = pin
         #GPIO.setmode(GPIO.BCM)
@@ -240,7 +240,7 @@ class PiMotion:
 
             # LED Switch
             #led = LEDSwitch(BaseConfig.LEDpin)
-            led = LEDSwitch(BaseConfig.LEDpin)
+            led = LEDSwitch()
 
             handler = CaptureHandler(camera, led, self.post_capture_callback, self.q)
 

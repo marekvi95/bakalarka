@@ -72,5 +72,5 @@ if __name__ == '__main__':
     finally:
         #w.cancel()
         #cfg.cancel()
-        GPIO.cleanup()
+        #GPIO.cleanup()
         logging.debug('Exiting program')

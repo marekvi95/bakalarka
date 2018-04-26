@@ -239,12 +239,12 @@ class PiMotion:
             camera.framerate = 5
 
             # LED Switch
-            led = LEDSwitch(BaseConfig.LEDpin)
+            #led = LEDSwitch(BaseConfig.LEDpin)
 
             handler = CaptureHandler(camera, led, self.post_capture_callback, self.q)
 
             # PIR Motion analyser
-            pir = PIRMotionAnalysis(BaseConfig.PIRpin, handler)
+            #pir = PIRMotionAnalysis(BaseConfig.PIRpin, handler)
 
             logging.debug('Starting camera')
             time.sleep(2)
@@ -258,7 +258,7 @@ class PiMotion:
 
                 while True:
                     handler.tick()
-                    pir.is_detected()
+                    #pir.is_detected()
                     time.sleep(1)
             finally:
                 camera.stop_recording()

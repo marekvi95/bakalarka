@@ -121,6 +121,8 @@ class CaptureHandler:
         self.i = 0
         self.echoCounter = -1
 
+        self.led2 = LEDSwitch()
+
     def motion_detected(self):
         if not self.working:
             self.detected = True
@@ -179,10 +181,10 @@ class CaptureHandler:
                 self.camera.shutter_speed = 200000
                 #self.camera.iso = 800
                 # Turn LED on
-                self.led.switch()
+                self.led2.switch()
                 self.camera.capture(path + filename, format='jpeg', quality=50)
                 # Turn LED off
-                self.led.switch()
+                self.led2.switch()
 
             logging.debug('Captured ' + filename)
 
@@ -239,8 +241,9 @@ class PiMotion:
 
             # LED Switch
             #led = LEDSwitch(BaseConfig.LEDpin)
-            with LEDSwitch() as led:
-                handler = CaptureHandler(camera, led, self.post_capture_callback, self.q)
+            led = LEDSwitch()
+
+            handler = CaptureHandler(camera, led, self.post_capture_callback, self.q)
 
             # PIR Motion analyser
             #pir = PIRMotionAnalysis(BaseConfig.PIRpin, handler)

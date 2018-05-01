@@ -113,15 +113,13 @@ class CaptureHandler:
     """
     def __init__(self, camera, led, post_capture_callback=None, q=None):
         self.camera = camera
-        self.led = led
+        #self.led = led
         self.callback = post_capture_callback
         self.q = q
         self.detected = False
         self.working = False
         self.i = 0
         self.echoCounter = -1
-
-        self.led2 = LEDSwitch()
 
     def motion_detected(self):
         if not self.working:
@@ -181,10 +179,10 @@ class CaptureHandler:
                 self.camera.shutter_speed = 200000
                 #self.camera.iso = 800
                 # Turn LED on
-                self.led2.switch()
+                led.switch()
                 self.camera.capture(path + filename, format='jpeg', quality=50)
                 # Turn LED off
-                self.led2.switch()
+                led.switch()
 
             logging.debug('Captured ' + filename)
 

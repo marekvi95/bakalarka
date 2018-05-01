@@ -111,15 +111,20 @@ class CaptureHandler:
             echoCounter (int): counter of taken pictures with echo mode
 
     """
-    def __init__(self, camera, led, post_capture_callback=None, q=None):
+    def __init__(self, camera, post_capture_callback=None, q=None):
         self.camera = camera
-        #self.led = led
         self.callback = post_capture_callback
         self.q = q
         self.detected = False
         self.working = False
         self.i = 0
         self.echoCounter = -1
+
+        # Configure LED
+
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(BaseConfig.LEDpin, GPIO.OUT)
+        GPIO.output(BaseConfig.LEDpin, 0)
 
     def motion_detected(self):
         if not self.working:
@@ -179,10 +184,10 @@ class CaptureHandler:
                 self.camera.shutter_speed = 200000
                 #self.camera.iso = 800
                 # Turn LED on
-                led.switch()
+                GPIO.output(BaseConfig.LEDpin, 1)
                 self.camera.capture(path + filename, format='jpeg', quality=50)
                 # Turn LED off
-                led.switch()
+                lGPIO.output(BaseConfig.LEDpin, 1)
 
             logging.debug('Captured ' + filename)
 
@@ -239,9 +244,8 @@ class PiMotion:
 
             # LED Switch
             #led = LEDSwitch(BaseConfig.LEDpin)
-            led = LEDSwitch()
 
-            handler = CaptureHandler(camera, led, self.post_capture_callback, self.q)
+            handler = CaptureHandler(camera, self.post_capture_callback, self.q)
 
             # PIR Motion analyser
             #pir = PIRMotionAnalysis(BaseConfig.PIRpin, handler)

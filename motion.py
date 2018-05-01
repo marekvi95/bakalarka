@@ -182,9 +182,6 @@ class CaptureHandler:
                 #self.camera.iso = 200
                 #self.camera.capture(path + filename, format='jpeg', quality=50)
                 self.camera.capture(stream, format='jpeg')
-                stream.seek(0)
-                picture = Image.open(stream)
-                picture.save(path + filename, optimize=True, quality=75)
             else:
                 logging.debug("Night mode capture activated")
                 self.camera.exposure_compensation = 25
@@ -193,10 +190,14 @@ class CaptureHandler:
                 #self.camera.iso = 800
                 # Turn LED on
                 GPIO.output(BaseConfig.LEDpin, 1)
-                self.camera.capture(path + filename, format='jpeg', quality=50)
+                #self.camera.capture(path + filename, format='jpeg', quality=50)
+                self.camera.capture(stream, format='jpeg')
                 # Turn LED off
                 GPIO.output(BaseConfig.LEDpin, 0)
 
+            stream.seek(0)
+            picture = Image.open(stream)
+            picture.save(path + filename, optimize=True, quality=75)
             logging.debug('Captured ' + filename)
 
             self.camera.stop_preview()

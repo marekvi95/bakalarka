@@ -271,7 +271,7 @@ class PiMotion:
 
                 while True:
                     handler.tick()
-                    #pir.is_detected()
+                    pir.is_detected()
                     time.sleep(1)
             finally:
                 camera.stop_recording()

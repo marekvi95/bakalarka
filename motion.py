@@ -85,18 +85,16 @@ class PIRMotionAnalysis():
             #return True
 
 class LEDSwitch():
-    def _init_(self, pin=18):
-        pass
-        #self.pin = pin
-        #GPIO.setmode(GPIO.BCM)
-        #GPIO.setup(self.pin, GPIO.OUT)
-        #GPIO.output(self.pin, 0)
+    def _init_(self, pin=BaseConfig.LEDpin):
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(pin, GPIO.OUT)
+        GPIO.output(pin, 0)
 
     def switch(self):
-        #if GPIO.input(self.pin):
-        #    GPIO.output(self.pin, 0)
-        #else:
-        #    GPIO.output(self.pin, 1)
+        if GPIO.input(self.pin):
+            GPIO.output(self.pin, 0)
+        else:
+            GPIO.output(self.pin, 1)
         pass
 
 class CaptureHandler:

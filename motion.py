@@ -5,9 +5,11 @@ import time
 import datetime
 import os
 import threading
+from io import BytesIO
 
 import picamera
 import picamera.array
+from PIL import Image
 
 import config
 import filemanipulation
@@ -161,6 +163,8 @@ class CaptureHandler:
             self.detected = False
             self.i += 1
 
+            stream = BytesIO()
+
             filename = '%s.jpg' % datetime.datetime.now().isoformat()
             path = BaseConfig.imagePath + "/" + BaseConfig.imageDir + "/"
             if not os.path.exists(path):
@@ -176,7 +180,11 @@ class CaptureHandler:
                 self.camera.exposure_mode = 'auto'
                 self.camera.shutter_speed = 0
                 #self.camera.iso = 200
-                self.camera.capture(path + filename, format='jpeg', quality=50)
+                #self.camera.capture(path + filename, format='jpeg', quality=50)
+                self.camera.capture(stream, format='jpeg')
+                stream.seek(0)
+                picture = Image.open(stream)
+                picture.save(path + filename, optimize=True, quality=75)
             else:
                 logging.debug("Night mode capture activated")
                 self.camera.exposure_compensation = 25

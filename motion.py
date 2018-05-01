@@ -139,7 +139,7 @@ class CaptureHandler:
             If detected == True and method is not processing any capture
             (That is indicated by variable 'working'), it begins with processing.
             First datetime method is called to obtain the actual datetime, then
-            the scene is analyzed with scan_dat method which return true if
+            the scene is analyzed with scan_day method which returns true if
             light conditions appear to be daylight or false if the light level
             is too low.
 
@@ -257,7 +257,7 @@ class PiMotion:
             handler = CaptureHandler(camera, self.post_capture_callback, self.q)
 
             # PIR Motion analyser
-            #pir = PIRMotionAnalysis(BaseConfig.PIRpin, handler)
+            pir = PIRMotionAnalysis(BaseConfig.PIRpin, handler)
 
             logging.debug('Starting camera')
             time.sleep(2)

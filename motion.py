@@ -239,9 +239,8 @@ class PiMotion:
 
             # LED Switch
             #led = LEDSwitch(BaseConfig.LEDpin)
-            led = LEDSwitch()
-
-            handler = CaptureHandler(camera, led, self.post_capture_callback, self.q)
+            with LEDSwitch() as led:
+                handler = CaptureHandler(camera, led, self.post_capture_callback, self.q)
 
             # PIR Motion analyser
             #pir = PIRMotionAnalysis(BaseConfig.PIRpin, handler)

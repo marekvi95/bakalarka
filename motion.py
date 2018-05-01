@@ -187,7 +187,7 @@ class CaptureHandler:
                 GPIO.output(BaseConfig.LEDpin, 1)
                 self.camera.capture(path + filename, format='jpeg', quality=50)
                 # Turn LED off
-                GPIO.output(BaseConfig.LEDpin, 1)
+                GPIO.output(BaseConfig.LEDpin, 0)
 
             logging.debug('Captured ' + filename)
 

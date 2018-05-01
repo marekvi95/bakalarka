@@ -91,11 +91,10 @@ class LEDSwitch():
         GPIO.output(pin, 0)
 
     def switch(self):
-        if GPIO.input(self.pin):
-            GPIO.output(self.pin, 0)
+        if GPIO.input(pin):
+            GPIO.output(pin, 0)
         else:
-            GPIO.output(self.pin, 1)
-        pass
+            GPIO.output(pin, 1)
 
 class CaptureHandler:
     """

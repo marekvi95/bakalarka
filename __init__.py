@@ -47,7 +47,7 @@ telemetryThread = TelemetrySender(gh1)
 logThread.start()
 telemetryThread.start()
 
-if __name__ == '__main__':
+if __name__ == '__init__':
     try:
         logging.debug('Starting program')
         #Initialization of configuration checker threadName

@@ -90,6 +90,14 @@ class ConfFileDownloader(threading.Thread):
         pass
 
 class FileUploader(threading.Thread):
+    """
+        This class provides a File uploader thread for uploading
+        captured photos. It supports google drive and dropbox (experimental)
+
+        Attributes:
+            storage (str): storage type (gdrive or dropbox)
+            q (Queue obj): queue with filenames of pictures to be uploaded
+    """
     def __init__(self, group=None, target=None, name=None,
                  storage=None, *, daemon=None, q=None):
         super().__init__(group=group, target=target, name=name,

@@ -18,25 +18,9 @@ from config import UserConfig
 from filemanipulation import FileUploader
 import RPi.GPIO as GPIO
 
-
-#Setup logging
-#logging.basicConfig(filename='logfile.log',level=logging.DEBUG,
-#                    format='%(asctime)s %(threadName)-12s %(levelname)-8s %(message)s',
-#                    datefmt='%m-%d %H:%M',)
-# define a Handler which writes INFO messages or higher to the sys.stderr
-#console = logging.StreamHandler()
-#console.setLevel(logging.DEBUG)
-# set a format which is simpler for console use
-#formatter = logging.Formatter('%(name)-12s: %(levelname)-8s %(message)s')
-# tell the handler to use this format
-#console.setFormatter(formatter)
-# add the handler to the root logger
-#logging.getLogger('').addHandler(console)
-
-#logging.debug('Libraries loaded')
-
 class MotionAnalysis(picamera.array.PiMotionAnalysis):
-    """ MotionAnalysis class extends PiMotionAnalysis class.
+    """
+        MotionAnalysis class extends PiMotionAnalysis class.
 
         The array passed to analyse() is organized as (rows, columns)
         where rows and columns are the number of rows and columns of macro-
@@ -72,6 +56,11 @@ class MotionAnalysis(picamera.array.PiMotionAnalysis):
 
 
 class PIRMotionAnalysis():
+    """
+        This class provides a handler for PIR sensor
+        It detects if the input pin is in the high state
+        and calls motion_detected handler
+    """
     def __init__(self, pin, handler):
 
         self.pin = pin
@@ -81,27 +70,14 @@ class PIRMotionAnalysis():
         GPIO.setup(self.pin, GPIO.IN)
 
     def is_detected(self):
-        if GPIO.input(18):
+        if GPIO.input(self.pin):
             self.handler.motion_detected()
             logging.info('Motion detected from PIR')
-            #return True
-
-class LEDSwitch():
-    def _init_(self, pin=BaseConfig.LEDpin):
-        self.pin = pin
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self.pin, GPIO.OUT)
-        GPIO.output(self.pin, 0)
-
-    def switch(self):
-        if GPIO.input(self.pin):
-            GPIO.output(self.pin, 0)
-        else:
-            GPIO.output(self.pin, 1)
 
 class CaptureHandler:
     """
-        It provides a handler for capturing the pictures
+        It provides a handler for capturing the pictures. With the LED Switch
+        functionality.
 
         Attributes:
             camera (obj): PiCamera object
@@ -123,7 +99,6 @@ class CaptureHandler:
         self.echoCounter = -1
 
         # Configure LED
-
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(BaseConfig.LEDpin, GPIO.OUT)
         GPIO.output(BaseConfig.LEDpin, 0)
@@ -156,6 +131,7 @@ class CaptureHandler:
                 exposure mode is set to night preview
                 shutter speed is set to 200000 microseconds which is equal
                 to 0,2s
+                Turn on the LED
         """
         if self.detected:
             logging.debug('Capturing!')
@@ -276,9 +252,3 @@ class PiMotion:
             finally:
                 camera.stop_recording()
                 logging.debug('Recording finished')
-
-#q = queue.Queue(maxsize=200)
-#w = FileUploader(storage='gdrive', q=q)
-#w.start()
-#motion = PiMotion(verbose=False, post_capture_callback=None)
-#motion.start()

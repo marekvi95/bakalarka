@@ -2,23 +2,6 @@ import contextlib
 import logging
 import json
 
-#Setup logging
-#logging.basicConfig(filename='logfile.log',level=logging.DEBUG,
-#                    format='%(asctime)s %(threadName)-12s %(levelname)-8s %(message)s',
-#                    datefmt='%m-%d %H:%M',)
-# define a Handler which writes INFO messages or higher to the sys.stderr
-#console = logging.StreamHandler()
-#console.setLevel(logging.DEBUG)
-# set a format which is simpler for console use
-#formatter = logging.Formatter('%(threadName)-12s: %(levelname)-8s %(message)s')
-# tell the handler to use this format
-#console.setFormatter(formatter)
-# add the handler to the root logger
-#logging.getLogger('googleapiclient.discovery').setLevel(logging.CRITICAL)
-#logging.getLogger('').addHandler(console)
-
-#logging.debug('Libraries loaded')
-
 class BaseConfig:
     """ Basic configuration which cannot be changed online
 
@@ -54,7 +37,7 @@ class BaseConfig:
     imageQuality = 72
 
     vecMagnitude = 60  # Vector magnitude
-    vecCount = 50  # How many pixels change
+    vecCount = 50  # How many vectors change
     cameraFPS = 10 # framerate
 
     nightISO = 800

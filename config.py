@@ -59,6 +59,11 @@ class BaseConfig:
     msgRange = 'Zpravy!A:A'
     OAuthJSON = 'client_secret.json'
 
+    # File uploader sleep time in seconds
+    fileUploadSleep = 5
+
+    batchUploadWindow = 23
+
 class UserConfig(BaseConfig):
     """ Extends BaseConfig class with user defined configuration
 

@@ -15,20 +15,27 @@ from telemetry import GoogleHandler
 from telemetry import LogSender
 from telemetry import TelemetrySender
 
+# initialization of the basic logging to the file
 logging.basicConfig(filename='logfile.log',level=logging.DEBUG,
                    format='%(asctime)s %(threadName)-12s %(levelname)-8s %(message)s',
                     datefmt='%m-%d %H:%M',)
 
+# initialization of the queue for logging
 q1 = queue.Queue(-1)
+
+# initialization of Google API handlers
 gh = GoogleHandler()
 gh1 = GoogleHandler()
 
+# get credentials for Google services
 crd = gh.get_credentials()
 crd1 = gh1.get_credentials()
 
+# get Google Sheet service
 srvc = gh.get_sheets_service(credentials=crd)
 srvc1 = gh1.get_sheets_service(credentials=crd1)
 
+# Setup logging handlers
 handler = logging.StreamHandler()
 handler2 = logging.handlers.QueueHandler(q1)
 handler2.setLevel(logging.DEBUG)
@@ -41,15 +48,16 @@ logging.getLogger('').addHandler(handler2)
 logging.getLogger('').addHandler(handler)
 logging.getLogger('googleapiclient').setLevel(logging.CRITICAL)
 
-
-logThread = LogSender(q1, gh)
-telemetryThread = TelemetrySender(gh1)
-logThread.start()
-telemetryThread.start()
-
 if __name__ == '__init__':
     try:
         logging.debug('Starting program')
+
+        # init of threads - Logsender and TelemetrySender
+        logThread = LogSender(q1, gh)
+        telemetryThread = TelemetrySender(gh1)
+        logThread.start()
+        telemetryThread.start()
+
         #Initialization of configuration checker threadName
         cfg = ConfFileDownloader(filename=BaseConfig.confFileID)
         cfg.start()

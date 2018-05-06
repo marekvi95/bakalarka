@@ -5,6 +5,7 @@ from io import StringIO
 import json
 import queue
 import contextlib
+import datetime
 
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
@@ -124,13 +125,22 @@ class FileUploader(threading.Thread):
 
             if (self.storage == 'gdrive'):
                 if self.gdrive_is_init:
-                    if not self.q.empty():
-                        self.gdrive_upload(filename = self.q.get(),
+                    if (UserConfig.mode == 'batch'):
+                        dt = datetime.datetime.now()
+                        if (dt.hour == BaseConfig.batchUploadWindow):
+                            if not self.q.empty():
+                                logging.debug('Batch upload')
+                                self.gdrive_upload(filename = self.q.get(),
+                                                drive = self.drive)
+                    else:
+                        if not self.q.empty():
+                            self.gdrive_upload(filename = self.q.get(),
                                             drive = self.drive)
                 else:
                     self.drive = self.gdrive_init()
                     self.gdrive_is_init = True
-            time.sleep(5)
+
+            time.sleep(BaseConfig.fileUploadSleep)
         return
 
     def gdrive_init(self):

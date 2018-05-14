@@ -48,7 +48,7 @@ logging.getLogger('').addHandler(handler2)
 logging.getLogger('').addHandler(handler)
 logging.getLogger('googleapiclient').setLevel(logging.CRITICAL)
 
-if __name__ == '__init__':
+if __name__ == '__main__':
     try:
         logging.debug('Starting program')
 

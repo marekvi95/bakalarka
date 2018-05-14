@@ -43,7 +43,7 @@ class ConfFileDownloader(threading.Thread):
         conf = self.parse_json(content)
         modified = self.get_timestamp(drive)
 
-        UserConfig.load_config(newconf)
+        UserConfig.load_config(conf)
         logging.info("New configuration has been loaded")
 
         while True:
@@ -56,7 +56,7 @@ class ConfFileDownloader(threading.Thread):
                 content = self.download_file(drive)
                 conf = self.parse_json(content)
 
-                UserConfig.load_config(newconf)
+                UserConfig.load_config(conf)
 
             # sleep thread for some amount of time
             time.sleep(BaseConfig.confCheckTime)

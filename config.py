@@ -91,9 +91,7 @@ class UserConfig(BaseConfig):
                 cls.mode = conf['mode']
 
             cls.interval = conf['interval']
-            cls.storage = conf['storage']
             cls.usePIR = conf['usePIR']
-            cls.dropboxToken = conf['dropboxToken']
             cls.authorizedNumber = conf['authorizedNumber']
             cls.SMSNotification = conf['SMSNotification']
             cls.SMSControl = conf['SMSControl']

@@ -38,15 +38,24 @@ class ConfFileDownloader(threading.Thread):
     def run(self):
         logging.debug('Initialization of Conf file checker thread ')
         drive = self.auth() # Authorization
-        content = self.download_file(drive)
-        oldconf = self.parse_json(content)
-        while True:
-            content = self.download_file(drive)
-            newconf = self.parse_json(content)
 
-            if (newconf != oldconf):
-                oldconf = newconf
+        content = self.download_file(drive)
+        conf = self.parse_json(content)
+        modified = self.get_timestamp(drive)
+
+        UserConfig.load_config(newconf)
+        logging.info("New configuration has been loaded")
+
+        while True:
+            new = self.get_timestamp(drive)
+
+            if (new != modified):
+                modified = new
                 logging.info("Configuration has been changed!!")
+
+                content = self.download_file(drive)
+                conf = self.parse_json(content)
+
                 UserConfig.load_config(newconf)
 
             # sleep thread for some amount of time
@@ -83,6 +92,15 @@ class ConfFileDownloader(threading.Thread):
                         conffile['mimeType']))
 
         return conffile.GetContentString()
+
+
+    def get_timestamp(self, drive):
+
+        conffile = drive.CreateFile({'id': self.filename})
+        conffile.FetchMetadata(fields='modifiedDate')
+
+        return conffile['modifiedDate']
+
 
     def parse_json(self, jsonfile):
         return json.loads(jsonfile)

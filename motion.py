@@ -246,8 +246,11 @@ class PiMotion:
                 )
 
                 while True:
+                    # Tick for the camera motion detection
                     handler.tick()
-                    pir.is_detected()
+                    # Tick for PIR motion detecion
+                    if UserConfig.usePIR:
+                        pir.is_detected()
                     time.sleep(1)
             finally:
                 camera.stop_recording()

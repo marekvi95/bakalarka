@@ -44,7 +44,6 @@ class ConfFileDownloader(threading.Thread):
         modified = self.get_timestamp(drive)
 
         UserConfig.load_config(conf)
-        logging.info("New configuration has been loaded")
 
         while True:
             new = self.get_timestamp(drive)

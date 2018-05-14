@@ -85,17 +85,33 @@ class UserConfig(BaseConfig):
     @classmethod
     def load_config(cls, conf):
         try:
-            if cls.mode == 'realtime' or 'interval' or 'batch' or 'ondemand':
+            if conf['mode'] != 'realtime' or 'interval' or 'batch' or 'ondemand':
                 logging.error('Mode is invalid!!')
             else:
                 cls.mode = conf['mode']
-
             cls.interval = conf['interval']
-            cls.usePIR = conf['usePIR']
+
+            if conf['usePIR'] == 'on':
+                cls.usePIR = True
+            else:
+                cls.usePIR = False
+
             cls.authorizedNumber = conf['authorizedNumber']
-            cls.SMSNotification = conf['SMSNotification']
-            cls.SMSControl = conf['SMSControl']
-            cls.echo = conf['echo']
+
+            if conf['SMSNotification'] == 'on';
+                cls.SMSNotification = True
+            else:
+                cls.SMSNotification = False
+
+            if conf['SMSControl'] == 'on':
+                cls.SMSControl = True
+            else:
+                cls.SMSControl = False
+
+            if conf['echo'] == 'on':
+                cls.echo = True
+            else:
+                cls.echo = False
 
         except KeyError:
             logging.error('New configuration cannot be loaded, check syntax!')

@@ -98,7 +98,7 @@ class UserConfig(BaseConfig):
 
             cls.authorizedNumber = conf['authorizedNumber']
 
-            if conf['SMSNotification'] == 'on';
+            if conf['SMSNotification'] == 'on':
                 cls.SMSNotification = True
             else:
                 cls.SMSNotification = False

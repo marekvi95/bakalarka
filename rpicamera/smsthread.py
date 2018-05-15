@@ -48,7 +48,7 @@ def handle_sms(sms):
             elif sms.text.lower() == 'q mode':
                 # query mode
                 logging.debug('Mode has been queried by SMS')
-                sms.reply(u'Mode is')
+                sms.reply(u'Mode is {}'.format(UserConfig.mode))
 
             elif sms.text.lower() == 'battery':
                 # query mode

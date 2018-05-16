@@ -155,7 +155,10 @@ class FileUploader(threading.Thread):
                                                 drive = self.drive)
                     else:
                         if not self.q.empty():
-                            self.gdrive_upload(filename = self.q.get(),
+                            # filename regex matching
+                            text = self.q.get()
+                            file = re.search("[^/]+$", text)
+                            self.gdrive_upload(filename = file.group(0),
                                             drive = self.drive)
                 else:
                     self.drive = self.gdrive_init()

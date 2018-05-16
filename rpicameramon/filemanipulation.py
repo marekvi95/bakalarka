@@ -149,7 +149,7 @@ class FileUploader(threading.Thread):
                             if not self.q.empty():
                                 logging.debug('Batch upload')
                                 self.gdrive_upload(filename = self.q.get()),
-                                                drive = self.drive)
+                                            drive = self.drive)
                     else:
                         if not self.q.empty():
                             self.gdrive_upload(filename = self.q.get(),
@@ -193,7 +193,7 @@ class FileUploader(threading.Thread):
         with stopwatch('uploading file to gdrive'):
             try:
                 file_upload.Upload() # Upload the file.
-            
+
         logging.debug('title: %s, id: %s' % (file_upload['title'],
                         file_upload['id']))
 

@@ -193,6 +193,8 @@ class FileUploader(threading.Thread):
         with stopwatch('uploading file to gdrive'):
             try:
                 file_upload.Upload() # Upload the file.
+            except:
+                logging.error('File upload error')
 
         logging.debug('title: %s, id: %s' % (file_upload['title'],
                         file_upload['id']))

@@ -36,8 +36,8 @@ class BaseConfig:
     imagePreview = False
     imageQuality = 72
 
-    vecMagnitude = 60  # Vector magnitude
-    vecCount = 50  # How many vectors change
+    vecMagnitude = 40  # Vector magnitude
+    vecCount = 40  # How many vectors change
     cameraFPS = 10 # framerate
 
     nightISO = 800

@@ -224,7 +224,7 @@ class SMSHandler:
     def __del__(self):
         modem.close()
 
-    def handle_sms(sms):
+    def handle_sms(self, sms):
         logging.debug(u'== SMS message received ==\nFrom: {0}\nTime: {1}\nMessage:\n{2}\n'.format(sms.number, sms.time, sms.text))
         if sms.number == UserConfig.authorizedNumber:
             if UserConfig.SMSControl:

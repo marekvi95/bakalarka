@@ -76,9 +76,9 @@ class UserConfig(BaseConfig):
         mode -- mode of motion detection
 
     """
-    mode = 'realtime'
+    mode = 'interval'
     echo = False
-    interval = 100
+    interval = 20
     storage = 'gdrive'
     usePIR = False
     dropboxToken = 'MZ2iiIImvUAAAAAAAAAAzo2V-UCXSK7MUojx9f7qDKo73tiFjRwJo0J2N2zwkYgz'

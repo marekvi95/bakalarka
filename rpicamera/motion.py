@@ -9,6 +9,7 @@ from io import BytesIO
 
 import picamera
 import picamera.array
+from gsmmodem.modem import GsmModem
 from PIL import Image
 
 import config
@@ -47,7 +48,7 @@ class MotionAnalysis(picamera.array.PiMotionAnalysis):
                 logging.info('Motion detected!')
                 self.handler.motion_detected()
 
-        if UserConfig.mode == 'interval':
+        elif UserConfig.mode == 'interval':
             # Interval mode
             # capture
             self.handler.motion_detected()
@@ -210,8 +211,67 @@ class CaptureHandler:
         else:
             return False
 
-    def turn_led():
-        pass
+class SMSHandler:
+    def __init__(self, handler):
+        self.handler = handler
+
+        modem = GsmModem(BaseConfig.GSMport, BaseConfig.GSMbaud,
+                         smsReceivedCallbackFunc=self.handle_sms, AT_CNMI="2,1,0,1")
+
+        modem.smsTextMode = False
+        modem.connect(BaseConfig.GSMPIN)
+
+    def __del__(self):
+        modem.close()
+
+    def handle_sms(sms):
+        logging.debug(u'== SMS message received ==\nFrom: {0}\nTime: {1}\nMessage:\n{2}\n'.format(sms.number, sms.time, sms.text))
+        if sms.number == UserConfig.authorizedNumber:
+            if UserConfig.SMSControl:
+                if sms.text.lower() == 'set mode realtime':
+                    # set mode
+                    UserConfig.mode = 'realtime'
+                    logging.debug('Mode has been set to realtime by SMS')
+                    sms.reply(u'Mode has been set to realtime')
+
+                elif sms.text.lower() == 'set mode batch':
+                    # set mode
+                    UserConfig.mode = 'batch'
+                    logging.debug('Mode has been set to batch by SMS')
+                    sms.reply(u'Mode has been set to batch')
+
+                elif sms.text.lower() == 'set mode interval':
+                    # set mode
+                    UserConfig.mode = 'interval'
+                    logging.debug('Mode has been set to interval by SMS')
+                    sms.reply(u'Mode has been set to interval')
+
+                elif sms.text.lower() == 'set mode ondemand':
+                    # set mode
+                    UserConfig.mode = 'ondemand'
+                    logging.debug('Mode has been set to ondemand by SMS')
+                    sms.reply(u'Mode has been set to ondemand')
+
+                elif sms.text.lower() == 'q mode':
+                    # query mode
+                    logging.debug('Mode has been queried by SMS')
+                    sms.reply(u'Mode is {}'.format(UserConfig.mode))
+
+                elif sms.text.lower() == 'battery':
+                    # query mode
+                    logging.debug('Status of charging has been queried')
+                    sms.reply(u'Charging 12V.3')
+
+                elif sms.text.lower() == 'takephoto':
+                    # query mode
+                    self.handler.motion_detected()
+                    logging.debug('Photo has been requested')
+                    sms.reply(u'Photo taken')
+
+            else:
+                logging.debug('SMS Control not allowed')
+        else:
+            logging.debug('Number is not authorized')
 
 
 class PiMotion:
@@ -235,6 +295,9 @@ class PiMotion:
             # PIR Motion analyser
             pir = PIRMotionAnalysis(BaseConfig.PIRpin, handler)
 
+            # SMS handler
+            smshandle = SMSHandler(handler)
+
             logging.debug('Starting camera')
             time.sleep(2)
 
@@ -255,3 +318,4 @@ class PiMotion:
             finally:
                 camera.stop_recording()
                 logging.debug('Recording finished')
+                del smshandle

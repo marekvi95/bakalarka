@@ -64,6 +64,10 @@ class BaseConfig:
 
     batchUploadWindow = 23
 
+    GSMport = '/dev/ttyGSM1'
+    GSMbaud = 115200
+    GSMPIN = None # SIM card PIN (if any)
+
 class UserConfig(BaseConfig):
     """ Extends BaseConfig class with user defined configuration
 

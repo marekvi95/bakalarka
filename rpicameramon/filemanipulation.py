@@ -148,7 +148,7 @@ class FileUploader(threading.Thread):
                         if (dt.hour == BaseConfig.batchUploadWindow):
                             if not self.q.empty():
                                 logging.debug('Batch upload')
-                                self.gdrive_upload(filename = self.q.get()),
+                                self.gdrive_upload(filename = self.q.get(),
                                             drive = self.drive)
                     else:
                         if not self.q.empty():

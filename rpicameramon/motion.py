@@ -51,6 +51,7 @@ class MotionAnalysis(picamera.array.PiMotionAnalysis):
         elif UserConfig.mode == 'interval':
             # Interval mode
             # capture
+            logging.info('Capturing interval photo')
             self.handler.motion_detected()
             # sleep for some time
             time.sleep(UserConfig.interval)

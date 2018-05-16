@@ -6,6 +6,7 @@ import json
 import queue
 import contextlib
 import datetime
+import re
 
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
@@ -147,7 +148,10 @@ class FileUploader(threading.Thread):
                         if (dt.hour == BaseConfig.batchUploadWindow):
                             if not self.q.empty():
                                 logging.debug('Batch upload')
-                                self.gdrive_upload(filename = self.q.get(),
+                                # filename regex matching
+                                text = self.q.get()
+                                file = re.search("[^/]+$", text)
+                                self.gdrive_upload(filename = file.group(0),
                                                 drive = self.drive)
                     else:
                         if not self.q.empty():

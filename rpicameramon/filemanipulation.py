@@ -148,17 +148,11 @@ class FileUploader(threading.Thread):
                         if (dt.hour == BaseConfig.batchUploadWindow):
                             if not self.q.empty():
                                 logging.debug('Batch upload')
-                                # filename regex matching
-                                text = self.q.get()
-                                file = re.search("[^/]+$", text)
-                                self.gdrive_upload(filename = file.group(0),
+                                self.gdrive_upload(filename = self.q.get()),
                                                 drive = self.drive)
                     else:
                         if not self.q.empty():
-                            # filename regex matching
-                            text = self.q.get()
-                            file = re.search("[^/]+$", text)
-                            self.gdrive_upload(filename = file.group(0),
+                            self.gdrive_upload(filename = self.q.get(),
                                             drive = self.drive)
                 else:
                     self.drive = self.gdrive_init()
@@ -189,8 +183,17 @@ class FileUploader(threading.Thread):
         file_upload = drive.CreateFile({"parents": [{"kind": "drive#fileLink",
                                             "id": BaseConfig.pictureFolderID}]})
         #file_upload = drive.CreateFile({'title': filename})
+        # filename regex matching
+        match = re.search("[^/]+$", filename)
+        file = match.group(0)
+        file_upload['title'] = file
+
         file_upload.SetContentFile(filename)
-        file_upload.Upload() # Upload the file.
+
+        with stopwatch('uploading file to gdrive'):
+            try:
+                file_upload.Upload() # Upload the file.
+            
         logging.debug('title: %s, id: %s' % (file_upload['title'],
                         file_upload['id']))
 

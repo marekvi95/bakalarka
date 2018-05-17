@@ -89,10 +89,10 @@ class UserConfig(BaseConfig):
     @classmethod
     def load_config(cls, conf):
         try:
-            if conf['mode'] != 'realtime' or 'interval' or 'batch' or 'ondemand':
-                logging.error('Mode is invalid!!')
-            else:
+            if conf['mode'] in ['realtime','batch','ondemand','interval']:
                 cls.mode = conf['mode']
+            else:
+                logging.error('Mode is invalid!!')
             cls.interval = conf['interval']
 
             if conf['usePIR'] == 'on':
@@ -117,5 +117,5 @@ class UserConfig(BaseConfig):
             else:
                 cls.echo = False
 
-        except KeyError:
-            logging.error('New configuration cannot be loaded, check syntax!')
+        #except KeyError:
+        #    logging.error('New configuration cannot be loaded, check syntax!')

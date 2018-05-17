@@ -117,5 +117,5 @@ class UserConfig(BaseConfig):
             else:
                 cls.echo = False
 
-        #except KeyError:
-        #    logging.error('New configuration cannot be loaded, check syntax!')
+        except KeyError:
+            logging.error('New configuration cannot be loaded, check syntax!')

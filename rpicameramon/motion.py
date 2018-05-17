@@ -319,7 +319,12 @@ class PiMotion:
                     if UserConfig.usePIR:
                         pir.is_detected()
                     time.sleep(1)
+
+            except KeyboardInterrupt:
+                logging.debug('Keyboard interrupt Exiting main loop')
+
             finally:
                 camera.stop_recording()
                 logging.debug('Recording finished')
                 del smshandle
+                GPIO.cleanup()

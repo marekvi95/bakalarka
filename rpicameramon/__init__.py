@@ -5,6 +5,7 @@ import motion
 import telemetry
 import queue
 
+
 from config import BaseConfig
 from config import UserConfig
 
@@ -53,29 +54,45 @@ if __name__ == '__main__':
         logging.debug('Starting program')
 
         # init of threads - Logsender and TelemetrySender
-        logThread = LogSender(q1, gh)
-        telemetryThread = TelemetrySender(gh1)
-        logThread.start()
-        telemetryThread.start()
+        try:
+            logThread = LogSender(q1, gh)
+            telemetryThread = TelemetrySender(gh1)
+            logThread.start()
+            telemetryThread.start()
+            logging.debug('Log and telemtry sender started')
+        except KeyboardInterrupt:
+            logThread.cancel()
+            telemetryThread.cancel()
 
         #Initialization of configuration checker threadName
-        cfg = ConfFileDownloader(filename=BaseConfig.confFileID)
-        cfg.start()
+        try:
+            cfg = ConfFileDownloader(filename=BaseConfig.confFileID)
+            cfg.start()
+            logging.debug('Conf file downloader started')
+        except KeyboardInterrupt:
+            cfg.cancel()
 
         #initialization of queue for file uploader
         q = queue.Queue(maxsize=200)
 
         #initialization of file uploader
-        w = FileUploader(storage=UserConfig.storage, q=q)
-        w.start()
+        try:
+            w = FileUploader(storage=UserConfig.storage, q=q)
+            w.start()
+            logging.debug('File uploader started')
+        except KeyboardInterrupt
+            w.cancel()
 
-        logging.debug('File uploader started')
+
         #initialization daylight detection threadName
 
         #initialization of motion detection analysis
 
         motion = PiMotion(verbose=False, post_capture_callback=None, q=q)
         motion.start()
+
+    except KeyboardInterrupt:
+        logging.debug('Keyboard interrupt received, exiting...')
 
     finally:
         #w.cancel()

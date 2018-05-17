@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>serializeArray demo</title>
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+<body>
+
+<form class="pure-form pure-form-aligned" id="test" action="#" method="post">
+    <fieldset>
+
+       <div class="pure-control-group">
+            <label for="mode">Mód běhu aplikace</label>
+            <select id="mode" name="mode">
+              <option>realtime</option>
+              <option>ondemand</option>
+              <option>interval</option>
+              <option>batch</option>
+             </select>
+
+        </div>
+        <div class="pure-control-group">
+          <label for="echo" class="pure-checkbox">Echo</label>
+           <input id="echo" type="checkbox" name="echo">
+
+        </div>
+
+        <div class="pure-control-group">
+          <label for="SMSNotification" class="pure-checkbox">SMS Notifikace</label>
+           <input id="SMSNotification" type="checkbox" name="SMSNotification">
+        </div>
+
+        <div class="pure-control-group">
+          <label for="SMSControl" class="pure-checkbox">SMS Ovládání</label>
+           <input id="SMSControl" type="checkbox" name="SMSControl">
+        </div>
+
+
+         <div class="pure-control-group">
+            <label for="storage">Úložiště</label>
+            <select id="storage" name="storage">
+              <option>google</option>
+              <option>dropbox</option>
+             </select>
+        </div>
+
+
+        <div class="pure-control-group">
+            <label for="phone">Autorizované tel. číslo</label>
+            <input id="phone" type="text" placeholder="XXXXXXXXX" name="phone">
+        </div>
+
+        <div class="pure-control-group">
+            <label for="interval">Interval</label>
+            <input id="interval" type="text" placeholder="Interval pro snímání v minutách" name="interval">
+        </div>
+
+        <div class="pure-controls">
+
+
+            <button type="submit" class="pure-button pure-button-primary">Generuj</button>
+        </div>
+    </fieldset>
+</form>
+<pre id="output"></pre>
+
+
+<script>
+ (function() {
+	function toJSONString( form ) {
+		var obj = {};
+		var elements = form.querySelectorAll( "input, select, textarea" );
+		for( var i = 0; i < elements.length; ++i ) {
+			var element = elements[i];
+			var name = element.name;
+			var value = element.value;
+
+			if( name ) {
+				obj[ name ] = value;
+			}
+		}
+
+		return JSON.stringify( obj );
+	}
+
+	document.addEventListener( "DOMContentLoaded", function() {
+		var form = document.getElementById( "test" );
+		var output = document.getElementById( "output" );
+		form.addEventListener( "submit", function( e ) {
+			e.preventDefault();
+			var json = toJSONString( this );
+			output.innerHTML = json;
+            google.script.run.saveToFile(json);
+
+		}, false);
+
+	});
+
+})();
+</script>
+
+</body>
+</html>

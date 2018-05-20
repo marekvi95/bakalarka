@@ -48,12 +48,21 @@
             
   <div class="section" id="rpicameramon-package">
 <h1>rpicameramon package<a class="headerlink" href="#rpicameramon-package" title="Permalink to this headline">¶</a></h1>
+<p>This package provides camera security system functionality for the Raspberry Pi minicomputer.
+It uses Raspberry Pi NoIR camera for the motion detection and also PIR sensor if available.</p>
+<p>Capturing is handled by the picamera package and image processing is handled by the Pillow package.</p>
+<p>Captured images are sent to the Google Drive storage.</p>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<p>Package itself consist of four submodules - config, filemanipulation, motion and telemetry.
+Each of them has consist of several classes.</p>
 </div>
-<div class="section" id="module-rpicameramon.config">
-<span id="rpicameramon-config-module"></span><h2>rpicameramon.config module<a class="headerlink" href="#module-rpicameramon.config" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<div class="section" id="config-module">
+<h2>config module<a class="headerlink" href="#config-module" title="Permalink to this headline">¶</a></h2>
+<p>Config modules is used for storing of the application configuration internally.
+It consist of two classes - BaseConfig and UserConfig. UserConfig inherits from the BaseConfig class.</p>
+<p>UserConfig class adds variables which can be loaded from the external JSON file.</p>
+<span class="target" id="module-rpicameramon.config"></span><dl class="class">
 <dt id="rpicameramon.config.BaseConfig">
 <em class="property">class </em><code class="descclassname">rpicameramon.config.</code><code class="descname">BaseConfig</code><a class="headerlink" href="#rpicameramon.config.BaseConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
@@ -143,18 +152,84 @@
 </dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.GSMPIN">
-<code class="descname">GSMPIN</code><em class="property"> = None</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.GSMPIN" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="rpicameramon.config.BaseConfig.pictureFolderID">
+<code class="descname">pictureFolderID</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.pictureFolderID" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> &#8211; Google Drive ID of folder with pictures</p>
+</dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.GSMbaud">
-<code class="descname">GSMbaud</code><em class="property"> = 115200</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.GSMbaud" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="rpicameramon.config.BaseConfig.confFileID">
+<code class="descname">confFileID</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.confFileID" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> &#8211; Google Drive ID of JSON configuration files</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.dashboardFileID">
+<code class="descname">dashboardFileID</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.dashboardFileID" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> &#8211; Google Drive ID of dashboard panel</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.logRange">
+<code class="descname">logRange</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.logRange" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> &#8211; Range in sheets for telemetry messages</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.msgRange">
+<code class="descname">msgRange</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.msgRange" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> &#8211; Range in sheets for log messages</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.OAuthJSON">
+<code class="descname">OAuthJSON</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.OAuthJSON" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> &#8211; Name of the JSON file for Google OAuth authentication</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.fileUploadSleep">
+<code class="descname">fileUploadSleep</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.fileUploadSleep" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; Sleep time in seconds for file uploader thread</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.batchUploadWindow">
+<code class="descname">batchUploadWindow</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.batchUploadWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; Allowed hour for file uploads in batch mode</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="rpicameramon.config.BaseConfig.GSMport">
-<code class="descname">GSMport</code><em class="property"> = '/dev/ttyGSM1'</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.GSMport" title="Permalink to this definition">¶</a></dt>
+<code class="descname">GSMport</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.GSMport" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> &#8211; Device address of a GSM Module</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.GSMbaud">
+<code class="descname">GSMbaud</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.GSMbaud" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; Baud rate for communication with the GSM module</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.GSMPIN">
+<code class="descname">GSMPIN</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.GSMPIN" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; PIN for unlocking the SIM card</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">GSMPIN</code><em class="property"> = None</em></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">GSMbaud</code><em class="property"> = 115200</em></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">GSMport</code><em class="property"> = '/dev/ttyGSM1'</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -163,8 +238,8 @@
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.OAuthJSON">
-<code class="descname">OAuthJSON</code><em class="property"> = 'client_secret.json'</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.OAuthJSON" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">OAuthJSON</code><em class="property"> = 'client_secret.json'</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -173,8 +248,8 @@
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.batchUploadWindow">
-<code class="descname">batchUploadWindow</code><em class="property"> = 23</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.batchUploadWindow" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">batchUploadWindow</code><em class="property"> = 23</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -188,18 +263,18 @@
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.confFileID">
-<code class="descname">confFileID</code><em class="property"> = '1TBLQfJHsZYPXDvcpS_ysg6asxf-5_Oku'</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.confFileID" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">confFileID</code><em class="property"> = '1TBLQfJHsZYPXDvcpS_ysg6asxf-5_Oku'</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.dashboardFileID">
-<code class="descname">dashboardFileID</code><em class="property"> = '1XNmtg0NoCiU03NDZohlBwmOpFC-heHWbdRzY_tTYjhg'</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.dashboardFileID" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">dashboardFileID</code><em class="property"> = '1XNmtg0NoCiU03NDZohlBwmOpFC-heHWbdRzY_tTYjhg'</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.fileUploadSleep">
-<code class="descname">fileUploadSleep</code><em class="property"> = 5</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.fileUploadSleep" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">fileUploadSleep</code><em class="property"> = 5</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -243,18 +318,18 @@
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.logRange">
-<code class="descname">logRange</code><em class="property"> = 'Log!A:A'</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.logRange" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">logRange</code><em class="property"> = 'Log!A:A'</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.msgRange">
-<code class="descname">msgRange</code><em class="property"> = 'Zpravy!A:A'</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.msgRange" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">msgRange</code><em class="property"> = 'Zpravy!A:A'</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.pictureFolderID">
-<code class="descname">pictureFolderID</code><em class="property"> = '1AO_tQMMz2c6_l69s9vo9PW0PTy4nrYqi'</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.pictureFolderID" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">pictureFolderID</code><em class="property"> = '1AO_tQMMz2c6_l69s9vo9PW0PTy4nrYqi'</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -278,22 +353,69 @@
 <dt id="rpicameramon.config.UserConfig">
 <em class="property">class </em><code class="descclassname">rpicameramon.config.</code><code class="descname">UserConfig</code><a class="headerlink" href="#rpicameramon.config.UserConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#rpicameramon.config.BaseConfig" title="rpicameramon.config.BaseConfig"><code class="xref py py-class docutils literal"><span class="pre">rpicameramon.config.BaseConfig</span></code></a></p>
-<p>Extends BaseConfig class with user defined configuration</p>
-<p>Variables:</p>
-<p>mode &#8211; mode of motion detection</p>
+<p>Extends BaseConfig class with the user defined configuration.
+This configuration can be updated from the external JSON.</p>
 <dl class="attribute">
-<dt id="rpicameramon.config.UserConfig.SMSControl">
-<code class="descname">SMSControl</code><em class="property"> = True</em><a class="headerlink" href="#rpicameramon.config.UserConfig.SMSControl" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="rpicameramon.config.UserConfig.mode">
+<code class="descname">mode</code><a class="headerlink" href="#rpicameramon.config.UserConfig.mode" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> &#8211; default runtime mode (realtime, interval, batch, ondemand)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.UserConfig.echo">
+<code class="descname">echo</code><a class="headerlink" href="#rpicameramon.config.UserConfig.echo" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>boolean</em> &#8211; echo mode</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.UserConfig.interval">
+<code class="descname">interval</code><a class="headerlink" href="#rpicameramon.config.UserConfig.interval" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; default interval time in seconds for interval mode</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.UserConfig.storage">
+<code class="descname">storage</code><a class="headerlink" href="#rpicameramon.config.UserConfig.storage" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> &#8211; gdrive or dropbox. Dropbox is only experimental</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.UserConfig.usePIR">
+<code class="descname">usePIR</code><a class="headerlink" href="#rpicameramon.config.UserConfig.usePIR" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>boolean</em> &#8211; use PIR sensor</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="rpicameramon.config.UserConfig.SMSNotification">
-<code class="descname">SMSNotification</code><em class="property"> = True</em><a class="headerlink" href="#rpicameramon.config.UserConfig.SMSNotification" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">SMSNotification</code><a class="headerlink" href="#rpicameramon.config.UserConfig.SMSNotification" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>boolean</em> &#8211; SMS SMSNotification</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.UserConfig.SMSControl">
+<code class="descname">SMSControl</code><a class="headerlink" href="#rpicameramon.config.UserConfig.SMSControl" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>boolean</em> &#8211; Allow control via SMS messages</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="rpicameramon.config.UserConfig.authorizedNumber">
-<code class="descname">authorizedNumber</code><em class="property"> = '+420733149295'</em><a class="headerlink" href="#rpicameramon.config.UserConfig.authorizedNumber" title="Permalink to this definition">¶</a></dt>
+<code class="descname">authorizedNumber</code><a class="headerlink" href="#rpicameramon.config.UserConfig.authorizedNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; Authorized number for control and notifications</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">SMSControl</code><em class="property"> = True</em></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">SMSNotification</code><em class="property"> = True</em></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">authorizedNumber</code><em class="property"> = '+420733149295'</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -302,41 +424,51 @@
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.UserConfig.echo">
-<code class="descname">echo</code><em class="property"> = False</em><a class="headerlink" href="#rpicameramon.config.UserConfig.echo" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">echo</code><em class="property"> = False</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.UserConfig.interval">
-<code class="descname">interval</code><em class="property"> = 20</em><a class="headerlink" href="#rpicameramon.config.UserConfig.interval" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">interval</code><em class="property"> = 20</em></dt>
 <dd></dd></dl>
 
 <dl class="classmethod">
 <dt id="rpicameramon.config.UserConfig.load_config">
 <em class="property">classmethod </em><code class="descname">load_config</code><span class="sig-paren">(</span><em>conf</em><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.config.UserConfig.load_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method loads configuration to UserConfig class from the JSON file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">KeyError</span></code> &#8211; If JSON cannot be parsed</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">mode</code><em class="property"> = 'realtime'</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.UserConfig.mode">
-<code class="descname">mode</code><em class="property"> = 'interval'</em><a class="headerlink" href="#rpicameramon.config.UserConfig.mode" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">storage</code><em class="property"> = 'gdrive'</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.UserConfig.storage">
-<code class="descname">storage</code><em class="property"> = 'gdrive'</em><a class="headerlink" href="#rpicameramon.config.UserConfig.storage" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="rpicameramon.config.UserConfig.usePIR">
-<code class="descname">usePIR</code><em class="property"> = False</em><a class="headerlink" href="#rpicameramon.config.UserConfig.usePIR" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">usePIR</code><em class="property"> = False</em></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 </div>
-<div class="section" id="module-rpicameramon.filemanipulation">
-<span id="rpicameramon-filemanipulation-module"></span><h2>rpicameramon.filemanipulation module<a class="headerlink" href="#module-rpicameramon.filemanipulation" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<div class="section" id="rpicameramon-filemanipulation-module">
+<h2>rpicameramon.filemanipulation module<a class="headerlink" href="#rpicameramon-filemanipulation-module" title="Permalink to this headline">¶</a></h2>
+<p>This module consist of classes for the manipulation with files in Google Drive.</p>
+<span class="target" id="module-rpicameramon.filemanipulation"></span><dl class="class">
 <dt id="rpicameramon.filemanipulation.ConfFileDownloader">
 <em class="property">class </em><code class="descclassname">rpicameramon.filemanipulation.</code><code class="descname">ConfFileDownloader</code><span class="sig-paren">(</span><em>group=None</em>, <em>target=None</em>, <em>name=None</em>, <em>filename=None</em>, <em>*</em>, <em>daemon=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.filemanipulation.ConfFileDownloader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></code></p>
@@ -352,17 +484,53 @@ and then it check if the configuration was changed. If yes, it loads it.</p>
 <dl class="method">
 <dt id="rpicameramon.filemanipulation.ConfFileDownloader.auth">
 <code class="descname">auth</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.filemanipulation.ConfFileDownloader.auth" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Function for Google Drive authentication. It loads credentials from the
+file &#8220;mycreds.txt&#8221;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Drive object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">drive</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="rpicameramon.filemanipulation.ConfFileDownloader.download_file">
 <code class="descname">download_file</code><span class="sig-paren">(</span><em>drive</em><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.filemanipulation.ConfFileDownloader.download_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This function downloads specified file from the Google Drive.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>drive</strong> (<em>obj</em>) &#8211; Google Drive object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Content of the file as string</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="rpicameramon.filemanipulation.ConfFileDownloader.get_timestamp">
 <code class="descname">get_timestamp</code><span class="sig-paren">(</span><em>drive</em><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.filemanipulation.ConfFileDownloader.get_timestamp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This function fetches date of the last modification of specified file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Timestamp of last modification of the file</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">timestamp</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="rpicameramon.filemanipulation.ConfFileDownloader.load_config">
@@ -377,7 +545,12 @@ and then it check if the configuration was changed. If yes, it loads it.</p>
 <dl class="method">
 <dt id="rpicameramon.filemanipulation.ConfFileDownloader.run">
 <code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.filemanipulation.ConfFileDownloader.run" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This method runs when ConfFileDownloader thread is started.
+First it initialize connection with Google Drive and starts loop
+for checking if JSON configuration file on Google Drive was modified.
+If yes, It downloads it and calls the method for loading it into UserConfig class.</p>
+<p>File is checked in intervals specified in confCheckTime variable.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -397,6 +570,18 @@ captured photos. It supports google drive and dropbox (experimental)</p>
 <dt id="rpicameramon.filemanipulation.FileUploader.q">
 <code class="descname">q</code><a class="headerlink" href="#rpicameramon.filemanipulation.FileUploader.q" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>Queue obj</em> &#8211; queue with filenames of pictures to be uploaded</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.filemanipulation.FileUploader.dropbox_is_init">
+<code class="descname">dropbox_is_init</code><a class="headerlink" href="#rpicameramon.filemanipulation.FileUploader.dropbox_is_init" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>boolean</em> &#8211; True if Dropbox is initialized</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.filemanipulation.FileUploader.gdrive_is_init">
+<code class="descname">gdrive_is_init</code><a class="headerlink" href="#rpicameramon.filemanipulation.FileUploader.gdrive_is_init" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>boolean</em> &#8211; True if Google Drive is initialized</p>
 </dd></dl>
 
 <dl class="method">
@@ -432,9 +617,12 @@ captured photos. It supports google drive and dropbox (experimental)</p>
 <dd></dd></dl>
 
 </div>
-<div class="section" id="module-rpicameramon.motion">
-<span id="rpicameramon-motion-module"></span><h2>rpicameramon.motion module<a class="headerlink" href="#module-rpicameramon.motion" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<div class="section" id="rpicameramon-motion-module">
+<h2>rpicameramon.motion module<a class="headerlink" href="#rpicameramon-motion-module" title="Permalink to this headline">¶</a></h2>
+<p>This module has functionality for the motion detection from the scene and also from the PIR sensor
+and also SMS handler.
+Optical flow method is used for the motion detection.</p>
+<span class="target" id="module-rpicameramon.motion"></span><dl class="class">
 <dt id="rpicameramon.motion.CaptureHandler">
 <em class="property">class </em><code class="descclassname">rpicameramon.motion.</code><code class="descname">CaptureHandler</code><span class="sig-paren">(</span><em>camera</em>, <em>post_capture_callback=None</em>, <em>q=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.motion.CaptureHandler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
@@ -490,16 +678,21 @@ functionality.</p>
 <dl class="method">
 <dt id="rpicameramon.motion.CaptureHandler.scan_day">
 <code class="descname">scan_day</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.motion.CaptureHandler.scan_day" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This method captures picture as an RGB array and calculates
+average value of the pixels in the matrix.
+If the value pixAverage is more than 50 (scene is gray to black).
+It indicates that the light condition is poor and we can set up night
+params.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="rpicameramon.motion.CaptureHandler.tick">
 <code class="descname">tick</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.motion.CaptureHandler.tick" title="Permalink to this definition">¶</a></dt>
 <dd><p>This tick method provides a handler for capturing the pictures.
 It ticks every second after PiMotion.start() was called.
-If detected == True and method is not processing any capture
+If detected is True and method is not processing any capture
 (That is indicated by variable &#8216;working&#8217;), it begins with processing.
-First datetime method is called to obtain the actual datetime, then
+First, datetime method is called to obtain the actual datetime, then
 the scene is analyzed with scan_day method which returns true if
 light conditions appear to be daylight or false if the light level
 is too low.</p>
@@ -543,6 +736,18 @@ one extra column of macro-blocks present in motion vector data.</p>
 <p>This class provides a handler for PIR sensor
 It detects if the input pin is in the high state
 and calls motion_detected handler</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pin</strong> (<em>number</em>) &#8211; BCM number of GPIO pin where is PIR sensor connected</li>
+<li><strong>handler</strong> (<em>obj</em>) &#8211; CaptureHandler object</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="rpicameramon.motion.PIRMotionAnalysis.is_detected">
 <code class="descname">is_detected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.motion.PIRMotionAnalysis.is_detected" title="Permalink to this definition">¶</a></dt>
@@ -552,8 +757,26 @@ and calls motion_detected handler</p>
 
 <dl class="class">
 <dt id="rpicameramon.motion.PiMotion">
-<em class="property">class </em><code class="descclassname">rpicameramon.motion.</code><code class="descname">PiMotion</code><span class="sig-paren">(</span><em>verbose=False</em>, <em>post_capture_callback=None</em>, <em>q=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.motion.PiMotion" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">rpicameramon.motion.</code><code class="descname">PiMotion</code><span class="sig-paren">(</span><em>post_capture_callback=None</em>, <em>q=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.motion.PiMotion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>This class handles the camera and PIR sensor setup.
+It sets up resolution and framerate and starts
+capturing the video outputting it to the MotionAnalysis object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>post_capture_callback</strong> (<a class="reference internal" href="#rpicameramon.motion.CaptureHandler.callback" title="rpicameramon.motion.CaptureHandler.callback"><em>callback</em></a>) &#8211; not in use</li>
+<li><strong>q</strong> (<em>Queue obj</em>) &#8211; queue for captured photos</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">KeyboardInterrupt</span></code> &#8211; Interrupt the program</p>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="rpicameramon.motion.PiMotion.start">
 <code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.motion.PiMotion.start" title="Permalink to this definition">¶</a></dt>
@@ -573,19 +796,32 @@ and calls motion_detected handler</p>
 </dd></dl>
 
 </div>
-<div class="section" id="rpicameramon-smsthread-module">
-<h2>rpicameramon.smsthread module<a class="headerlink" href="#rpicameramon-smsthread-module" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-rpicameramon.telemetry">
-<span id="rpicameramon-telemetry-module"></span><h2>rpicameramon.telemetry module<a class="headerlink" href="#module-rpicameramon.telemetry" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<div class="section" id="rpicameramon-telemetry-module">
+<h2>rpicameramon.telemetry module<a class="headerlink" href="#rpicameramon-telemetry-module" title="Permalink to this headline">¶</a></h2>
+<p>This module provides functionality for sending telemetry data to the Google Sheets.</p>
+<span class="target" id="module-rpicameramon.telemetry"></span><dl class="class">
 <dt id="rpicameramon.telemetry.GoogleHandler">
 <em class="property">class </em><code class="descclassname">rpicameramon.telemetry.</code><code class="descname">GoogleHandler</code><a class="headerlink" href="#rpicameramon.telemetry.GoogleHandler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="rpicameramon.telemetry.GoogleHandler.add_sheet_line">
 <code class="descname">add_sheet_line</code><span class="sig-paren">(</span><em>service=None</em>, <em>line=None</em>, <em>spreadsheetId=None</em>, <em>rangeName=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.telemetry.GoogleHandler.add_sheet_line" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Append a line/lines to Google Sheet.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>service</strong> (<em>obj</em>) &#8211; Google Sheets Service object</li>
+<li><strong>line</strong> (<em>nested list</em>) &#8211; matrix of data to be put into Google Sheet</li>
+<li><strong>spreadsheetId</strong> (<em>str</em>) &#8211; Id of spreadsheet</li>
+<li><strong>rangeName</strong> (<em>str</em>) &#8211; Range in a spreadsheet</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="rpicameramon.telemetry.GoogleHandler.get_credentials">
@@ -606,17 +842,44 @@ the OAuth2 flow is completed to obtain the new credentials.</p>
 <dl class="method">
 <dt id="rpicameramon.telemetry.GoogleHandler.get_file_service">
 <code class="descname">get_file_service</code><span class="sig-paren">(</span><em>credentials</em><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.telemetry.GoogleHandler.get_file_service" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Gets Google Drive Service v3</p>
+<dl class="docutils">
+<dt>Retruns:</dt>
+<dd>Google Drive service object</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="rpicameramon.telemetry.GoogleHandler.get_sheets_service">
 <code class="descname">get_sheets_service</code><span class="sig-paren">(</span><em>credentials</em><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.telemetry.GoogleHandler.get_sheets_service" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Gets Google Sheets Service v4</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Google Sheets service object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="rpicameramon.telemetry.GoogleHandler.upload_file">
 <code class="descname">upload_file</code><span class="sig-paren">(</span><em>service</em>, <em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.telemetry.GoogleHandler.upload_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Uploads a image/jpeg file to the Google Drive.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>service</strong> (<em>obj</em>) &#8211; Google Drive Service object</li>
+<li><strong>filename</strong> (<em>str</em>) &#8211; full path to the file.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -630,7 +893,8 @@ Google Sheets. It should be used together with the
 logging.handlers.QueueHandler class as a handler for logging.
 LogSender works only in specified time intervals,
 dequeues everything in logQueue, sends it
-to the Google Sheets and goes sleep.</p>
+to the Google Sheets and goes sleep for the amount of time
+specified by the variable fileUploadSleep</p>
 <dl class="attribute">
 <dt id="rpicameramon.telemetry.LogSender.logQueue">
 <code class="descname">logQueue</code><a class="headerlink" href="#rpicameramon.telemetry.LogSender.logQueue" title="Permalink to this definition">¶</a></dt>
@@ -676,9 +940,6 @@ Google Sheets.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-rpicameramon">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-rpicameramon" title="Permalink to this headline">¶</a></h2>
-</div>
 </div>
 
 
@@ -691,12 +952,10 @@ Google Sheets.</p>
   <ul>
 <li><a class="reference internal" href="#">rpicameramon package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-rpicameramon.config">rpicameramon.config module</a></li>
-<li><a class="reference internal" href="#module-rpicameramon.filemanipulation">rpicameramon.filemanipulation module</a></li>
-<li><a class="reference internal" href="#module-rpicameramon.motion">rpicameramon.motion module</a></li>
-<li><a class="reference internal" href="#rpicameramon-smsthread-module">rpicameramon.smsthread module</a></li>
-<li><a class="reference internal" href="#module-rpicameramon.telemetry">rpicameramon.telemetry module</a></li>
-<li><a class="reference internal" href="#module-rpicameramon">Module contents</a></li>
+<li><a class="reference internal" href="#config-module">config module</a></li>
+<li><a class="reference internal" href="#rpicameramon-filemanipulation-module">rpicameramon.filemanipulation module</a></li>
+<li><a class="reference internal" href="#rpicameramon-motion-module">rpicameramon.motion module</a></li>
+<li><a class="reference internal" href="#rpicameramon-telemetry-module">rpicameramon.telemetry module</a></li>
 </ul>
 </li>
 </ul>

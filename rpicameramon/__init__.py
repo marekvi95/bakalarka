@@ -80,7 +80,7 @@ if __name__ == '__main__':
 
         #initialization of motion detection analysis
 
-        motion = PiMotion(verbose=False, post_capture_callback=None, q=q)
+        motion = PiMotion(post_capture_callback=None, q=q)
         motion.start()
 
     except KeyboardInterrupt:

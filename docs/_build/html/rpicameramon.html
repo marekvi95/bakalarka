@@ -296,10 +296,12 @@ imageQuality &#8211; JPEG quality 0...100</p>
 <p>ConfFileDownloader is a subclass of a Thread class
 First it loads the initial JSON configuration from Google drive
 and then it check if the configuration was changed. If yes, it loads it.</p>
-<dl class="docutils">
-<dt>Attributes:</dt>
-<dd>filename (string): file ID of JSON configuration file on Google drive</dd>
-</dl>
+<dl class="attribute">
+<dt id="rpicameramon.filemanipulation.ConfFileDownloader.filename">
+<code class="descname">filename</code><a class="headerlink" href="#rpicameramon.filemanipulation.ConfFileDownloader.filename" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>string</em> &#8211; file ID of JSON configuration file on Google drive</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="rpicameramon.filemanipulation.ConfFileDownloader.auth">
 <code class="descname">auth</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.filemanipulation.ConfFileDownloader.auth" title="Permalink to this definition">¶</a></dt>
@@ -338,11 +340,18 @@ and then it check if the configuration was changed. If yes, it loads it.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></code></p>
 <p>This class provides a File uploader thread for uploading
 captured photos. It supports google drive and dropbox (experimental)</p>
-<dl class="docutils">
-<dt>Attributes:</dt>
-<dd>storage (str): storage type (gdrive or dropbox)
-q (Queue obj): queue with filenames of pictures to be uploaded</dd>
-</dl>
+<dl class="attribute">
+<dt id="rpicameramon.filemanipulation.FileUploader.storage">
+<code class="descname">storage</code><a class="headerlink" href="#rpicameramon.filemanipulation.FileUploader.storage" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> &#8211; storage type (gdrive or dropbox)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.filemanipulation.FileUploader.q">
+<code class="descname">q</code><a class="headerlink" href="#rpicameramon.filemanipulation.FileUploader.q" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Queue obj</em> &#8211; queue with filenames of pictures to be uploaded</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="rpicameramon.filemanipulation.FileUploader.dropbox_init">
 <code class="descname">dropbox_init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.filemanipulation.FileUploader.dropbox_init" title="Permalink to this definition">¶</a></dt>
@@ -384,16 +393,48 @@ q (Queue obj): queue with filenames of pictures to be uploaded</dd>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>It provides a handler for capturing the pictures. With the LED Switch
 functionality.</p>
-<dl class="docutils">
-<dt>Attributes:</dt>
-<dd>camera (obj): PiCamera object
-callback (str): callback
-q (obj): queue for passing captured photos
-detected (bool): True if motion is detected
-working (bool): True if the picture is saving
-i (int): counter of captured photos
-echoCounter (int): counter of taken pictures with echo mode</dd>
-</dl>
+<dl class="attribute">
+<dt id="rpicameramon.motion.CaptureHandler.camera">
+<code class="descname">camera</code><a class="headerlink" href="#rpicameramon.motion.CaptureHandler.camera" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>obj</em> &#8211; PiCamera object</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.motion.CaptureHandler.callback">
+<code class="descname">callback</code><a class="headerlink" href="#rpicameramon.motion.CaptureHandler.callback" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> &#8211; callback</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.motion.CaptureHandler.q">
+<code class="descname">q</code><a class="headerlink" href="#rpicameramon.motion.CaptureHandler.q" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>obj</em> &#8211; queue for passing captured photos</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.motion.CaptureHandler.detected">
+<code class="descname">detected</code><a class="headerlink" href="#rpicameramon.motion.CaptureHandler.detected" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>bool</em> &#8211; True if motion is detected</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.motion.CaptureHandler.working">
+<code class="descname">working</code><a class="headerlink" href="#rpicameramon.motion.CaptureHandler.working" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>bool</em> &#8211; True if the picture is saving</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.motion.CaptureHandler.i">
+<code class="descname">i</code><a class="headerlink" href="#rpicameramon.motion.CaptureHandler.i" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; counter of captured photos</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.motion.CaptureHandler.echoCounter">
+<code class="descname">echoCounter</code><a class="headerlink" href="#rpicameramon.motion.CaptureHandler.echoCounter" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; counter of taken pictures with echo mode</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="rpicameramon.motion.CaptureHandler.motion_detected">
 <code class="descname">motion_detected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.motion.CaptureHandler.motion_detected" title="Permalink to this definition">¶</a></dt>
@@ -518,10 +559,14 @@ and the messages, then replies to the SMS by saying &#8220;thank you&#8221;</p>
 <dd><p>Gets valid user credentials from storage.</p>
 <p>If nothing has been stored, or if the stored credentials are invalid,
 the OAuth2 flow is completed to obtain the new credentials.</p>
-<dl class="docutils">
-<dt>Returns:</dt>
-<dd>Credentials, the obtained credential.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Credentials, the obtained credential.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -552,12 +597,23 @@ logging.handlers.QueueHandler class as a handler for logging.
 LogSender works only in specified time intervals,
 dequeues everything in logQueue, sends it
 to the Google Sheets and goes sleep.</p>
-<dl class="docutils">
-<dt>Attributes:</dt>
-<dd>logQueue (obj): queue.Queue object with logRecord (obj)
-enqueued
-googleHandler (obj): GoogleHandler instance object</dd>
-</dl>
+<dl class="attribute">
+<dt id="rpicameramon.telemetry.LogSender.logQueue">
+<code class="descname">logQueue</code><a class="headerlink" href="#rpicameramon.telemetry.LogSender.logQueue" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>obj</em> &#8211; queue.Queue object with logRecord (obj)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.telemetry.LogSender.enqueued">
+<code class="descname">enqueued</code><a class="headerlink" href="#rpicameramon.telemetry.LogSender.enqueued" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.telemetry.LogSender.googleHandler">
+<code class="descname">googleHandler</code><a class="headerlink" href="#rpicameramon.telemetry.LogSender.googleHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>obj</em> &#8211; GoogleHandler instance object</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="rpicameramon.telemetry.LogSender.run">
 <code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.telemetry.LogSender.run" title="Permalink to this definition">¶</a></dt>

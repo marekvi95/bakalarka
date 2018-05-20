@@ -60,6 +60,12 @@ class GoogleHandler:
         return credentials
 
     def get_sheets_service(self, credentials):
+        """Gets Google Sheets Service v4
+
+        Returns:
+                Google Sheets service object
+        """
+
         self.credentials = credentials
 
         http = self.credentials.authorize(httplib2.Http())
@@ -70,6 +76,11 @@ class GoogleHandler:
         return service
 
     def get_file_service(self, credentials):
+        """Gets Google Drive Service v3
+
+        Retruns:
+            Google Drive service object
+        """
         self.credentials = credentials
 
         http = credentials.authorize(httplib2.Http())
@@ -79,6 +90,14 @@ class GoogleHandler:
 
     def add_sheet_line(self, service=None, line=None, spreadsheetId=None,
                         rangeName=None):
+        """Append a line/lines to Google Sheet.
+
+        Args:
+            service (obj): Google Sheets Service object
+            line (nested list): matrix of data to be put into Google Sheet
+            spreadsheetId (str): Id of spreadsheet
+            rangeName (str): Range in a spreadsheet
+        """
 
         body = {
             'values': line
@@ -91,7 +110,13 @@ class GoogleHandler:
         #logging.debug('{0} cells updated.'.format(result.get('updates')));
 
     def upload_file(self, service, filename):
+        """Uploads a image/jpeg file to the Google Drive.
 
+        Args:
+            service (obj): Google Drive Service object
+            filename (str): full path to the file.
+
+        """
         file_metadata = {'name': filename}
         media = MediaFileUpload(filename,
                             mimetype='image/jpeg')
@@ -108,7 +133,8 @@ class LogSender(threading.Thread):
         logging.handlers.QueueHandler class as a handler for logging.
         LogSender works only in specified time intervals,
         dequeues everything in logQueue, sends it
-        to the Google Sheets and goes sleep.
+        to the Google Sheets and goes sleep for the amount of time
+        specified by the variable fileUploadSleep
 
         Attributes:
             logQueue (obj): queue.Queue object with logRecord (obj)
@@ -145,7 +171,7 @@ class LogSender(threading.Thread):
 
                 self.array = [] #empty the array
 
-            time.sleep(1)
+            time.sleep(BaseConfig.fileUploadSleep)
 
 class TelemetrySender(threading.Thread):
     """
@@ -173,7 +199,7 @@ class TelemetrySender(threading.Thread):
             self.googleHandler.add_sheet_line(spreadsheetId=BaseConfig.dashboardFileID,
                                 rangeName=BaseConfig.logRange,
                                 line=[self.record])
-            time.sleep(5)
+            time.sleep(BaseConfig.fileUploadSleep)
 
     def getTelemetry(self):
         self.time = str(datetime.now())

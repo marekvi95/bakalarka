@@ -37,6 +37,13 @@ class ConfFileDownloader(threading.Thread):
         return
 
     def run(self):
+        """ This method runs when ConfFileDownloader thread is started.
+            First it initialize connection with Google Drive and starts loop
+            for checking if JSON configuration file on Google Drive was modified.
+            If yes, It downloads it and calls the method for loading it into UserConfig class.
+
+            File is checked in intervals specified in confCheckTime variable.
+        """
         logging.debug('Initialization of Conf file checker thread ')
         drive = self.auth() # Authorization
 
@@ -64,6 +71,13 @@ class ConfFileDownloader(threading.Thread):
         return
 
     def auth(self):
+        """
+        Function for Google Drive authentication. It loads credentials from the
+        file "mycreds.txt".
+
+        Returns:
+            drive: Drive object
+        """
         gauth = GoogleAuth()
         # Try to load saved client credentials
         gauth.LoadCredentialsFile("mycreds.txt")
@@ -84,10 +98,18 @@ class ConfFileDownloader(threading.Thread):
         return drive
 
     def download_file(self, drive):
+        """ This function downloads specified file from the Google Drive.
 
+            Args:
+                drive (obj): Google Drive object
+
+            Returns:
+                str: Content of the file as string
+        """
         conffile = drive.CreateFile({'id': self.filename})
         conffile.FetchMetadata()
 
+        logging.debug('New configuration file downloaded')
         logging.debug('title: %s, mimeType: %s' % (conffile['title'],
                         conffile['mimeType']))
 
@@ -95,7 +117,11 @@ class ConfFileDownloader(threading.Thread):
 
 
     def get_timestamp(self, drive):
+        """ This function fetches date of the last modification of specified file.
 
+            Returns:
+                timestamp: Timestamp of last modification of the file
+        """
         conffile = drive.CreateFile({'id': self.filename})
         conffile.FetchMetadata(fields='modifiedDate')
 
@@ -116,6 +142,8 @@ class FileUploader(threading.Thread):
         Attributes:
             storage (str): storage type (gdrive or dropbox)
             q (Queue obj): queue with filenames of pictures to be uploaded
+            dropbox_is_init (boolean): True if Dropbox is initialized
+            gdrive_is_init (boolean): True if Google Drive is initialized
     """
     def __init__(self, group=None, target=None, name=None,
                  storage=None, *, daemon=None, q=None):

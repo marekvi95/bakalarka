@@ -23,7 +23,21 @@ class BaseConfig:
 
             PIRpin (int): GPIO pin (BCM) where is PIR sensor connected
             LEDpin (int): GPIO pin (BCM) where is LED connected
-            
+
+            pictureFolderID (str): Google Drive ID of folder with pictures
+            confFileID (str): Google Drive ID of JSON configuration files
+            dashboardFileID (str): Google Drive ID of dashboard panel
+
+            logRange (str): Range in sheets for telemetry messages
+            msgRange (str): Range in sheets for log messages
+            OAuthJSON (str): Name of the JSON file for Google OAuth authentication
+
+            fileUploadSleep (int): Sleep time in seconds for file uploader thread
+            batchUploadWindow (int): Allowed hour for file uploads in batch mode
+
+            GSMport (str): Device address of a GSM Module
+            GSMbaud (int): Baud rate for communication with the GSM module
+            GSMPIN (int): PIN for unlocking the SIM card
     """
     # Default Settings
 
@@ -62,14 +76,21 @@ class BaseConfig:
     GSMPIN = None # SIM card PIN (if any)
 
 class UserConfig(BaseConfig):
-    """ Extends BaseConfig class with user defined configuration
+    """ Extends BaseConfig class with the user defined configuration.
+        This configuration can be updated from the external JSON.
 
-        Variables:
+        Attributes:
 
-        mode -- mode of motion detection
-
+            mode (str): default runtime mode (realtime, interval, batch, ondemand)
+            echo (boolean): echo mode
+            interval (int): default interval time in seconds for interval mode
+            storage (str): gdrive or dropbox. Dropbox is only experimental
+            usePIR (boolean): use PIR sensor
+            SMSNotification (boolean): SMS SMSNotification
+            SMSControl (boolean): Allow control via SMS messages
+            authorizedNumber (int): Authorized number for control and notifications
     """
-    mode = 'interval'
+    mode = 'realtime'
     echo = False
     interval = 20
     storage = 'gdrive'
@@ -81,6 +102,11 @@ class UserConfig(BaseConfig):
 
     @classmethod
     def load_config(cls, conf):
+    """ This method loads configuration to UserConfig class from the JSON file.
+
+        Raises:
+            KeyError: If JSON cannot be parsed
+    """
         try:
             if conf['mode'] in ['realtime','batch','ondemand','interval']:
                 cls.mode = conf['mode']

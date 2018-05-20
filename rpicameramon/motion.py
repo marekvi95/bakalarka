@@ -65,6 +65,10 @@ class PIRMotionAnalysis():
         This class provides a handler for PIR sensor
         It detects if the input pin is in the high state
         and calls motion_detected handler
+
+        Args:
+            pin (number): BCM number of GPIO pin where is PIR sensor connected
+            handler (obj): CaptureHandler object
     """
     def __init__(self, pin, handler):
 
@@ -116,9 +120,9 @@ class CaptureHandler:
         """
             This tick method provides a handler for capturing the pictures.
             It ticks every second after PiMotion.start() was called.
-            If detected == True and method is not processing any capture
+            If detected is True and method is not processing any capture
             (That is indicated by variable 'working'), it begins with processing.
-            First datetime method is called to obtain the actual datetime, then
+            First, datetime method is called to obtain the actual datetime, then
             the scene is analyzed with scan_day method which returns true if
             light conditions appear to be daylight or false if the light level
             is too low.
@@ -203,9 +207,13 @@ class CaptureHandler:
             self.working = False
 
     def scan_day(self):
+        """ This method captures picture as an RGB array and calculates
+        average value of the pixels in the matrix.
+        If the value pixAverage is more than 50 (scene is gray to black).
+        It indicates that the light condition is poor and we can set up night
+        params.
+        """
         with picamera.array.PiRGBArray(self.camera) as stream:
-            #camera.exposure_mode = 'auto'
-            #camera.awb_mode = 'auto'
             self.camera.capture(stream, format='rgb')
             pixAverage = int(np.average(stream.array[...,1]))
 
@@ -217,6 +225,10 @@ class CaptureHandler:
 
 class SMSHandler:
     def __init__(self, handler):
+        """ This class handles receiving of SMS messages. After receiving
+        the SMS, it's checked if SMSControl and SMSNotifications are allowed and also
+        if the phone number is allowed.
+        """
         self.handler = handler
 
         modem = GsmModem(BaseConfig.GSMport, BaseConfig.GSMbaud,
@@ -279,20 +291,27 @@ class SMSHandler:
 
 
 class PiMotion:
-    def __init__(self, verbose=False, post_capture_callback=None, q=None):
-        self.verbose = verbose
+    """ This class handles the camera and PIR sensor setup.
+    It sets up resolution and framerate and starts
+    capturing the video outputting it to the MotionAnalysis object.
+
+    Args:
+        post_capture_callback (callback): not in use
+        q (Queue obj): queue for captured photos
+
+    Raises:
+        KeyboardInterrupt: Interrupt the program
+
+    """
+    def __init__(self, post_capture_callback=None, q=None):
         self.post_capture_callback = post_capture_callback
         self.q = q
 
     def start(self):
         with picamera.PiCamera() as camera:
             camera.resolution = (BaseConfig.imageWidth, BaseConfig.imageHeight)
-            # camera.framerate = BaseConfig.cameraFPS
+            camera.framerate = BaseConfig.cameraFPS
             camera.rotation = BaseConfig.rotation
-            camera.framerate = 5
-
-            # LED Switch
-            #led = LEDSwitch(BaseConfig.LEDpin)
 
             handler = CaptureHandler(camera, self.post_capture_callback, self.q)
 
@@ -303,7 +322,7 @@ class PiMotion:
             smshandle = SMSHandler(handler)
 
             logging.debug('Starting camera')
-            time.sleep(2)
+            #time.sleep(2)
 
             try:
                 logging.debug('Capture of video started')

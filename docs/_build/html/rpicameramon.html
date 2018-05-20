@@ -58,18 +58,90 @@
 <em class="property">class </em><code class="descclassname">rpicameramon.config.</code><code class="descname">BaseConfig</code><a class="headerlink" href="#rpicameramon.config.BaseConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Basic configuration which cannot be changed online</p>
-<p>Variables:</p>
-<p>confFileName &#8211; name of the default JSON configuration file</p>
-<p>imageDir &#8211; default image directory
-imagePath &#8211; path to the directory + imageDir
-imageNamePrefix &#8211; Prefix for all image file names. Eg front-
-imageWidth &#8211; width of taken pictures in pixels
-imageHeight &#8211; height of taken pictures in pixels
-imageVFlip &#8211; flips image vertically if true
-imageHFlip &#8211; flips image Horizontally if true
-imagePreview &#8211; opens window with picture if true
-imageQuality &#8211; JPEG quality 0...100</p>
-<p>confCheckTime &#8211; how long does it take between conf file checks in sec</p>
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.imageDir">
+<code class="descname">imageDir</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.imageDir" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> &#8211; default image directory</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.imagePath">
+<code class="descname">imagePath</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.imagePath" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> &#8211; path to the directory + imageDir</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.imageWidth">
+<code class="descname">imageWidth</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.imageWidth" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; width of taken pictures in pixels</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.imageHeight">
+<code class="descname">imageHeight</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.imageHeight" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; height of taken pictures in pixels</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.imageVFlip">
+<code class="descname">imageVFlip</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.imageVFlip" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>bool</em> &#8211; flips image vertically if true</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.imageHFlip">
+<code class="descname">imageHFlip</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.imageHFlip" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>bool</em> &#8211; flips image Horizontally if true</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.imagePreview">
+<code class="descname">imagePreview</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.imagePreview" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>bool</em> &#8211; opens window with picture if true</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.imageQuality">
+<code class="descname">imageQuality</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.imageQuality" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; JPEG quality 0...100</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.vecMagnitude">
+<code class="descname">vecMagnitude</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.vecMagnitude" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; minimum magnitude of a motion vector</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.vecCount">
+<code class="descname">vecCount</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.vecCount" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; minimal number of motion vectors</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.cameraFPS">
+<code class="descname">cameraFPS</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.cameraFPS" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; framerate of the camera</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.confCheckTime">
+<code class="descname">confCheckTime</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.confCheckTime" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; how long does it take between conf file checks in sec</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.PIRpin">
+<code class="descname">PIRpin</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.PIRpin" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; GPIO pin (BCM) where is PIR sensor connected</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rpicameramon.config.BaseConfig.LEDpin">
+<code class="descname">LEDpin</code><a class="headerlink" href="#rpicameramon.config.BaseConfig.LEDpin" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; GPIO pin (BCM) where is LED connected</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="rpicameramon.config.BaseConfig.GSMPIN">
 <code class="descname">GSMPIN</code><em class="property"> = None</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.GSMPIN" title="Permalink to this definition">¶</a></dt>
@@ -86,8 +158,8 @@ imageQuality &#8211; JPEG quality 0...100</p>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.LEDpin">
-<code class="descname">LEDpin</code><em class="property"> = 23</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.LEDpin" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">LEDpin</code><em class="property"> = 23</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -96,8 +168,8 @@ imageQuality &#8211; JPEG quality 0...100</p>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.PIRpin">
-<code class="descname">PIRpin</code><em class="property"> = 18</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.PIRpin" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">PIRpin</code><em class="property"> = 18</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -106,23 +178,18 @@ imageQuality &#8211; JPEG quality 0...100</p>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.cameraFPS">
-<code class="descname">cameraFPS</code><em class="property"> = 10</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.cameraFPS" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">cameraFPS</code><em class="property"> = 10</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.confCheckTime">
-<code class="descname">confCheckTime</code><em class="property"> = 10</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.confCheckTime" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">confCheckTime</code><em class="property"> = 10</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="rpicameramon.config.BaseConfig.confFileID">
 <code class="descname">confFileID</code><em class="property"> = '1TBLQfJHsZYPXDvcpS_ysg6asxf-5_Oku'</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.confFileID" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.confFileName">
-<code class="descname">confFileName</code><em class="property"> = 'conf.json'</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.confFileName" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -136,48 +203,43 @@ imageQuality &#8211; JPEG quality 0...100</p>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.imageDir">
-<code class="descname">imageDir</code><em class="property"> = 'images'</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.imageDir" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">imageDir</code><em class="property"> = 'images'</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.imageHFlip">
-<code class="descname">imageHFlip</code><em class="property"> = False</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.imageHFlip" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">imageHFlip</code><em class="property"> = False</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.imageHeight">
-<code class="descname">imageHeight</code><em class="property"> = 368</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.imageHeight" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">imageHeight</code><em class="property"> = 368</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.imageNamePrefix">
-<code class="descname">imageNamePrefix</code><em class="property"> = 'capture-'</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.imageNamePrefix" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">imagePath</code><em class="property"> = '/home/pi/images'</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.imagePath">
-<code class="descname">imagePath</code><em class="property"> = '/home/pi/images'</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.imagePath" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">imagePreview</code><em class="property"> = False</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.imagePreview">
-<code class="descname">imagePreview</code><em class="property"> = False</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.imagePreview" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">imageQuality</code><em class="property"> = 72</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.imageQuality">
-<code class="descname">imageQuality</code><em class="property"> = 72</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.imageQuality" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">imageVFlip</code><em class="property"> = False</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.imageVFlip">
-<code class="descname">imageVFlip</code><em class="property"> = False</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.imageVFlip" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.imageWidth">
-<code class="descname">imageWidth</code><em class="property"> = 640</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.imageWidth" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">imageWidth</code><em class="property"> = 640</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -191,11 +253,6 @@ imageQuality &#8211; JPEG quality 0...100</p>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.nightISO">
-<code class="descname">nightISO</code><em class="property"> = 800</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.nightISO" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="rpicameramon.config.BaseConfig.pictureFolderID">
 <code class="descname">pictureFolderID</code><em class="property"> = '1AO_tQMMz2c6_l69s9vo9PW0PTy4nrYqi'</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.pictureFolderID" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -206,23 +263,13 @@ imageQuality &#8211; JPEG quality 0...100</p>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.testHeight">
-<code class="descname">testHeight</code><em class="property"> = 80</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.testHeight" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">vecCount</code><em class="property"> = 40</em></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.testWidth">
-<code class="descname">testWidth</code><em class="property"> = 128</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.testWidth" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.vecCount">
-<code class="descname">vecCount</code><em class="property"> = 40</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.vecCount" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="rpicameramon.config.BaseConfig.vecMagnitude">
-<code class="descname">vecMagnitude</code><em class="property"> = 40</em><a class="headerlink" href="#rpicameramon.config.BaseConfig.vecMagnitude" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">vecMagnitude</code><em class="property"> = 40</em></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -526,21 +573,8 @@ and calls motion_detected handler</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-rpicameramon.smsthread">
-<span id="rpicameramon-smsthread-module"></span><h2>rpicameramon.smsthread module<a class="headerlink" href="#module-rpicameramon.smsthread" title="Permalink to this headline">¶</a></h2>
-<p>Demo: handle incoming SMS messages by replying to them</p>
-<p>Simple demo app that listens for incoming SMS messages, displays the sender&#8217;s number
-and the messages, then replies to the SMS by saying &#8220;thank you&#8221;</p>
-<dl class="function">
-<dt id="rpicameramon.smsthread.handle_sms">
-<code class="descclassname">rpicameramon.smsthread.</code><code class="descname">handle_sms</code><span class="sig-paren">(</span><em>sms</em><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.smsthread.handle_sms" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="rpicameramon.smsthread.main">
-<code class="descclassname">rpicameramon.smsthread.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rpicameramon.smsthread.main" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<div class="section" id="rpicameramon-smsthread-module">
+<h2>rpicameramon.smsthread module<a class="headerlink" href="#rpicameramon-smsthread-module" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-rpicameramon.telemetry">
 <span id="rpicameramon-telemetry-module"></span><h2>rpicameramon.telemetry module<a class="headerlink" href="#module-rpicameramon.telemetry" title="Permalink to this headline">¶</a></h2>
@@ -660,7 +694,7 @@ Google Sheets.</p>
 <li><a class="reference internal" href="#module-rpicameramon.config">rpicameramon.config module</a></li>
 <li><a class="reference internal" href="#module-rpicameramon.filemanipulation">rpicameramon.filemanipulation module</a></li>
 <li><a class="reference internal" href="#module-rpicameramon.motion">rpicameramon.motion module</a></li>
-<li><a class="reference internal" href="#module-rpicameramon.smsthread">rpicameramon.smsthread module</a></li>
+<li><a class="reference internal" href="#rpicameramon-smsthread-module">rpicameramon.smsthread module</a></li>
 <li><a class="reference internal" href="#module-rpicameramon.telemetry">rpicameramon.telemetry module</a></li>
 <li><a class="reference internal" href="#module-rpicameramon">Module contents</a></li>
 </ul>

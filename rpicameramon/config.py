@@ -102,11 +102,12 @@ class UserConfig(BaseConfig):
 
     @classmethod
     def load_config(cls, conf):
-    """ This method loads configuration to UserConfig class from the JSON file.
+        """ This method loads configuration to UserConfig class from the JSON file.
 
         Raises:
             KeyError: If JSON cannot be parsed
-    """
+
+        """
         try:
             if conf['mode'] in ['realtime','batch','ondemand','interval']:
                 cls.mode = conf['mode']

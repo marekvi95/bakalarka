@@ -1,0 +1,26 @@
+\chapter*{Úvod}
+\phantomsection
+\addcontentsline{toc}{chapter}{Úvod}
+
+
+Tento dokument popisuje semestrální práci vytvořenou na VUT, fakultě elektrotechniky, v Brně.
+
+Po krátkém úvodu a seznámení se zadáním práce následuje kapitola číslo 1, ve které je popsán minipočítač Raspberry Pi, na kterém bude práce dále stavět. Dále je popsán operační systém Raspbian a další 
+programové vybavení, které bude použito. Je zde teoreticky popsán způsob detekce pohybu a také je teoreticky objasněn problém solárního napájení.
+
+Kapitola č. 2 popisuje návrh aplikace pro detekci pohybu.
+
+Návrh řešení se nachází v kapitole č. 3 a popis samotné realizace projektu je v kapitole č. 4.  
+
+Poslední kapitola krátce hodnotí celou práci a navrhuje případná zlepšení.
+
+\section*{Úvod do problematiky}
+Práce si klade za cíl vytvořit zařízení, které bude schopné sloužit jako monitorovací systém, například pro ostrahu objektu, nebo pro monitorování zvěře.
+
+Ve srovnání s komerčně dostupnými, kamerovými zabezpečovacími systémy, bude navrhovaný systém, vytvořený na platformě Raspberry Pi a Linux, disponovat větší variabilitou.
+
+Monitorovací systém je navržen tak, aby mohl být po nějakou dobu energeticky soběstačný. Problém lze řešit napájením pomocí solárního panelu, kterým bude dobíjen akumulátor.
+
+Systém by tedy měl být energeticky úsporný. Bude nutné vybrat vhodnou, spolehlivou metodu detekce obrazu, která by nevyžadovala pro svoji činnost příliš mnoho elektrické energie.
+
+Konektivita monitorovacího systému do sítě Internet bude zajištěna pomocí přídavného modulu. 

@@ -245,7 +245,7 @@ htmlhelp_basename = 'CameraSecuritySystemwithRaspberryPiMinicomputerdoc'
 latex_elements = {
      # The paper size ('letterpaper' or 'a4paper').
      #
-     # 'papersize': 'letterpaper',
+     'papersize': 'a4paper',
 
      # The font size ('10pt', '11pt' or '12pt').
      #
@@ -266,7 +266,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'CameraSecuritySystemwithRaspberryPiMinicomputer.tex', 'Camera Security System with Raspberry Pi Minicomputer Documentation',
-     'Marek Vitula', 'manual'),
+     'Marek Vitula', 'howto'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

@@ -1,0 +1,236 @@
+% Soubory musí být v kódování, které je nastaveno v příkazu \usepackage[...]{inputenc}
+
+\documentclass[%
+%  draft,    				  % Testovací překlad
+  12pt,       				% Velikost základního písma je 12 bodů
+  %a4paper,    				% Formát papíru je A4
+	t,                  % obsah slajdů nebude centrovaný, nýbrž budou začínat od hora
+	aspectratio=1610,   % poměr stran bude 16:10 (všechny projektory v učebnách na Technické 12), další volby jsou 43, 149, 169, 54, 32.
+%  oneside,      			% Jednostranný tisk (výchozí)
+%% Z následujicich voleb lze použít maximálně jednu:
+%	dvipdfm  						% výstup bude zpracován programem 'dvipdfm' do PDF
+%	dvips	  						% výstup bude zpracován programem 'dvips' do PS
+%	pdftex							% překlad bude proveden programem 'pdftex' do PDF (výchozí)
+	unicode,						% Záložky a informace budou v kódování unicode
+% Z následujících voleb lze použít jen jednu:
+%english,            % originální jazyk je angličtina
+czech,              % originální jazyk je čeština (výchozí)
+%slovak,             % originální jazyk je slovenčina
+]{beamer}				    	% Dokument třídy 'zpráva'
+%\usepackage{etex}
+
+\usepackage[utf8]		%	Kódování zdrojových souborů je v UTF-8
+	{inputenc}					% Balíček pro nastavení kódování zdrojových souborů
+\usepackage{graphicx} % Balíček 'graphicx' pro vkládání obrázků
+											% Nutné pro vložení log školy a fakulty
+
+\usepackage[
+	nohyperlinks				% Nebudou tvořeny hypertextové odkazy do seznamu zkratek
+]{acronym}						% Balíček 'acronym' pro sazby zkratek a symbolů
+											% Nutné pro použití prostředí 'seznamzkratek' balíčku 'thesis'
+
+%% Balíček hyperref je volán třídou beamer automaticky
+%\usepackage[
+%	breaklinks=true,		% Hypertextové odkazy mohou obsahovat zalomení řádku
+%	hypertexnames=false % Názvy hypertextových odkazů budou tvořeny
+%											% nezávisle na názvech TeXu
+%]{hyperref}						% Balíček 'hyperref' pro sazbu hypertextových odkazů
+%											% Nutné pro použití příkazu 'nastavenipdf' balíčku 'thesis'
+
+%\usepackage{pdfpages} % Balíček umožňující vkládat stránky z PDF souborů
+                      %% Nutné při vkládání titulních listů a zadání přímo
+                      %% ve formátu PDF z informačního systému
+
+\usepackage{cmap} 		% Balíček cmap zajišťuje, že PDF vytvořené `pdflatexem' je
+											% plně "prohledávatelné" a "kopírovatelné"
+
+\usepackage{upgreek}	% Balíček pro sazbu stojatých řeckých písmem
+											% např. stojaté pí: \uppi
+											% např. stojaté mí: \upmu (použitelné třeba v mikrometrech)
+											% pozor, grafická nekompatibilita s fonty typu Computer Modern!
+
+%% Nastavení českého jazyka při sazbě v češtině.
+\usepackage
+  {babel}             % Balíček pro sazbu různojazyčných dokumentů; kompilovat (pdf)latexem!
+										% převezme si z parametrů třídy správný jazyk
+\usepackage{lmodern}	% vektorové fonty Latin Modern, nástupce původních Knuthových Computern Modern fontů
+\usepackage{textcomp} % Dodatečné symboly
+\usepackage[T1]{fontenc}  % Kódování fontu - mj. kvůli správným vzorům pro dělení slov
+
+%\usepackage{amsmath}
+\usepackage{booktabs}			% Balíček, který umožňuje v tabulce používat příkazy \toprule, \midrule, \bottomrule 
+
+
+\usepackage[%
+%% Z následujících voleb lze použít pouze jednu
+% left,               % Rovnice a popisky plovoucich objektů budou %zarovnány vlevo
+  center,             % Rovnice a popisky plovoucich objektů budou zarovnány na střed (vychozi)
+%% Z následujících voleb lze použít pouze jednu
+semestral						%	sazba zprávy semestrálního projektu
+%bachelor						%	sazba bakalářské práce
+%diploma						 % sazba diplomové práce
+%treatise            % sazba pojednání o dizertační práci
+%%%%%%phd                 % sazba dizertační práce
+]{thesis}             % Balíček pro sazbu studentských prací
+                      % Musí být vložen až jako poslední, aby
+                      % ostatní balíčky nepřepisovaly jeho příkazy
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%      Definice informací o dokumentu             %%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\input{nastav_udaju}  % do tohoto souboru doplňte údaje o sobě, o názvu práce...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%     Nastavení polí ve Vlastnostech dokumentu PDF      %%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Při vloženém balíčku 'hyperref' lze použít příkaz '\nastavenipdf'
+\nastavenipdf
+%  Nastavení polí je možné provést také ručně příkazem:
+%\hypersetup{
+%  pdftitle={Název studentské práce},    	% Pole 'Document Title'
+%  pdfauthor={Autor studenstké práce},   	% Pole 'Author'
+%  pdfsubject={Typ práce}, 						  	% Pole 'Subject'
+%  pdfkeywords={Klíčová slova}           	% Pole 'Keywords'
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\logohlavicka					% vytvoření zkraceného loga VUT FEKT (FEEC) v hlavičce slajdu, nechte odkomentované
+
+\usetheme{VUT} 				% barvy a rozložení prezentace odpovídající VUT FEKT
+% alternativne lze pouzit jina berevna temata, napr. 
+%\usetheme{Darmstadt} \usecolortheme{default2}
+% ale bez zaruky
+
+\begin{document}
+
+% v pripade zakomentovani se zobrazi v pravem dolnim rohu slajdu klikatelne navigacni symboly 
+\vypninavigacnisymboly
+
+% snimek s titulni strankou vysazen bez hornich, dolnich a postranich list (volba plain),
+% neni tak vysazen ani nadpis snimku
+\vytvortitulku
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 1.snimek s cili (zadanim) prace
+\begin{frame} 
+	% nadpis snímku
+	\frametitle{Cíle práce}
+	\begin{itemize}
+			\item Nastudovat
+			\item Popsat
+				\begin{itemize}
+					\item nastudované
+				\end{itemize}
+			\item Implementovat
+				\begin{itemize}
+					\item nastudované
+					\item nové
+				\end{itemize}
+			\item Porovnat a vyhodnotit
+				\begin{itemize}
+						\item výsledky
+				\end{itemize}
+	\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%
+\begin{frame} 
+	\frametitle{Klíčové nástroje}
+
+	% prostředí alertblok, které slouží pro zdůraznění informace
+	\begin{alertblock}{Pro práci je klíčový Eulerův vzorec}
+		$$\eul^{\jmag x}=\cos x + \jmag\sin x$$
+	\end{alertblock}
+
+	\vspace{4ex}
+	Eulerova identita je speciálním případem tohoto vzorce, jestliže dosadíme $x=\uppi$:
+
+	% prostředí block, které slouží jako informativní
+	\begin{block}{Eulerova identita}
+		$$\eul^{\jmag \uppi}=\cos \uppi + \jmag\sin \uppi,$$\\
+		odkud vyplývá
+		$$\eul^{\jmag \uppi}+1=0.$$
+	\end{block}
+\end{frame} 
+
+
+%%%%%%%%%%%%%
+\begin{frame} 
+	\frametitle{Blokové schéma}
+	
+	\begin{columns}[T] 								% prostředí sloupce s umístěním nahoře
+		\begin{column}{0.4\textwidth}		% první sloupec
+			Obrázek znázorňuje model:\\[2ex]
+			%
+			\begin{itemize}
+				\item Deska
+				\item Součástky
+				\item Signály
+				\item Napájení
+			\end{itemize}
+		\end{column}
+		%
+		\begin{column}{0.6\textwidth}		% druhý sloupec
+			\begin{figure}%	
+				\centering
+				\vspace{1cm}	              % horizontální mezera
+				
+				%lze vlozit popisek, ale povetsinou je to v prezentaci zbytecne
+				%\caption{Popisek obrázku}%
+				%\label{obr:ukazka}
+			\end{figure}
+		\end{column}
+	\end{columns}											% ukončení prostředí sloupce
+\end{frame}
+
+
+%%%%%%%%%%%%%
+\begin{frame} 
+	\frametitle{Výsledky}
+	\vspace{1cm}
+	\begin{table}[]
+		\centering
+		\caption{Výsledky měření mobilních sítí}
+		\label{tab:tabulka}
+			\begin{tabular}{lcc}
+				\toprule
+					Technologie  & Rychlost stahování [kB/s] & Rychlost nahrávání [kB/s] \\
+				\midrule
+					GPRS (2,5G)	& 7,2 	& 3,6\\
+					UMTS 3G     & 48 		& 48\\
+					HSPA (3,5G)	&	1\,706	&	720\\
+					LTE (4G) 		& 40\,750 & 10\,750\\
+				\bottomrule                                       
+			\end{tabular}
+	\end{table}
+\end{frame}
+
+
+%%%%%%%%%%%%%
+\begin{frame} 
+	\frametitle{Závěr}
+	\dots
+\end{frame}
+
+
+% podekovani
+\begin{frame}[c] 
+% bez nadpisu snimku
+	\frametitle{\mbox{ }}
+	\begin{center}
+		{\Huge Děkuji za pozornost!}
+	\end{center}
+\end{frame}
+
+% otázky oponenta
+\frame{
+\frametitle{Otázky oponenta}
+	\emph{Jaká je souvislost Vašeho vzorce (1.2) s~Maxwellovými rovnicemi v~integrálním tvaru?}\\[2ex]
+	%
+	Již staří Římané\,\dots
+}
+
+\end{document}

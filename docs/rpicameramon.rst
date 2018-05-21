@@ -22,10 +22,9 @@ UserConfig class adds variables which can be loaded from the external JSON file.
 
 .. automodule:: rpicameramon.config
     :members:
-    :undoc-members:
     :show-inheritance:
 
-rpicameramon.filemanipulation module
+filemanipulation module
 ------------------------------------
 This module consist of classes for the manipulation with files in Google Drive.
 
@@ -34,7 +33,7 @@ This module consist of classes for the manipulation with files in Google Drive.
     :undoc-members:
     :show-inheritance:
 
-rpicameramon.motion module
+motion module
 --------------------------
 This module has functionality for the motion detection from the scene and also from the PIR sensor
 and also SMS handler.
@@ -46,7 +45,7 @@ Optical flow method is used for the motion detection.
     :show-inheritance:
 
 
-rpicameramon.telemetry module
+telemetry module
 -----------------------------
 This module provides functionality for sending telemetry data to the Google Sheets.
 

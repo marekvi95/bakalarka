@@ -66,6 +66,7 @@ class BaseConfig:
     logRange = 'Log!A:A'
     msgRange = 'Zpravy!A:A'
     OAuthJSON = 'client_secret.json'
+    dropboxToken = ''
 
     # File uploader sleep time in seconds
     fileUploadSleep = 5
@@ -95,7 +96,6 @@ class UserConfig(BaseConfig):
     interval = 20
     storage = 'gdrive'
     usePIR = False
-    dropboxToken = 'MZ2iiIImvUAAAAAAAAAAzo2V-UCXSK7MUojx9f7qDKo73tiFjRwJo0J2N2zwkYgz'
     SMSNotification = True
     SMSControl = True
     authorizedNumber = "+420733149295"

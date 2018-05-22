@@ -7,7 +7,7 @@ Capturing is handled by the picamera package and image processing is handled by 
 Captured images are sent to the Google Drive storage.
 
 Package itself consist of four submodules - config, filemanipulation, motion and telemetry.
-Each of them has consist of several classes.
+Each of them has several classes.
 
 ## Motion detection
 Motion can be detected from the scene using optical flow method and also from the PIR sensor.
@@ -32,9 +32,3 @@ This package also provides ability to use GSM/GPRS module for the SMS and Intern
 SMS handling is provided by the pygsmmodule package.
 Internet connection is realized via PPP.
 GSM/GPRS module requires GSM0710 mux protocol support for multiplexing PPP data flow and SMS which are handled by the AT commands.
-
-
-
-
-
-
